@@ -1,41 +1,36 @@
 import React, {useState} from 'react';
+import { Accordion } from '@mui/material';
+import { AccordionSummary } from '@mui/material';
+import { AccordionDetails } from '@mui/material';
+import { Typography } from '@mui/material';
 
 function Transactions(props) {
-  const [isHidden, setExpandView] = useState(true);
 
-  function onClick(e) {
-    setExpandView(!isHidden);
-  }
+  let totalPrice = '$' + (props.data.price.slice(0,-4) * props.data.quantity).toFixed(2) + ' USD';
 
-  let mockData = {
-    stock: 'TSLA',
-    transactionType: 'buy',
-    datetime: 'Feb 21, 2023 1:30 PM',
-    quantity: 10,
-    price: '295.19 USD',
-    status: 'complete'
-  }
+  let outerAccordian = <div className='transaction'>{props.data.stock} <span>{totalPrice}</span></div>
 
-  let transactionInfo = null;
-  if (!isHidden) {
-    transactionInfo = <div>
-    <div className='transaction'>Transaction type <span>{mockData.transactionType}</span></div>
-  <div className='transaction'>Date <span>{mockData.datetime}</span></div>
-  <hr></hr>
-  <div className='transaction'>Quantity <span>{mockData.quantity}</span></div>
-  <div className='transaction'>Price <span>{mockData.price}</span></div>
-  <hr></hr>
-  <div className='transaction'>Total Price <span>{(mockData.price.slice(0,-4) * mockData.quantity).toFixed(2) + ' USD'}</span></div>
-  <div className='transaction'>Status <span>{mockData.status}</span></div>
-    </div>;
-  }
-
+  let innerAccordian = <div>
+    <div className='transaction'>Transaction type <span>{props.data.transactionType}</span></div>
+    <div className='transaction'>Date <span>{props.data.datetime}</span></div>
+    <hr></hr>
+    <div className='transaction'>Quantity <span>{props.data.quantity}</span></div>
+    <div className='transaction'>Price <span>{'$' + props.data.price}</span></div>
+    <hr></hr>
+    <div className='transaction'>Total Price <span>{totalPrice}</span></div>
+    <div className='transaction'>Status <span>{props.data.status}</span></div>
+  </div>;
 
   return <>
-  <h1>Recent Transaction History</h1>
-  <hr></hr>
-  <h2 className='transaction'>{mockData.stock}<button onClick={onClick}>Expand/Hide</button></h2>
-  {transactionInfo}
+  <Accordion >
+    <AccordionSummary expandIcon={<span>{'\u2304'}</span>}>
+      <Typography variant='h5' sx={{ width: '75%', flexShrink: 0 }}>{props.data.stock}</Typography>
+      <Typography variant='h5'>{totalPrice}</Typography>
+    </AccordionSummary>
+    <AccordionDetails>
+      {innerAccordian}
+    </AccordionDetails>
+  </Accordion>
   </>
 }
 

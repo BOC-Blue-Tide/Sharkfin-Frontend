@@ -1,11 +1,16 @@
 import Axios from 'axios'
-const polygonToken = process.env.REACT_APP_POLYGON
+const avToken = process.env.REACT_APP_ALPHA_VANTAGE
 
 const helpers = {
   symbolLookup: async (symbol) => {
-    var url = `https://api.polygon.io/v3/reference/tickers/${symbol}?apiKey=`
-    let symbolData = await Axios.get(`${url}${polygonToken}`)
+    var url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${avToken}`
+    let symbolData = await Axios.get(url)
     return symbolData
+  },
+  autoComplete: async (input) => {
+    var url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${input}&apikey=${avToken}`
+    let searchSuggestion = await Axios.get(url)
+    return searchSuggestion.data
   }
 }
 

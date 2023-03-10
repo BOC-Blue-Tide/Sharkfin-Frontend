@@ -10,24 +10,25 @@ class App extends React.Component {
     super(props);
     this.state = {
       currency: 'USD',// can be dynaimc if offers currency selection
-      stockObj: {},
-      liveData: {},
-      errorMsg: ''
+      stockObj: null,
+      liveData: null,
+      errorMsg: null
     }
   }
   async getStockData(input, scope, operation) {
+    console.log('gg')
     var symbol = input.toUpperCase()
     if (operation === 'search') {
       if (scope === 'stock') {
         try {
-          this.getLiveData(symbol)
           var symbolData = await helpers.symbolLookup(symbol)
             .then(async (symbolData) => {
 
-              console.log(symbolData.data)
+              //console.log(symbolData.data)
               this.setState({ stockObj: symbolData.data })
 
             })
+          this.getLiveData(symbol)
         }
         catch (err) {
           console.log(err)
@@ -48,7 +49,14 @@ class App extends React.Component {
 
     socket.onmessage = (event) => {
       console.log('Message from server ', event.data);
-      this.setState({ liveData: event.data })
+      if (event.data === '{"type":"ping"}') {
+        this.setState({ errorMsg: 'Sorry, live data unavailable.' })
+        unsubscribe(symbol)
+        socket.close()
+      } else {
+        this.setState({ liveData: event.data })
+      }
+
     }
 
     socket.onerror = (event) => {

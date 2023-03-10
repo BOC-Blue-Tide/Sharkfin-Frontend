@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Route, Routes } from 'react-router-dom';
+import AccountInfo from './accountInfo.jsx';
+import Dashboard from './exampleComponent.jsx'
 
 const theme = createTheme({
   palette: {
@@ -11,20 +16,17 @@ const theme = createTheme({
   },
 });
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+function App() {
 
-  render() {
-    return (
+  return (
+  
     <ThemeProvider theme={theme}>
-      <>
-      Hello Worldsss
-      </>
-  </ThemeProvider>
-    )
-  }
+          <Routes>
+          <Route path="/" element={<Dashboard/>}/>
+          <Route path="/accountInfo" element={<AccountInfo/>} />
+          </Routes>
+    </ThemeProvider>
+  );
 }
 
 export default App;

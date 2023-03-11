@@ -55,3 +55,8 @@ main {
 #root {
   padding: 20px 0 20px 0;
 }
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+}

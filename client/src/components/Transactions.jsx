@@ -22,15 +22,25 @@ function Transactions(props) {
   </div>;
 
   return <>
-  <Accordion >
-    <AccordionSummary expandIcon={<span>{'\u2304'}</span>}>
-      <Typography variant='h5' sx={{ width: '75%', flexShrink: 0 }}>{props.data.stock}</Typography>
-      <Typography variant='h5'>{totalPrice}</Typography>
-    </AccordionSummary>
-    <AccordionDetails>
-      {innerAccordian}
-    </AccordionDetails>
-  </Accordion>
+    <Accordion >
+      <AccordionSummary expandIcon={<span>{'\u2304'}</span>}>
+        <Typography variant='h5' sx={{ width: '75%', flexShrink: 0 }}>
+          <div>
+            {props.data.stock}
+          </div>
+          <div style={{'fontSize': 'medium'}}>{props.data.datetime}</div>
+        </Typography>
+        <Typography variant='h5'>
+          <div>
+            {totalPrice}
+          </div>
+          <div style={{'fontSize': 'medium'}}>{props.data.transactionType}</div>
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        {innerAccordian}
+      </AccordionDetails>
+    </Accordion>
   </>
 }
 

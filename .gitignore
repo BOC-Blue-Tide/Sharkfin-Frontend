@@ -96,7 +96,5 @@ typings/
 # TernJS port file
 .tern-port
 
-#Bundle
-.gitignore
-client/dist/bundle.js.map
-client/dist/bundle.js
+*bundle.js
+*bundle.js.map

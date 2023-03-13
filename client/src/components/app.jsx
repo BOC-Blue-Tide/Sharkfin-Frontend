@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import TransactionList from './TransactionList.jsx';
+import mockData from '../../../mockData.js';
+
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
@@ -51,6 +54,7 @@ function App() {
   return (
   
     <ThemeProvider theme={theme}>
+            {/* <TransactionList data={mockData}/> */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"

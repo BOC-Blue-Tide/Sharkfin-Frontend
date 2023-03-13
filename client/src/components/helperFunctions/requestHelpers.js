@@ -1,17 +1,27 @@
 import Axios from 'axios'
 const avToken = process.env.REACT_APP_ALPHA_VANTAGE
 
+
 const helpers = {
   symbolLookup: async (symbol) => {
     var url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${avToken}`
     let symbolData = await Axios.get(url)
     return symbolData
   },
-  autoComplete: async (input) => {
-    var url = `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${input}&apikey=${avToken}`
-    let searchSuggestion = await Axios.get(url)
-    return searchSuggestion.data
+  getBarData: async (symbol, start, timeframe) => {
+
+    var limit = 10
+    var url = `https://data.alpaca.markets/v2/stocks/${symbol}/bars?start=${start}&timeframe=${timeframe}&limit=${limit}`
+    var requestOption = {
+      headers: {
+        "Apca-Api-Key-Id": process.env.REACT_APP_ALPACA_ID,
+        "Apca-Api-Secret-Key": process.env.REACT_APP_ALPACA_KEY
+      }
+    }
+    let stock = await Axios.get(url, requestOption)
+    return stock.data.bars
   }
+
 }
 
 

@@ -1,8 +1,14 @@
 import React from 'react';
 import Axios from 'axios'
 import SearchBar from './searchBar.jsx'
-import StockCryptoPage from './stockCryptoPage.jsx'
+import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
+import moment from 'moment-timezone'
+const API_KEY = process.env.REACT_APP_ALPACA_ID;
+const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
+const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
+
+
 
 
 class App extends React.Component {
@@ -12,23 +18,41 @@ class App extends React.Component {
       currency: 'USD',// can be dynaimc if offers currency selection
       stockObj: null,
       liveData: null,
-      errorMsg: null
+      barData: null,
+      errorMsg: null,
+      currentSymbol: null,
+      start: '2023-03-10T06:33:40.481Z',
+      timeframe: '5Min'
     }
   }
+
+  componentDidMount() { // for development purpose only
+    this.getStockData('msft', 'stock', 'search')
+    this.getBarData('msft', this.state.start, this.state.timeframe)
+  }
+
+  handleTimeRangeClick(start, timeframe) {
+    this.setState({ start: start, timeframe: timeframe }, async () => {
+      this.getBarData('msft', this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
+    })
+  }
+
   async getStockData(input, scope, operation) {
-    console.log('gg')
     var symbol = input.toUpperCase()
     if (operation === 'search') {
       if (scope === 'stock') {
         try {
-          var symbolData = await helpers.symbolLookup(symbol)
-            .then(async (symbolData) => {
+          this.setState({ symbol: symbol }, async () => {
+            var symbolData = await helpers.symbolLookup(symbol)
+              .then(async (symbolData) => {
 
-              //console.log(symbolData.data)
-              this.setState({ stockObj: symbolData.data })
+                //console.log(symbolData.data)
+                this.setState({ stockObj: symbolData.data })
+                //this.getLiveData(symbol)
+              })
+          })
 
-            })
-          this.getLiveData(symbol)
+
         }
         catch (err) {
           console.log(err)
@@ -41,21 +65,44 @@ class App extends React.Component {
 
   }
 
+  async getBarData(symbol, start, timeframe) {
+    try {
+
+      var barData = await helpers.getBarData(symbol, start, timeframe)
+      console.log(barData)
+
+      this.setState({ barData: barData })
+
+
+    }
+    catch (err) {
+      console.log(err)
+      this.setState({ errorMsg: 'Something went wrong.' })
+    }
+  }
+
+
   getLiveData(symbol) {
-    const socket = new WebSocket(`wss://ws.finnhub.io?token=${process.env.REACT_APP_FINNHUB}`);
-    socket.onopen = (event) => {
-      socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': symbol }))
-    };
+    const socket = new WebSocket(`wss://stream.data.alpaca.markets/v2/${SOURCE}`);
 
     socket.onmessage = (event) => {
-      console.log('Message from server ', event.data);
-      if (event.data === '{"type":"ping"}') {
-        this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-        unsubscribe(symbol)
-        socket.close()
-      } else {
-        this.setState({ liveData: event.data })
+      const data = JSON.parse(event.data)
+      const message = data[0]['msg']
+      console.log('Message from server ', data);
+
+      if (message === 'connected') {
+        socket.send(JSON.stringify({ "action": "auth", "key": `${API_KEY}`, "secret": `${API_SECRET}` }))
       }
+      if (message === 'authenticated') {
+        socket.send(JSON.stringify({ "action": "subscribe", "bars": [symbol] }))
+      }
+      // if (event.data === '{"type":"ping"}') {
+      //   this.setState({ errorMsg: 'Sorry, live data unavailable.' })
+      //   unsubscribe(symbol)
+      //   socket.close()
+      // } else {
+      //   this.setState({ liveData: data })
+      // }
 
     }
 
@@ -74,9 +121,15 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <SearchBar getStockData={this.getStockData.bind(this)} />
+        <SearchBar
+          getStockData={this.getStockData.bind(this)} />
 
-        <StockCryptoPage liveData={this.state.liveData} stockObj={this.state.stockObj} errorMsg={this.state.errorMsg} />
+        <StockCryptoPage
+          liveData={this.state.liveData}
+          stockObj={this.state.stockObj}
+          errorMsg={this.state.errorMsg}
+          handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+          barData={this.state.barData} />
       </>
     )
   }

@@ -15,7 +15,7 @@ const searchBar = (props) => {
 
 
   const handleInput = async (e) => {
-    setSearchInput(e)
+    setSearchInput(e.target.value)
   }
 
 

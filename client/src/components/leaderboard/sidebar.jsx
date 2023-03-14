@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Person from './person.jsx'
+import Axios from 'axios';
 
 const SideBar = () => {
   const [friendBoard, setFriendBoard] = useState([])
@@ -15,15 +16,29 @@ const SideBar = () => {
   }, [])
 
   const getFriendBoardData = async () => {
-    //api get all friends data
-    setFriendBoard([{name: "testing", gain: "testing"},{name: "testing", gain: "testing"}])
-    //set first 10 to current
-    setFriendCurrent([{name: "testing", gain: "testing"},{name: "testing", gain: "testing"}])
+    await Axios.get('/friendBoard')
+    .then((response) => {
+      var data = response.data
+      setFriendBoard(data)
+      if (data.length <= 10) {
+        setFriendCurrent(data)
+      } else {
+        setFriendCurrent(data.slice(0, 11))
+      }
+    })
   }
 
   const getGlobalBoardData = async () => {
-    setGlobalBoard([{name: "testing", gain: "testing"},{name: "testing", gain: "testing"}])
-    setGlobalCurrent([{name: "testing", gain: "testing"},{name: "testing", gain: "testing"}, {name: "testing", gain: "testing"}])
+    await Axios.get('/globalBoard')
+    .then((response) => {
+      var data = response.data
+      setGlobalBoard(data)
+      if (data.length <= 10) {
+        setGlobalCurrent(data)
+      } else {
+        setGlobalCurrent(data.slice(0, 11))
+      }
+    })
   }
 
   //handle next page
@@ -52,12 +67,12 @@ const SideBar = () => {
       <button className="friend-btn" onClick= {()=>{friendView()}}>FRIEND ({friendBoard?.length})</button>
       <button className="globle-btn" onClick= {()=>{globleView()}}>GLOBAL ({globalBoard?.length})</button>
       <div>
-      {friend && friendCurrent?.map((item, index) =>
-        <Person item= {item} index= {index}/>)
-      }
-      {global && globalCurrent?.map((item, index) =>
-        <Person item= {item} index= {index}/>)
-      }
+
+
+       {friend && <Person data = {friendCurrent}/>}
+       {global && <Person data = {globalCurrent}/>}
+
+
       </div>
       <div>
       <button className="addFriend-btn" onClick= {()=>{}}>Add New Friend</button>

@@ -55,7 +55,7 @@ class App extends React.Component {
               })
               .then(async () => {
                 var stockQoute = await helpers.getStockQoute(symbol)
-                console.log(stockQoute.data)
+                //console.log(stockQoute.data)
                 this.setState({ qouteData: stockQoute.data['Global Quote'] })
               })
           })

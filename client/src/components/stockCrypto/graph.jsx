@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Line } from 'react-chartjs-2'
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import helper from './helperFunction/graphDataHelper.js'
+import helper from './helperFunctions/graphDataHelper.js'
 Chart.register(...registerables)
 
 

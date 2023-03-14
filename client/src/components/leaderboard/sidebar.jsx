@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Person from './person.jsx'
 import Axios from 'axios';
+import { Pagination } from '@mui/material';
 
 const SideBar = () => {
   const [friendBoard, setFriendBoard] = useState([])
@@ -9,6 +10,9 @@ const SideBar = () => {
   const [globalCurrent, setGlobalCurrent] = useState([])
   const [friend, setFriend] = useState(true)
   const [global, setGlobal] = useState(false)
+  const [friendPage, setFriendPage] = useState(1)
+  const [globalPage, setGlobalPage] = useState(1)
+
 
   useEffect(() => {
     getFriendBoardData()
@@ -22,8 +26,11 @@ const SideBar = () => {
       setFriendBoard(data)
       if (data.length <= 10) {
         setFriendCurrent(data)
+        setFriendPage(1)
       } else {
-        setFriendCurrent(data.slice(0, 11))
+        setFriendCurrent(data.slice(0, 10))
+        var friendPageNumber = Math.floor(data.length / 10)
+        setFriendPage(friendPageNumber)
       }
     })
   }
@@ -35,22 +42,34 @@ const SideBar = () => {
       setGlobalBoard(data)
       if (data.length <= 10) {
         setGlobalCurrent(data)
+        setGlobalPage(1)
       } else {
-        setGlobalCurrent(data.slice(0, 11))
+        setGlobalCurrent(data.slice(0, 10))
+        var pageNumber = Math.floor(data.length / 10) + 1
+        setGlobalPage(pageNumber)
       }
     })
   }
 
-  //handle next page
-  const updateFriendCurrent = () => {
+  //friend select bar
+  const [currentFriendPage, setCurrentFriendPage] = useState(1)
+  const handleFriendChange = (event, value) => {
+    setCurrentFriendPage(value);
+    var startIndex = (value - 1) * 10
+    var endIndex = value * 10
+    setFriendCurrent(friendBoard.slice(startIndex, endIndex))
+  };
+   //global select bar
+   const [currentGlobalPage, setCurrentGlobalPage] = useState(1)
+   const handleGlobalChange = (event, value) => {
+    setCurrentGlobalPage(value);
+     var startIndex = (value - 1) * 10
+     var endIndex = value * 10
+     setGlobalCurrent(globalBoard.slice(startIndex, endIndex))
+   };
 
-  }
 
-  const updateGlobalCurrent = () => {
-
-  }
-
-  //switch from friend and globle view
+  //switch from friend and global view
   const friendView = () => {
     setFriend(true)
     setGlobal(false)
@@ -65,13 +84,35 @@ const SideBar = () => {
   return (
     <div>
       <button className="friend-btn" onClick= {()=>{friendView()}}>FRIEND ({friendBoard?.length})</button>
-      <button className="globle-btn" onClick= {()=>{globleView()}}>GLOBAL ({globalBoard?.length})</button>
+      <button className="global-btn" onClick= {()=>{globleView()}}>GLOBAL ({globalBoard?.length})</button>
       <div>
 
 
-       {friend && <Person data = {friendCurrent}/>}
-       {global && <Person data = {globalCurrent}/>}
+       {friend &&
+       <div>
+          <div className="board-table">
+            <Person data = {friendCurrent}/>
+          </div>
+          <div className="selective-bar">
+            <Pagination count={friendPage} page={currentFriendPage} onChange={handleFriendChange} />
+          </div>
+        </div>
+        }
+          {global &&
+       <div>
+          <div className="board-table">
+            <Person data = {globalCurrent}/>
+          </div>
+          <div className="selective-bar">
+            <Pagination count={globalPage} page={currentGlobalPage} onChange={handleGlobalChange} />
+          </div>
+        </div>
+        }
 
+
+
+      </div>
+      <div>
 
       </div>
       <div>

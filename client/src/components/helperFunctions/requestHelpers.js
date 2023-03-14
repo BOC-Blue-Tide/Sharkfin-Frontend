@@ -1,10 +1,11 @@
 import Axios from 'axios'
 const avToken = process.env.REACT_APP_ALPHA_VANTAGE
+const alphavantage = 'https://www.alphavantage.co/query?function='
 
 
 const helpers = {
   symbolLookup: async (symbol) => {
-    var url = `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${symbol}&apikey=${avToken}`
+    var url = `${alphavantage}OVERVIEW&symbol=${symbol}&apikey=${avToken}`
     let symbolData = await Axios.get(url)
     return symbolData
   },
@@ -20,6 +21,11 @@ const helpers = {
     }
     let stock = await Axios.get(url, requestOption)
     return stock.data.bars
+  },
+  getStockQoute: async (symbol) => {
+    var url = `${alphavantage}GLOBAL_QUOTE&symbol=${symbol}&apikey=${avToken}`
+    let stockQouteData = await Axios(url)
+    return stockQouteData
   }
 
 }

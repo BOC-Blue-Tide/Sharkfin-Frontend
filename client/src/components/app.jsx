@@ -21,6 +21,7 @@ class App extends React.Component {
       stockObj: null,
       liveData: null,
       barData: null,
+      qouteData: null,
       errorMsg: null,
       currentSymbol: null,
       start: defaultStartTime,
@@ -52,6 +53,11 @@ class App extends React.Component {
                 this.setState({ stockObj: symbolData.data })
                 //this.getLiveData(symbol)
               })
+              .then(async () => {
+                var stockQoute = await helpers.getStockQoute(symbol)
+                console.log(stockQoute.data)
+                this.setState({ qouteData: stockQoute.data['Global Quote'] })
+              })
           })
 
 
@@ -71,7 +77,7 @@ class App extends React.Component {
     try {
 
       var barData = await helpers.getBarData(symbol, start, timeframe)
-      console.log(barData)
+      //console.log(barData)
 
       this.setState({ barData: barData })
 
@@ -131,7 +137,8 @@ class App extends React.Component {
           stockObj={this.state.stockObj}
           errorMsg={this.state.errorMsg}
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-          barData={this.state.barData} />
+          barData={this.state.barData}
+          qouteData={this.state.qouteData} />
         {/* <TransactionList data={mockData}/> */}
       </>
     )

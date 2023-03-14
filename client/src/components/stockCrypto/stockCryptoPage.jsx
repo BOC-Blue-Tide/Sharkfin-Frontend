@@ -3,8 +3,9 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 import Graph from './graph.jsx'
-import TimeRange from './timeRange.js'
-import Description from './description.js'
+import TimeRange from './timeRange.jsx'
+import Description from './description.jsx'
+import Stats from './stats.jsx'
 
 const stockCryptoPage = (props) => {
 
@@ -29,6 +30,7 @@ const stockCryptoPage = (props) => {
               <Graph barData={props.barData} />
               <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
               <Description stockObj={stockObj} />
+              <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />
 
 
             </Grid>

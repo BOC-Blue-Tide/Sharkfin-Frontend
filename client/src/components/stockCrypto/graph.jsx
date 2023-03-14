@@ -69,7 +69,7 @@ const Graph = (props) => {
             //   // }
             // },
             ticks: {
-              display: true
+              display: false
             },
             grid: {
               display: false

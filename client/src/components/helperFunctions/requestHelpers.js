@@ -10,7 +10,7 @@ const helpers = {
   },
   getBarData: async (symbol, start, timeframe) => {
 
-    var limit = 10
+    var limit = 1000
     var url = `https://data.alpaca.markets/v2/stocks/${symbol}/bars?start=${start}&timeframe=${timeframe}&limit=${limit}`
     var requestOption = {
       headers: {

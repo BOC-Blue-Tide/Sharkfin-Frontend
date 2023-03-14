@@ -9,40 +9,25 @@ Chart.register(...registerables)
 
 
 const Graph = (props) => {
-  // const [data, setData] = useState([]);
-  const data = [
-    {
-      x: 10,
-      y: 20
-    }, {
-      x: 12,
-      y: 10
-    }, {
-      x: 15,
-      y: 4
-    }
-  ]
   const [graphData, setGraphData] = useState({});
 
-  useEffect(async () => {
-    var graphData = await helper.processGraphData(props.barData)
-    console.log(graphData)
-    // let data = [];
-    // let value = 50;
-    // for (var i = 0; i < 366; i++) {
-    //   let date = new Date();
-    //   date.setHours(0, 0, 0, 0);
-    //   date.setDate(i);
-    //   value += Math.round((Math.random() < 0.5 ? 1 : 0) * Math.random() * 10);
-    //   data.push({ x: date, y: value });
-    // }
-    // setGraphData(data)
+  useEffect(() => {
+    (async () => {
+      if (props.barData) {
+        var graphData = await helper.processGraphData(props.barData)
+        //console.log(graphData)
+        setGraphData(graphData)
+      }
+
+    })()
+
   }, [props.barData]);
 
   return (
 
     <Line
       data={{
+        // labels: graphData.xAxis,
         datasets: [
           {
             data: graphData,
@@ -77,12 +62,12 @@ const Graph = (props) => {
 
           x: {
             type: 'time',
-            time: {
-              unit: 'hour',
-              // displayFormats: {
-              //   hour: 'MMM D, hA'
-              // }
-            },
+            // time: {
+            //   unit: 'day',
+            //   // displayFormats: {
+            //   //   hour: 'MMM D, hA'
+            //   // }
+            // },
             ticks: {
               display: true
             },
@@ -92,7 +77,7 @@ const Graph = (props) => {
           },
           y: {
             ticks: {
-              display: true
+              display: false
             },
             grid: {
               display: false

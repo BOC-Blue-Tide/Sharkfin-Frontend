@@ -7,7 +7,7 @@ import moment from 'moment-timezone'
 const API_KEY = process.env.REACT_APP_ALPACA_ID;
 const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
-
+const defaultStartTime = moment().subtract(1, 'days').toISOString()
 
 
 
@@ -21,7 +21,7 @@ class App extends React.Component {
       barData: null,
       errorMsg: null,
       currentSymbol: null,
-      start: '2023-03-10T06:33:40.481Z',
+      start: defaultStartTime,
       timeframe: '5Min'
     }
   }

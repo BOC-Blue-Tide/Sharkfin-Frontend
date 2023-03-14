@@ -48,7 +48,7 @@ h6 {
 main {
   max-width: 840px;
   padding: 16px;
-  margin: 60px;
+  margin: auto;
   box-sizing: content-box;
 }
 

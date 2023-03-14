@@ -43,8 +43,17 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "@alpacahq/alpaca-trade-api": "^2.16.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@mui/material": "^5.11.12"
+    "@mui/icons-material": "^5.11.11",
+    "@mui/material": "^5.11.12",
+    "chart.js": "^4.2.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^2.29.3",
+    "material-ui-popup-state": "^5.0.4",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.41",
+    "react-chartjs-2": "^5.2.0"
   }
 }

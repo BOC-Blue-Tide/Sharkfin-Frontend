@@ -8,6 +8,8 @@ const API_KEY = process.env.REACT_APP_ALPACA_ID;
 const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
+import TransactionList from './TransactionList.jsx';
+import mockData from '../../../mockData.js';
 
 
 
@@ -130,6 +132,7 @@ class App extends React.Component {
           errorMsg={this.state.errorMsg}
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData} />
+        {/* <TransactionList data={mockData}/> */}
       </>
     )
   }

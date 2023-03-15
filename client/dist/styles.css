@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 @import url('~@mui/material/styles');
 
-
 *,
 *::before,
 *::after {
@@ -50,16 +49,38 @@ h6 {
 }
 
 main {
-  padding: 5px 7% 5px 7%;
+  max-width: 840px;
+  padding: 16px;
   margin: auto;
   box-sizing: content-box;
 }
 
 #root {
   padding: 20px 0 20px 0;
+  width: 100%;
 }
+
+/*seach bar*/
+.page-content {
+  margin-top: 2em;
+}
+
+.stock-name {
+  font-weight: bold;
+}
+
+/*seach bar*/
+/*Stock & Crypto page*/
+.description-title {
+  font-weight: bold;
+}
+
+/*Stock & Crypto page*/
+
 
 .transaction {
   display: flex;
   justify-content: space-between;
 }
+
+/*Stock & Crypto page*/

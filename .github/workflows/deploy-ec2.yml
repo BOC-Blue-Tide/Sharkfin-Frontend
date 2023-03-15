@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     name: Deploy to EC2 on main branch push
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v2 
@@ -20,8 +20,8 @@ jobs:
           TARGET: ${{ secrets.TARGET_DIR }}
                 
         run: |
-          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          echo "$PRIVATE_KEY" > private_key && chmod 400 private_key
+          ssh -o StrictHostKeyChecking=no -i private_key ${REMOTE_USER}@${REMOTE_HOST} '
 
               # Now we have got the access of EC2 and we will start the deploy .
               cd /home/ubuntu/Sharkfin-Frontend &&

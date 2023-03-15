@@ -45,7 +45,7 @@ const chartOptions = {
   }
 }
 
-const NetWorthChart = () => {
+const NetWorthChart = (props) => {
   return (
     <div>
       <Line

@@ -32,7 +32,7 @@ const chartOptions = {
   maintainAspectRatio: false,
 }
 
-const AllocationChart = () => {
+const AllocationChart = (props) => {
   return (
     <div>
       <Pie

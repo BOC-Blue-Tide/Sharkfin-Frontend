@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/BOC-Blue-Tide/Sharkfin-Frontend#readme",
   "devDependencies": {
+    "@alpacahq/alpaca-trade-api": "^2.16.1",
     "@babel/cli": "^7.21.0",
     "@babel/core": "^7.21.0",
     "@babel/plugin-transform-runtime": "^7.21.0",

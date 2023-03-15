@@ -12,12 +12,19 @@ const SideBar = () => {
   const [global, setGlobal] = useState(false)
   const [friendPage, setFriendPage] = useState(1)
   const [globalPage, setGlobalPage] = useState(1)
+  const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, name: null, gain: null})
+  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
 
 
   useEffect(() => {
     getFriendBoardData()
     getGlobalBoardData()
   }, [])
+
+  useEffect(() => {
+    checkFriendPlacement("Ab")
+    checkGlobalPlacement("Farris")
+  }, [friendBoard, globalBoard])
 
   const getFriendBoardData = async () => {
     await Axios.get('/friendBoard')
@@ -68,6 +75,21 @@ const SideBar = () => {
      setGlobalCurrent(globalBoard.slice(startIndex, endIndex))
    };
 
+  //check self placement
+  const checkFriendPlacement = (name) => {
+    for (var x = 0; x < friendBoard.length; x ++) {
+      if (friendBoard[x].name == name) {
+        setSelfFriendPlacement({placement: x + 1, name: name, gain: friendBoard[x].gain})
+      }
+    }
+  }
+  const checkGlobalPlacement = (name) => {
+    for (var x = 0; x < globalBoard.length; x ++) {
+      if (globalBoard[x].name == name) {
+        setSelfGlobalPlacement({placement: x + 1, name: name, gain: friendBoard[x].gain})
+      }
+    }
+  }
 
   //switch from friend and global view
   const friendView = () => {
@@ -91,7 +113,7 @@ const SideBar = () => {
        {friend &&
        <div>
           <div className="board-table">
-            <Person data = {friendCurrent}/>
+            <Person data = {friendCurrent} placement = {currentFriendPage} selfPlacement = {selfFriendPlacement}/>
           </div>
           <div className="selective-bar">
             <Pagination count={friendPage} page={currentFriendPage} onChange={handleFriendChange} />
@@ -101,7 +123,7 @@ const SideBar = () => {
           {global &&
        <div>
           <div className="board-table">
-            <Person data = {globalCurrent}/>
+            <Person data = {globalCurrent} color="8AEADF" placement = {currentGlobalPage} selfPlacement = {selfGlobalPlacement}/>
           </div>
           <div className="selective-bar">
             <Pagination count={globalPage} page={currentGlobalPage} onChange={handleGlobalChange} />

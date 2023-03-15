@@ -1,4 +1,5 @@
 const Axios = require('axios');
+const schedule = require('node-schedule');
 // require("dotenv").config();
 
 
@@ -186,5 +187,21 @@ module.exports = {
     {"name":"Maison","gain":33},
     {"name":"Donal","gain":-48}]
     res.send(dummyData)
-  }
+  },
+
+  //auto update
+  // const updateRule = new schedule.RecurrenceRule();
+  // updateRule.hour = 9;
+  // updateRule.minute = 0;
+
+  // const updateJob = schedule.scheduleJob(updateRule, async () => {
+  //   try {
+  //     // 在此處進行自動更新的 POST 請求
+  //     const response = await axios.post('your_api_url', { your_data });
+  //     console.log('Auto update success:', response.data);
+  //   } catch (error) {
+  //     console.error('Auto update error:', error);
+  //   }
+  // });
+
 }

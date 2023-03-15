@@ -1,10 +1,21 @@
 import React, { useRef, useState, useEffect } from 'react';
 
 const Person = (props) => {
-
+  var selfLine = ""
+  if (Number(props.selfPlacement.gain) > 0) {
+    selfLine = `<th><img src="arrow-up.png" alt="arrow up" width="20"></th><th><h6 style="color:green;">${props.selfPlacement.gain}%</h6></th>`
+  } else {
+    selfLine = `<th><img src="arrow-down.png" alt="arrow down" width="20"></th><th><h6 style="color:red;">${props.selfPlacement.gain}%</h6></th>`
+  }
+  // CSS 加入外框凸顯
+  var selfHTML = `<tr>
+  <th><h6>${props.selfPlacement.placement}.</h6></th>
+  <th><h6>${props.selfPlacement.name}</h6></th>
+  ${selfLine}
+</tr>`
   var tableChart = `<table>`
   for (var x = 0; x < props.data.length; x ++) {
-    var first = x + 1
+    var first = (props.placement - 1) * 10 + x + 1
     var second = props.data[x].name
     var number = Number(props.data[x].gain)
     var third = ""
@@ -24,6 +35,7 @@ const Person = (props) => {
     </tr>`;
     tableChart += insert
   }
+  tableChart += selfHTML
   tableChart += "</table>"
 
   if (props.data.length === 0) {

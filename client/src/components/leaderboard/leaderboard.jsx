@@ -1,5 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import SideBar from './sidebar.jsx'
+import Placement from './placement.jsx'
 
 const LeaderBoard = () => {
 
@@ -21,6 +22,7 @@ const LeaderBoard = () => {
           details placehoader
         </section>
       </div>
+      <div><Placement/></div>
     </div>
 
   )

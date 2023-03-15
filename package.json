@@ -7,6 +7,7 @@
     "server-dev": "npx nodemon --watch server/index.js",
     "client-dev": "npx webpack --watch",
     "start-dev": "npx nodemon --watch server/index.js & npx webpack --watch",
+    "start-prod": "npx node server/index.js & npx webpack",
     "test": "jest"
   },
   "repository": {

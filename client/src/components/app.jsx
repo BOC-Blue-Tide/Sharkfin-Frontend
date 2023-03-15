@@ -168,9 +168,6 @@ class App extends React.Component {
       socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
     }
   }
-});
-
-function App() {
 
   render() {
     return (

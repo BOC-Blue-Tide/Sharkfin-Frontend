@@ -104,19 +104,25 @@ const SideBar = () => {
   }
 
   return (
-    <div>
-      <button className="friend-btn" onClick= {()=>{friendView()}}>FRIEND ({friendBoard?.length})</button>
-      <button className="global-btn" onClick= {()=>{globleView()}}>GLOBAL ({globalBoard?.length})</button>
+    <div className = "main-wrapper">
+      <div className="fg-container">
+        <button className={"friend-btn " + (friend === true ? 'active' : '' )} onClick= {()=>{friendView()}}>FRIEND ({friendBoard?.length})</button>
+        <button className={"global-btn " + (global === true ? 'active' : '' )}  onClick= {()=>{globleView()}}>GLOBAL ({globalBoard?.length})</button>
+      </div>
       <div>
-
-
        {friend &&
        <div>
           <div className="board-table">
             <Person data = {friendCurrent} placement = {currentFriendPage} selfPlacement = {selfFriendPlacement}/>
           </div>
           <div className="selective-bar">
-            <Pagination count={friendPage} page={currentFriendPage} onChange={handleFriendChange} />
+          <Pagination
+            count={friendPage}
+            page={currentFriendPage}
+            onChange={handleFriendChange}
+            // sx={{ width: "100%" }}
+            // color='blue'
+          />
           </div>
         </div>
         }
@@ -130,16 +136,13 @@ const SideBar = () => {
           </div>
         </div>
         }
-
-
-
       </div>
-      <div>
-
-      </div>
-      <div>
+      <div className = "friend-btns">
       <button className="addFriend-btn" onClick= {()=>{}}>Add New Friend</button>
       <button className="requestFriend-btn" onClick= {()=>{}}>View Requests</button>
+      <span class="request-num">
+        <label>99</label>
+      </span>
       </div>
     </div>
   )

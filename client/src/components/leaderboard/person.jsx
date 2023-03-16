@@ -8,12 +8,12 @@ const Person = (props) => {
     selfLine = `<th><img src="arrow-down.png" alt="arrow down" width="20"></th><th><h6 style="color:red;">${props.selfPlacement.gain}%</h6></th>`
   }
   // CSS 加入外框凸顯
-  var selfHTML = `<tr>
+  var selfHTML = `<tr class="self-tr">
   <th><h6>${props.selfPlacement.placement}.</h6></th>
   <th><h6>${props.selfPlacement.name}</h6></th>
   ${selfLine}
 </tr>`
-  var tableChart = `<table>`
+  var tableChart = `<table class="fg-table">`
   for (var x = 0; x < props.data.length; x ++) {
     var first = (props.placement - 1) * 10 + x + 1
     var second = props.data[x].name

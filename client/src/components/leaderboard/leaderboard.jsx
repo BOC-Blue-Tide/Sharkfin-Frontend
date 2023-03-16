@@ -1,30 +1,33 @@
 import React, { useRef, useState, useEffect } from 'react';
 import SideBar from './sidebar.jsx'
 import Placement from './placement.jsx'
+import {daysUntilNextQuarter} from '../helper/leaderboardHelper.js'
 
 const LeaderBoard = () => {
+  const [dayLeft, setdayLeft] = useState(0)
+
+    useEffect(() => {
+      var day = daysUntilNextQuarter()
+      setdayLeft(day)
+    }, [])
 
   return (
-    <div>
+    <>
       <div className="header-container">
-        <section className = "menu">
-          menu placehoader
-        </section>
-        <section className = "countdown">
-          countdown placehoader
-        </section>
+        <h2>LEADER BOARD</h2><h3>{dayLeft} more days in the quarter</h3>
       </div>
-      <div className="info-container">
-        <section className = "sideBar">
+      <div className="leaderboard-main-container">
+        <div className="sidebar-container">
           <SideBar/>
-        </section>
-        <section className = "details">
-          details placehoader
-        </section>
+        </div>
+        <div className="info-container">
+          <div className="investment-profile">investment profile placeholder</div>
+          <div className="position-chart">transection history placeholder</div>
+          <div className="pie-chart">pie chart placeholder</div>
+        </div>
       </div>
-      <div><Placement/></div>
-    </div>
-
+      {/* <div><Placement/></div> */}
+    </>
   )
 
 }

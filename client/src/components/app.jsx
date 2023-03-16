@@ -1,5 +1,6 @@
 import React from 'react';
 import Axios from 'axios'
+//Jason
 import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
@@ -8,9 +9,12 @@ const API_KEY = process.env.REACT_APP_ALPACA_ID;
 const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
+//Jacinthe
 import TransactionList from './TransactionList.jsx';
 import mockData from '../../../mockData.js';
+//Lenord
 import LeaderBoard from './leaderboard/leaderboard.jsx'
+//Daniel
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
@@ -193,14 +197,15 @@ class App extends React.Component {
           </Routes>
     </ThemeProvider>
 
-        <StockCryptoPage
+        {/* <StockCryptoPage
           liveData={this.state.liveData}
           stockObj={this.state.stockObj}
           errorMsg={this.state.errorMsg}
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
-          qouteData={this.state.qouteData} />
+          qouteData={this.state.qouteData} /> */}
         {/* <TransactionList data={mockData}/> */}
+        <LeaderBoard/>
       </>
     )
   }

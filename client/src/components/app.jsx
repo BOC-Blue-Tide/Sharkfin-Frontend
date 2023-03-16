@@ -18,20 +18,26 @@ class App extends React.Component {
     super(props);
     this.state = {
       currency: 'USD',// can be dynaimc if offers currency selection
-      stockObj: null,
-      liveData: null,
-      barData: null,
-      qouteData: null,
+      stockObj: null, // incoming data from api
+      liveData: null, // incoming data from api
+      barData: null, // incoming data from api
+      qouteData: null, // incoming data from api
       errorMsg: null,
       currentSymbol: null,
-      start: defaultStartTime,
-      timeframe: '5Min'
+      start: defaultStartTime, // default to show 1 day history when user search for a stock
+      timeframe: '5Min', // default to show 5 mins interval btween data points when user search for a stock
+      orderInput: null
     }
   }
 
   componentDidMount() { // for development purpose only
-    this.getStockData('msft', 'stock', 'search')
-    this.getBarData('msft', this.state.start, this.state.timeframe)
+    // this.getStockData('msft', 'stock', 'search')
+    // this.getBarData('msft', this.state.start, this.state.timeframe)
+  }
+
+  handleOrderClick(orderInput) {
+    console.log(orderInput)
+    this.setState({ orderInput: orderInput })
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -136,9 +142,11 @@ class App extends React.Component {
           liveData={this.state.liveData}
           stockObj={this.state.stockObj}
           errorMsg={this.state.errorMsg}
-          handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
-          qouteData={this.state.qouteData} />
+          qouteData={this.state.qouteData}
+          handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+          handleOrderClick={this.handleOrderClick.bind(this)}
+        />
         {/* <TransactionList data={mockData}/> */}
       </>
     )

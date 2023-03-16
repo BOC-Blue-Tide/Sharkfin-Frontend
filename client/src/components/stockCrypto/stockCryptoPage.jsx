@@ -6,11 +6,13 @@ import Graph from './graph.jsx'
 import TimeRange from './timeRange.jsx'
 import Description from './description.jsx'
 import Stats from './stats.jsx'
+import Order from './orderForm/orderTab.jsx'
 
 const stockCryptoPage = (props) => {
-
   const fallback = 'Data unavailable'
   var stockObj = props.stockObj
+
+
 
   return (
     <>
@@ -35,10 +37,11 @@ const stockCryptoPage = (props) => {
 
             </Grid>
             <Grid item xs={4}>
-              FSF
+              <Order handleOrderClick={props.handleOrderClick} />
             </Grid>
           </Grid>
         </div> : fallback}
+      <Order handleOrderClick={props.handleOrderClick} />
     </>
 
 

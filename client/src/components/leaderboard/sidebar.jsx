@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Person from './person.jsx'
 import Axios from 'axios';
-import { Pagination } from '@mui/material';
+import {Pagination} from '@mui/material';
 
 const SideBar = () => {
   const [friendBoard, setFriendBoard] = useState([])
@@ -140,7 +140,7 @@ const SideBar = () => {
       <div className = "friend-btns">
       <button className="addFriend-btn" onClick= {()=>{}}>Add New Friend</button>
       <button className="requestFriend-btn" onClick= {()=>{}}>View Requests</button>
-      <span class="request-num">
+      <span className="request-num">
         <label>99</label>
       </span>
       </div>

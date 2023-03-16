@@ -178,7 +178,7 @@ class App extends React.Component {
     return (
       <>
           <ThemeProvider theme={theme}>
-            {/* <TransactionList data={mockData}/> */}
+            <TransactionList data={mockData}/>
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
@@ -197,13 +197,13 @@ class App extends React.Component {
           </Routes>
     </ThemeProvider>
 
-        {/* <StockCryptoPage
+        <StockCryptoPage
           liveData={this.state.liveData}
           stockObj={this.state.stockObj}
           errorMsg={this.state.errorMsg}
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
-          qouteData={this.state.qouteData} /> */}
+          qouteData={this.state.qouteData} />
         {/* <TransactionList data={mockData}/> */}
         <LeaderBoard/>
       </>

@@ -54,18 +54,18 @@ const styles = {
       },
     },
   };
-  
+
   const Header = () => {
     const [searchValue, setSearchValue] = useState('');
-  
+
     const handleSearchChange = (event) => {
       setSearchValue(event.target.value);
     };
-  
+
     const handleLogout = () => {
       // Handle logout logic here
     };
-  
+
     return (
       <div
         position="static"
@@ -120,5 +120,5 @@ const styles = {
       </div>
     );
   };
-  
+
   export default Header;

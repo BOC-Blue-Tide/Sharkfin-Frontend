@@ -98,3 +98,7 @@ typings/
 
 *bundle.js
 *bundle.js.map
+
+.DS_Store
+BOCFrontEnd.pem
+package-lock.json

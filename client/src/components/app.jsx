@@ -8,8 +8,14 @@ const API_KEY = process.env.REACT_APP_ALPACA_ID;
 const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
+//Jacinthe
 import TransactionList from './TransactionList.jsx';
 import mockData from '../../../mockData.js';
+//Howard
+import Portfolio from './portfolio/portfolio.jsx';
+//Lenord
+import LeaderBoard from './leaderboard/leaderboard.jsx'
+//Daniel
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
@@ -160,7 +166,6 @@ class App extends React.Component {
     return (
       <>
           <ThemeProvider theme={theme}>
-            {/* <TransactionList data={mockData}/> */}
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
@@ -175,7 +180,7 @@ class App extends React.Component {
           <Route path="/accountInfo" element={<AccountInfo/>} />
           </Routes>
     </ThemeProvider>
-       
+
         <StockCryptoPage
           liveData={this.state.liveData}
           stockObj={this.state.stockObj}
@@ -183,7 +188,9 @@ class App extends React.Component {
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
           qouteData={this.state.qouteData} />
-        {/* <TransactionList data={mockData}/> */}
+        <TransactionList data={mockData}/>
+      <Portfolio />
+        <LeaderBoard/>
       </>
     )
   }

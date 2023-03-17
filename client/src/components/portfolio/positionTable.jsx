@@ -92,7 +92,7 @@ PositionTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
 };
 
-const PositionTable = (props) {
+const PositionTable = (props) => {
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('symbol');
   const [page, setPage] = React.useState(0);

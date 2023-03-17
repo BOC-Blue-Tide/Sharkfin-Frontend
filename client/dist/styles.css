@@ -54,4 +54,35 @@ main {
 
 #root {
   padding: 20px 0 20px 0;
+  width: 100%;
 }
+
+/*seach bar*/
+.page-content {
+  margin-top: 2em;
+}
+
+.stock-name {
+  font-weight: bold;
+}
+
+/*seach bar*/
+/*Stock & Crypto page*/
+.description-title {
+  font-weight: bold;
+}
+
+/*Stock & Crypto page*/
+
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+}
+
+.transaction {
+  display: flex;
+  justify-content: space-between;
+}
+
+/*Stock & Crypto page*/

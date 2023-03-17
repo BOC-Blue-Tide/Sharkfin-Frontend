@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-@import url('~@mui/material/styles');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('~@mui/material/styles'); */
 
 *,
 *::before,
@@ -96,9 +96,15 @@ main {
 
 .header-container {
   margin-top: 20px;
-  height: 100px;
+  padding: 30px;
+  height: 100%;
   width: 100%;
-  background-color: antiquewhite;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leaderboard-title {
+  display: flex;
 }
 
 .info-container {
@@ -152,6 +158,12 @@ main {
   color: #278D9B;
   border-bottom: 1px #278D9B solid;
 }
+
+.mainpage-table {
+  width: 100%;
+  margin: 15px;
+}
+
 
 .fg-table {
   width: 100%;
@@ -227,5 +239,24 @@ main {
 
 .right-wrapper {
   width: 70%;
+}
+
+.greeting-leaderboard {
+  margin-top: 20px;
+  margin-left: 20px;
+  max-width: 750px;
+  width: 40%;
+}
+
+.mainpage-leaderboard {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.top-five-board {
+  border-radius: 10px;
+  margin: 20px;
+  height: 100%;
+  outline: 1px solid rgba(102, 0, 204, 0.3);
 }
 /*LeaderBoard page*/

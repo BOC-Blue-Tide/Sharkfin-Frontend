@@ -14,7 +14,12 @@ const LeaderBoard = () => {
   return (
     <>
       <div className="header-container">
-        <h2>LEADER BOARD</h2><h3>{dayLeft} more days in the quarter</h3>
+        <div>
+          <h2 style={{color:"#FFD300"}}>LEADER BOARD</h2>
+        </div>
+        <div className ="leaderboard-title">
+          <h3 style={{color:"#EF6F6C"}}>{dayLeft} more days</h3> <h3> in the quarter</h3>
+        </div>
       </div>
       <div className="leaderboard-main-container">
         <div className="sidebar-container">
@@ -26,7 +31,7 @@ const LeaderBoard = () => {
           <div className="pie-chart">pie chart placeholder</div>
         </div>
       </div>
-      {/* <div><Placement/></div> */}
+      <div><Placement/></div>
     </>
   )
 

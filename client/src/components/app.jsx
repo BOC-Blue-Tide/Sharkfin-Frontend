@@ -177,7 +177,7 @@ class App extends React.Component {
   render() {
     return (
       <>
-          <ThemeProvider theme={theme}>
+          {/* <ThemeProvider theme={theme}>
             <TransactionList data={mockData}/>
         <link
           rel="stylesheet"
@@ -186,8 +186,8 @@ class App extends React.Component {
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-      <Header/>
+        /> */}
+      {/* <Header/>
       <SearchBar
           getStockData={this.getStockData.bind(this)} />
 
@@ -195,15 +195,15 @@ class App extends React.Component {
           <Route path="/" element={<Dashboard/>}/>
           <Route path="/accountInfo" element={<AccountInfo/>} />
           </Routes>
-    </ThemeProvider>
+    </ThemeProvider> */}
 
-        <StockCryptoPage
+        {/* <StockCryptoPage
           liveData={this.state.liveData}
           stockObj={this.state.stockObj}
           errorMsg={this.state.errorMsg}
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
-          qouteData={this.state.qouteData} />
+          qouteData={this.state.qouteData} /> */}
         {/* <TransactionList data={mockData}/> */}
         <LeaderBoard/>
       </>

@@ -22,8 +22,8 @@ const SideBar = () => {
   }, [])
 
   useEffect(() => {
-    checkFriendPlacement("Ab")
-    checkGlobalPlacement("Farris")
+    checkFriendPlacement("Lenord")
+    checkGlobalPlacement("Lenord")
   }, [friendBoard, globalBoard])
 
   const getFriendBoardData = async () => {
@@ -86,7 +86,7 @@ const SideBar = () => {
   const checkGlobalPlacement = (name) => {
     for (var x = 0; x < globalBoard.length; x ++) {
       if (globalBoard[x].name == name) {
-        setSelfGlobalPlacement({placement: x + 1, name: name, gain: friendBoard[x].gain})
+        setSelfGlobalPlacement({placement: x + 1, name: name, gain: globalBoard[x].gain})
       }
     }
   }

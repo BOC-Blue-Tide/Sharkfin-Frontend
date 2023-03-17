@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('~@mui/material/styles');
+
 *,
 *::before,
 *::after {
@@ -46,8 +49,7 @@ h6 {
 }
 
 main {
-  max-width: 840px;
-  padding: 16px;
+  padding: 5px 7% 5px 7%;
   margin: auto;
   box-sizing: content-box;
 }
@@ -80,9 +82,150 @@ main {
   justify-content: space-between;
 }
 
-.transaction {
-  display: flex;
-  justify-content: space-between;
+/*Stock & Crypto page*/
+
+
+
+/*LeaderBoard page*/
+
+.sidebar-container {
+  margin-top: 20px;
+  max-width: 350px;
+  width: 35%;
 }
 
-/*Stock & Crypto page*/
+.header-container {
+  margin-top: 20px;
+  height: 100px;
+  width: 100%;
+  background-color: antiquewhite;
+}
+
+.info-container {
+  margin-top: 20px;
+  margin-left: 20px;
+  max-width: 750px;
+  width: 65%;
+}
+
+.leaderboard-main-container{
+  display: flex;
+}
+
+.investment-profile {
+  height: 250px;
+  margin-top: 20px;
+}
+
+.position-chart {
+  height: 250px;
+  background-color: #FFD300;
+}
+
+.pie-chart {
+  height: 250px;
+  background-color: #8AEADF;
+}
+
+.fg-container {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.fg-container button {
+  background: none;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.fg-container button:nth-child(1) {
+  margin-right: 10px;
+}
+
+.fg-container button:hover {
+  color: #278D9B;
+  border-bottom: 1px #278D9B solid;
+}
+
+.fg-container button.active {
+  color: #278D9B;
+  border-bottom: 1px #278D9B solid;
+}
+
+.fg-table {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.fg-table tr {
+  height: 35px;
+}
+
+.fg-table tr th:nth-child(1) {
+  width: 15%;
+}
+
+.fg-table tr th:nth-child(2) {
+  width: 45%;
+  text-align: left;
+}
+
+.fg-table tr th:nth-child(3) {
+  width: 20%;
+}
+
+.fg-table tr th:nth-child(4) {
+  width: 20%;
+}
+
+.fg-table .self-tr {
+  outline: 1px solid rgba(102, 0, 204, 0.3);
+}
+
+.self-tr th:nth-child(1),
+.self-tr th:nth-child(2) {
+  color: #278D9B;
+}
+
+.selective-bar {
+  margin-bottom: 20px;
+}
+
+.request-num {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: #FF1313;
+  color: #fff;
+  position: relative;
+  margin-left: 15px;
+}
+
+.request-num label {
+  font-size: 10;
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%
+}
+
+.friend-btns {
+  display: flex;
+}
+
+.main-wrapper {
+  width: 100%;
+}
+
+.left-wrapper {
+  width: 30%;
+  border-right: 1px solid #000;
+}
+
+.right-wrapper {
+  width: 70%;
+}
+/*LeaderBoard page*/

@@ -161,15 +161,13 @@ const SideBar = () => {
       <button className="addFriend-btn" onClick= {openAddFriendModal}>Add New Friend</button>
       <Modal open={addFriend} onClose={closeAddFriendModal}>
       <div>
-        <h2>這是一個 Modal</h2>
-        <p>你可以在這裡放置任何內容</p>
+        <h2>Place Modal</h2>
       </div>
       </Modal>
       <button className="requestFriend-btn" onClick= {openFriendRequestModal}>View Requests</button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div>
-          <h2>這是一個 Modal</h2>
-          <p>你可以在這裡放置任何內容</p>
+          <h2>Place Modal</h2>
         </div>
       </Modal>
       <span className="request-num">

@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios'
-import SearchBar from './searchBar.jsx'
+// import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
 import moment from 'moment-timezone'
@@ -12,7 +12,7 @@ import TransactionList from './TransactionList.jsx';
 import mockData from '../../../mockData.js';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { Route, Routes } from 'react-router-dom';
@@ -23,7 +23,10 @@ import Header from './header.jsx'
 const theme = createTheme({
   palette: {
     primary: {
-      main: purple[500],
+      main: "#278D9B",
+    },
+    secondary: {
+      main: '#11cb5f',
     },
   },
   typography: {
@@ -38,22 +41,6 @@ const theme = createTheme({
       fontStyle: 'bold',
     },
   },
-  components: {
-    MuiCssBaseline: {
-      // styleOverrides: `
-      // @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 400; src: local('Inter'), local('Inter-Regular'), url(${InterWoff2}) format('woff2'); unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF; } 
-      // `,
-    },
-    Link: {
-      styleOverrides: {
-        // Name of the slot
-        root: {
-          // Some CSS
-          fontSize: '1rem',
-        },
-      },
-    },
-  }
 });
 
 class App extends React.Component {
@@ -183,9 +170,6 @@ class App extends React.Component {
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
       <Header/>
-      <SearchBar
-          getStockData={this.getStockData.bind(this)} />
-
           <Routes>
           <Route path="/" element={<Dashboard/>}/>
           <Route path="/accountInfo" element={<AccountInfo/>} />

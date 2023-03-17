@@ -10,7 +10,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-import mockData from '../../../../mockdata.js';
+import mockDataP from '../../../../mockDataP.js';
 
 const headCells = [
   {id: 'symbol', numeric: false, label: 'Symbol'},
@@ -22,7 +22,7 @@ const headCells = [
   {id: 'avgCost', numeric: true, label: 'Average Cost Basis'}
 ];
 
-const rows = mockData.mockPortfolioData;
+const rows = mockDataP.mockPortfolioData;
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {

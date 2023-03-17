@@ -1,10 +1,10 @@
 import React from 'react';
 import Chart from 'chart.js/auto';
-import mockData from '../../../../mockdata.js';
+import mockDataP from '../../../../mockDataP.js';
 import portfolioHelper from '../helper/portfolioHelper.js';
 import { Pie } from "react-chartjs-2";
 
-var myPortfolio = mockData.mockPortfolioData;
+var myPortfolio = mockDataP.mockPortfolioData;
 
 var allocation = portfolioHelper.allocationRatio(myPortfolio);
 var xData = allocation.symbols;

@@ -1,11 +1,11 @@
 import React from 'react';
 import Chart from 'chart.js/auto';
-import mockData from '../../../../mockdata.js';
+import mockDataP from '../../../../mockDataP.js';
 import portfolioHelper from '../helper/portfolioHelper.js';
 import { Line } from "react-chartjs-2";
 
-var myPortfolio = mockData.mockPortfolioData;
-var stockHistory = mockData.mockHistory;
+var myPortfolio = mockDataP.mockPortfolioData;
+var stockHistory = mockDataP.mockHistory;
 
 var netWorth = portfolioHelper.GainAndLoss('GOOGL','03/08/2023', myPortfolio, stockHistory);
 var xData = netWorth.timestamp;

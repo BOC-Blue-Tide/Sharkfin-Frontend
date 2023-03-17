@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { Button, InputBase, AppBar, TextField, Toolbar, Typography, IconButton } from '@mui/material';
+import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import Logo from '../img/logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const styles = {
-  link: {
+  link: (isActive) => ({
     margin: '0  20px',
     textDecoration: 'none',
-    fontWeight: '500',
+    fontWeight: isActive ? 'bold' : '500',
     '&:hover': {
-      color:"primary"
+      color: 'primary',
     },
-  },
+  }),
   search: {
     float: 'left',
     position: 'relative',
@@ -40,6 +40,7 @@ const styles = {
 
 const Header = () => {
   const [searchValue, setSearchValue] = useState('');
+  const location = useLocation();
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
@@ -80,18 +81,18 @@ const Header = () => {
             onChange={handleSearchChange}
           />
         </div>
-        <Typography sx={styles.link}>
+        <Typography sx={styles.link(location.pathname === '/leaderboard')}>
           <Link component="button" to="/leaderboard">
             Leaderboard
           </Link>
         </Typography>
-        <Typography sx={styles.link}>
-          <Link to="/transactionList" sx={styles.link}>
+        <Typography sx={styles.link(location.pathname === '/transactionList')}>
+          <Link to="/transactionList">
             Transactions
           </Link>
         </Typography>
-        <Typography sx={styles.link}>
-          <Link to="/accountInfo" sx={styles.link}>
+        <Typography sx={styles.link(location.pathname === '/accountInfo')}>
+          <Link to="/accountInfo">
             Account
           </Link>
         </Typography>
@@ -103,7 +104,7 @@ const Header = () => {
         </Button>
       </Toolbar>
     </AppBar>
-    );
-    };
-    
-    export default Header;
+  );
+};
+
+export default Header;

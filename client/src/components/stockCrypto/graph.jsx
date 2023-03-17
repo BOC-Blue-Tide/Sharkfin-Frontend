@@ -26,7 +26,8 @@ const Graph = (props) => {
       if (graphData.length > 0 && props.liveData) {
         let graphDataArr = graphData
         var newGraphData = await helper.addNewDataToGraph(graphDataArr, props.liveData)
-        console.log('newGraphData', newGraphData)
+        // console.log('newGraphData', newGraphData)
+        setGraphData(newGraphData)
       }
     })()
   }, [props.liveData])

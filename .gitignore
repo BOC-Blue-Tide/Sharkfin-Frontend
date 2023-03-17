@@ -100,4 +100,4 @@ typings/
 *bundle.js.map
 
 .DS_Store
-package-lock.json
+# package-lock.json

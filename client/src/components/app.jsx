@@ -179,7 +179,6 @@ class App extends React.Component {
   render() {
     <>
           <ThemeProvider theme={theme}>
-            <TransactionList data={mockData}/>
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
@@ -205,7 +204,6 @@ class App extends React.Component {
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
           qouteData={this.state.qouteData} />
-        {/* <TransactionList data={mockData}/> */}
       <Portfolio />
         <LeaderBoard/>
         <TransactionList data={mockData}/>

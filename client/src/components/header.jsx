@@ -96,6 +96,11 @@ const Header = () => {
             Account
           </Link>
         </Typography>
+        <Typography sx={styles.link}>
+            <Link to="/signin" sx={styles.link}>
+              Signin
+            </Link>
+          </Typography>
         <Button
           onClick={handleLogout}
           variant="outlined" color="primary"

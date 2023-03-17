@@ -1,4 +1,4 @@
-let mockDatahis = [
+let mockData = [
   {
     stock: 'AAPL',
     transactionType: 'buy',
@@ -239,4 +239,4 @@ var mockHistory = {
 };
 
 
-module.exports = { mockPortfolioData, mockHistory, mockDatahis };
+module.exports = { mockPortfolioData, mockHistory, mockData };

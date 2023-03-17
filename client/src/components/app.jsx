@@ -12,6 +12,8 @@ const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
 import TransactionList from './TransactionList.jsx';
 import mockData from '../../../mockData.js';
+//Howard
+import Portfolio from './portfolio/portfolio.jsx';
 //Lenord
 import LeaderBoard from './leaderboard/leaderboard.jsx'
 //Daniel
@@ -203,6 +205,9 @@ class App extends React.Component {
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
           qouteData={this.state.qouteData} />
+        {/* <TransactionList data={mockData}/> */}
+      <Portfolio />
+        <LeaderBoard/>
         <TransactionList data={mockData}/>
       </>
   }

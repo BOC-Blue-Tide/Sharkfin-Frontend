@@ -9,9 +9,6 @@ function Dashboard() {
 
   return (
     <>
-    <Button variant="contained" color="primary" onClick={() => setCount(count + 1)}>
-    Hello World ({count})
-  </Button>
   <Link to="/accountInfo">
     <Button variant="contained" color="primary">
         Go to account info    

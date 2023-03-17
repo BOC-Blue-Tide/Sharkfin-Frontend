@@ -115,7 +115,7 @@ main {
 .info-container {
   margin-top: 20px;
   margin-left: 20px;
-  max-width: 750px;
+  /* max-width: 750px; */
   width: 65%;
 }
 
@@ -123,23 +123,31 @@ main {
   display: flex;
 }
 
-.investment-profile {
-  height: 250px;
-  margin-top: 20px;
+.investment-profile-leaderboard {
+  padding-top: 20px;
+  padding: 20px;
 }
 
-.position-chart {
-  height: 250px;
+.investment-profile-leaderboard {
+  padding-top: 20px;
+  padding: 20px;
+}
+
+.position-chart-leaderboard {
+  padding-top: 20px;
+  padding: 20px;
   background-color: #FFD300;
 }
 
 .pie-chart {
-  height: 250px;
+  padding-top: 20px;
+  padding: 20px;
   background-color: #8AEADF;
 }
 
 .fg-container {
   display: flex;
+  text-align: center;
   margin-bottom: 25px;
 }
 
@@ -243,6 +251,7 @@ main {
 }
 
 .main-wrapper {
+  text-align: center;
   width: 100%;
 }
 
@@ -253,13 +262,6 @@ main {
 
 .right-wrapper {
   width: 70%;
-}
-
-.greeting-leaderboard {
-  margin-top: 20px;
-  margin-left: 20px;
-  max-width: 750px;
-  width: 40%;
 }
 
 .mainpage-leaderboard {
@@ -273,4 +275,23 @@ main {
   height: 100%;
   outline: 1px solid rgba(102, 0, 204, 0.3);
 }
+
+/***leaderboard in portfolio ***/
+.greeting-net-worth-chart {
+  display: flex;
+}
+
+.greeting-leaderboard {
+  margin-top: 20px;
+}
+
+.portfolio-my-net-worth-chart {
+  margin-top: 20px;
+  width: 60%
+}
+
+.mainpage-greeting-leaderboard {
+  width: 40%;
+}
+
 /*LeaderBoard page*/

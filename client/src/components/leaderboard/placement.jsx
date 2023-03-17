@@ -37,7 +37,7 @@ const Placement = () => {
 
 
   return (
-    <div className="greeting-leaderboard">
+    <div className="mainpage-greeting-leaderboard">
       <div><h1>Good Afternoon, {selfPlace.name}</h1></div>
       <div>
         <h2>{selfPlace.gain}% growth this quarter</h2>

@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Person from './person.jsx'
 import Axios from 'axios';
 import {Pagination} from '@mui/material';
+import { Modal } from '@material-ui/core';
 
 const SideBar = () => {
   const [friendBoard, setFriendBoard] = useState([])
@@ -14,7 +15,6 @@ const SideBar = () => {
   const [globalPage, setGlobalPage] = useState(1)
   const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, name: null, gain: null})
   const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
-
 
   useEffect(() => {
     getFriendBoardData()
@@ -103,6 +103,26 @@ const SideBar = () => {
     setGlobal(true)
   }
 
+  //friend
+  const [addFriend, openAddFriend] = useState(false);
+  const [friendRequest, openFriendRequest] = useState(false);
+
+  const openAddFriendModal = () => {
+    openAddFriend(true);
+  };
+  const closeAddFriendModal = () => {
+    openAddFriend(false);
+  };
+  const openFriendRequestModal = () => {
+    openFriendRequest(true);
+  };
+  const closeFriendRequestModal = () => {
+    openFriendRequest(false);
+  };
+
+
+
+
   return (
     <div className = "main-wrapper">
       <div className="fg-container">
@@ -138,8 +158,20 @@ const SideBar = () => {
         }
       </div>
       <div className = "friend-btns">
-      <button className="addFriend-btn" onClick= {()=>{}}>Add New Friend</button>
-      <button className="requestFriend-btn" onClick= {()=>{}}>View Requests</button>
+      <button className="addFriend-btn" onClick= {openAddFriendModal}>Add New Friend</button>
+      <Modal open={addFriend} onClose={closeAddFriendModal}>
+      <div>
+        <h2>這是一個 Modal</h2>
+        <p>你可以在這裡放置任何內容</p>
+      </div>
+      </Modal>
+      <button className="requestFriend-btn" onClick= {openFriendRequestModal}>View Requests</button>
+      <Modal open={friendRequest} onClose={closeFriendRequestModal}>
+        <div>
+          <h2>這是一個 Modal</h2>
+          <p>你可以在這裡放置任何內容</p>
+        </div>
+      </Modal>
       <span className="request-num">
         <label>99</label>
       </span>

@@ -14,7 +14,7 @@ const dropDown = (props) => {
   };
 
   return (
-    <FormControl variant="standard" sx={{ m: 0, minWidth: 210 }}>
+    <FormControl variant="standard" sx={{ m: 0 }}>
       {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
       <Select
         labelId="buyType"

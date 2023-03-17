@@ -51,7 +51,7 @@ const Order = (props) => {
   };
 
   return (
-    <Box sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', border: 1, p: 2 }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="BUY" {...a11yProps(0)} />
@@ -59,10 +59,10 @@ const Order = (props) => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0} >
-        <OrderCard handleOrderClick={props.handleOrderClick} value={value} />
+        <OrderCard handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <OrderCard handleOrderClick={props.handleOrderClick} value={value} />
+        <OrderCard handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
       </TabPanel>
     </Box>
   );

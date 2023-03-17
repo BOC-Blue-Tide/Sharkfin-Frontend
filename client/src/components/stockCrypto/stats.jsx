@@ -6,7 +6,6 @@ import Stack from '@mui/material/Stack';
 import helpers from './helperFunctions/statsFormatter.js'
 
 const stats = (props) => {
-  console.log(props)
   var stockObj = props.stockObj
   var qouteData = props.qouteData
   const fallback = 'Data unavailable'

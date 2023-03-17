@@ -8,39 +8,56 @@ import Grid from '@mui/material/Grid';
 import Dropdown from './orderDropDown.jsx'
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-
+import Divider from '@mui/material/Divider';
 import ReviewModal from './reviewOrder.jsx'
 
 const orderCard = (props) => {
 
   const [orderInput, setOrderInput] = useState({})
   const [buyType, setBuyType] = useState('shares')
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState()
   const [open, setOpen] = useState(false);
+  const [errMsg, setErrMsg] = useState("")
+  const [openErr, setOpenErr] = useState(false)
 
 
   const handleReviewClick = () => {
-    let orderInputObj = {
-      buyType: buyType,
-      amount: amount
+    if (!openErr) {
+      if (amount === 0) {
+        setErrMsg('Invalid number')
+      } else {
+        let orderInputObj = {
+          buyType: buyType,
+          amount: amount
+        }
+        setOrderInput(orderInputObj)
+        setOpen(!open)
+      }
     }
-    setOrderInput(orderInputObj)
-    setOpen(!open)
+
 
   }
 
   const handleBuyType = (e) => {
     setBuyType(e.target.value)
   }
+
   const handleAmount = (e) => {
 
-    setAmount(e.target.value)
+    if (e.target.value <= 0) {
+      setOpenErr(true)
+      setErrMsg('Invalid number')
+    } else {
+      setOpenErr(false)
+      setErrMsg('')
+      setAmount(e.target.value)
+    }
 
   }
 
   return (
     <>
-      <CardContent >
+      <CardContent>
         <Typography variant="subtitle1" component="div">
           {props.value === 0 ? <Grid container spacing={1}>
             <Grid item xs={6}>
@@ -65,23 +82,24 @@ const orderCard = (props) => {
             </Grid>
             <Grid item xs={6}>
               {props.value === 0 ?
-                <TextField type="number" InputProps={{
+                <TextField type="number" helperText={errMsg} InputProps={{
                   inputProps: { min: 0 }
-                }} label="USD" variant="standard" onInput={handleAmount} /> :
+                }} type="number" variant="standard" onInput={handleAmount} /> :
                 <TextField InputProps={{
                   inputProps: { min: 0 }
-                }} type="number" variant="standard" onInput={handleAmount} />
+                }} type="number" helperText={errMsg} variant="standard" onInput={handleAmount} />
               }
             </Grid>
           </Grid>
 
         </Typography>
       </CardContent>
+      <Divider />
       <CardActions>
         <Button size="small" onClick={handleReviewClick}>Review Order</Button>
       </CardActions>
 
-      {open ? <ReviewModal handleReviewClick={handleReviewClick} orderInput={orderInput} /> : null}
+      {open ? <ReviewModal handleReviewClick={handleReviewClick} value={props.value} handleOrderClick={props.handleOrderClick} barData={props.barData} stockObj={props.stockObj} orderInput={orderInput} /> : null}
 
     </>
   )

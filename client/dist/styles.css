@@ -159,10 +159,19 @@ main {
   border-bottom: 1px #278D9B solid;
 }
 
-.mainpage-table {
-  width: 100%;
-  margin: 15px;
+.mainpage-tf {
+  display: flex;
+  justify-content: space-between;
 }
+
+.tf-box {
+  margin-left: 1px;
+  margin-right: 1px;
+  width: 50px;
+  text-align: center;
+}
+
+
 
 
 .fg-table {

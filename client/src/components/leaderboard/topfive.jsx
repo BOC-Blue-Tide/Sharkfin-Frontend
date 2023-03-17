@@ -16,17 +16,11 @@ const Topfive = (props) => {
     })
   }
 
-  var tableChart = `<table class="tf-table">`
-  var insertLineOne = `<tr>`
+  var tfDiv = ""
   for (var x = 0; x < friendBoard.length; x ++) {
+    var box = `<div class="tf-box">`
     var place = x + 1
     var name =friendBoard[x].name
-    insertLineOne += `<th>${place}. ${name}</th>`
-  }
-  insertLineOne += `</tr>`
-
-  var insertLineTwo = `<tr>`
-  for (var x = 0; x < friendBoard.length; x ++) {
     var number = Number(friendBoard[x].gain)
     var arrow = null
     var gain = null
@@ -37,12 +31,10 @@ const Topfive = (props) => {
       arrow = `<img src="arrow-down.png" alt="arrow down" width="20">`
       gain = `<p style="color:red;">${friendBoard[x].gain}%</p>`
     }
-    insertLineTwo += `<th>${gain}${arrow}</th>`
+    box += `<div>${place}. ${name}</div><div>${gain} ${arrow}</div></div>`
+    tfDiv += box
   }
-  insertLineTwo += `</tr>`
-  tableChart += insertLineOne
-  tableChart += insertLineTwo
-  tableChart += "</table>"
+
 
   if (friendBoard.length === 0) {
     return (
@@ -50,8 +42,7 @@ const Topfive = (props) => {
     )
   } else {
     return (
-         <div className="mainpage-table" dangerouslySetInnerHTML={{__html: tableChart}} />
-
+         <div className="mainpage-tf" dangerouslySetInnerHTML={{__html: tfDiv}} />
     )
   }
 }

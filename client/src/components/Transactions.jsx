@@ -8,17 +8,21 @@ function Transactions(props) {
 
   let totalPrice = '$' + (props.data.price.slice(0,-4) * props.data.quantity).toFixed(2) + ' USD';
 
+  let capitalizeFirstLetter = function(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   let outerAccordian = <div className='transaction'>{props.data.stock} <span>{totalPrice}</span></div>
 
   let innerAccordian = <div>
-    <div className='transaction'>Transaction type <span>{props.data.transactionType}</span></div>
+    <div className='transaction'>Transaction type <span>{capitalizeFirstLetter(props.data.transactionType)}</span></div>
     <div className='transaction'>Date <span>{props.data.datetime}</span></div>
     <hr></hr>
     <div className='transaction'>Quantity <span>{props.data.quantity}</span></div>
     <div className='transaction'>Price <span>{'$' + props.data.price}</span></div>
     <hr></hr>
     <div className='transaction'>Total Price <span>{totalPrice}</span></div>
-    <div className='transaction'>Status <span>{props.data.status}</span></div>
+    <div className='transaction'>Status <span>{capitalizeFirstLetter(props.data.status)}</span></div>
   </div>;
 
   return <>
@@ -34,7 +38,7 @@ function Transactions(props) {
           <div>
             {totalPrice}
           </div>
-          <div style={{'fontSize': 'medium'}}>{props.data.transactionType}</div>
+          <div style={{'fontSize': 'medium'}}>{capitalizeFirstLetter(props.data.transactionType)}</div>
         </Typography>
       </AccordionSummary>
       <AccordionDetails>

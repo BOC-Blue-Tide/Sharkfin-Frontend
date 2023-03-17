@@ -23,7 +23,6 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { Route, Routes } from 'react-router-dom';
 import AccountInfo from './accountInfo.jsx';
-import Dashboard from './exampleComponent.jsx'
 import Header from './header.jsx'
 
 const theme = createTheme({
@@ -176,21 +175,21 @@ class App extends React.Component {
         />
       <Header/>
           <Routes>
-          <Route path="/" element={<Dashboard/>}/>
+          <Route path="/" element={<Portfolio/>}/>
           <Route path="/accountInfo" element={<AccountInfo/>} />
-          </Routes>
-    </ThemeProvider>
-
-        <StockCryptoPage
+          <Route path="/leaderboard" element={<LeaderBoard/>} />
+          <Route path="/transactionList" element={<TransactionList data={mockData}/>} />
+          <Route path="/stockCryptoPage" element={ <StockCryptoPage
           liveData={this.state.liveData}
           stockObj={this.state.stockObj}
           errorMsg={this.state.errorMsg}
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
-          qouteData={this.state.qouteData} />
-        <TransactionList data={mockData}/>
-      <Portfolio />
-        <LeaderBoard/>
+          qouteData={this.state.qouteData} />} />
+
+          
+          </Routes>
+    </ThemeProvider>
       </>
     )
   }

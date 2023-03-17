@@ -86,12 +86,12 @@ const Header = () => {
           </Link>
         </Typography>
         <Typography sx={styles.link}>
-          <Link to="/history" sx={styles.link}>
-            History
+          <Link to="/transactionList" sx={styles.link}>
+            Transactions
           </Link>
         </Typography>
         <Typography sx={styles.link}>
-          <Link to="/account" sx={styles.link}>
+          <Link to="/accountInfo" sx={styles.link}>
             Account
           </Link>
         </Typography>

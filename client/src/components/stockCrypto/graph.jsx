@@ -18,10 +18,18 @@ const Graph = (props) => {
         //console.log(graphData)
         setGraphData(graphData)
       }
-
     })()
-
   }, [props.barData]);
+
+  useEffect(() => {
+    (async () => {
+      if (graphData.length > 0 && props.liveData) {
+        let graphDataArr = graphData
+        var newGraphData = await helper.addNewDataToGraph(graphDataArr, props.liveData)
+        console.log('newGraphData', newGraphData)
+      }
+    })()
+  }, [props.liveData])
 
   return (
 

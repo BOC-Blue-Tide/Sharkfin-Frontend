@@ -46,7 +46,7 @@ const stockCryptoPage = (props) => {
               <div className="live-price">{livePrice}</div>
               <div className="today-change">{`$${parseFloat(qouteData['09. change']).toFixed(2)} (${parseFloat(qouteData['10. change percent']).toFixed(2)}%) Today`}</div>
 
-              <Graph barData={props.barData} />
+              <Graph barData={props.barData} liveData={props.liveData} />
               <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
               <Description stockObj={stockObj} />
               <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />

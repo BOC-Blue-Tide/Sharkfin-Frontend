@@ -1,12 +1,13 @@
 import React from 'react';
-import Axios from 'axios'
+const axios = require('axios').default;
 // import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
 import moment from 'moment-timezone'
-const API_KEY = process.env.REACT_APP_ALPACA_ID;
-const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
+const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
+const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
+const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
 import TransactionList from './TransactionList.jsx';
@@ -28,7 +29,6 @@ import Header from './header.jsx'
 
 //Mengna
 import Login from './Login/Login.jsx';
-import GoogleLogin from './Login/Login2.jsx';
 import AddFriends from './Friends/AddFriends.jsx';
 import ViewRequests from './Friends/ViewRequests.jsx';
 
@@ -60,46 +60,54 @@ class App extends React.Component {
     super(props);
     this.state = {
       currency: 'USD',// can be dynaimc if offers currency selection
-      stockObj: null,
-      liveData: null,
-      barData: null,
-      qouteData: null,
+      stockObj: null, // incoming data from api
+      liveData: null, // incoming data from api
+      barData: null, // incoming data from api
+      qouteData: null, // incoming data from api
       errorMsg: null,
       currentSymbol: null,
       start: defaultStartTime,
-      timeframe: '5Min'
+      timeframe: '5Min',
+      isReady: false,
+      user: ""
     }
   }
 
-  componentDidMount() { // for development purpose only
-    this.getStockData('msft', 'stock', 'search')
-    this.getBarData('msft', this.state.start, this.state.timeframe)
-  }
+  // componentDidMount() { // for development purpose only
+  //   this.getStockData('msft', 'stock', 'search')
+  //   this.getBarData('msft', this.state.start, this.state.timeframe)
+  // }
 
   handleTimeRangeClick(start, timeframe) {
     this.setState({ start: start, timeframe: timeframe }, async () => {
-      this.getBarData('msft', this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
+      this.getBarData(this.state.currentSymbol, this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
     })
   }
 
   async getStockData(input, scope, operation) {
+
     var symbol = input.toUpperCase()
     if (operation === 'search') {
       if (scope === 'stock') {
         try {
-          this.setState({ symbol: symbol }, async () => {
+          this.setState({ currentSymbol: symbol }, async () => {
             var symbolData = await helpers.symbolLookup(symbol)
               .then(async (symbolData) => {
 
                 //console.log(symbolData.data)
                 this.setState({ stockObj: symbolData.data })
-                //this.getLiveData(symbol)
+                this.getLiveData(symbol)
               })
               .then(async () => {
                 var stockQoute = await helpers.getStockQoute(symbol)
-                console.log(stockQoute.data)
+                //console.log(stockQoute.data)
                 this.setState({ qouteData: stockQoute.data['Global Quote'] })
               })
+              .then(async () => {
+                await this.getBarData(symbol, this.state.start, this.state.timeframe)
+              })
+
+
           })
 
 
@@ -117,13 +125,9 @@ class App extends React.Component {
 
   async getBarData(symbol, start, timeframe) {
     try {
-
       var barData = await helpers.getBarData(symbol, start, timeframe)
       //console.log(barData)
-
       this.setState({ barData: barData })
-
-
     }
     catch (err) {
       console.log(err)
@@ -133,74 +137,111 @@ class App extends React.Component {
 
 
   getLiveData(symbol) {
-    const socket = new WebSocket(`wss://stream.data.alpaca.markets/v2/${SOURCE}`);
+    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
 
+    console.info('1. New websocket created.');
+
+    // Connection opened -> Subscribe
+    socket.onopen = (event) => {
+      socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': `${symbol}` }))
+
+      console.info('2. Subscribing to symbols...');
+
+    };
+
+    // Listen for messages from the websocket stream...
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      const message = data[0]['msg']
-      console.log('Message from server ', data);
 
-      if (message === 'connected') {
-        socket.send(JSON.stringify({ "action": "auth", "key": `${API_KEY}`, "secret": `${API_SECRET}` }))
+      // console.clear();
+      // console.info('1. New websocket created.');
+      // console.info('2. Subscribing to symbols...');
+      // console.info('3. Websocket streaming.');
+
+      // stream response...
+      let response = JSON.parse(event.data);
+
+      if (response.type === 'ping') {
+        console.warn('Occasional server', response.type + '.');
+        let pong = { "type": "pong" }
+        socket.send(JSON.stringify(pong))
+      } else {
+        var data = response.data || null
+        console.log(data)
+        this.setState({ liveData: data })
       }
-      if (message === 'authenticated') {
-        socket.send(JSON.stringify({ "action": "subscribe", "bars": [symbol] }))
-      }
-      // if (event.data === '{"type":"ping"}') {
-      //   this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-      //   unsubscribe(symbol)
-      //   socket.close()
-      // } else {
-      //   this.setState({ liveData: data })
-      // }
 
-    }
+    };
 
-    socket.onerror = (event) => {
-      unsubscribe(symbol)
-      this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-      socket.close()
-    }
-
-    // Unsubscribe function to be called
+    // Unsubscribe
     var unsubscribe = function (symbol) {
       socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
     }
   }
 
-  render() {
-    return (
-      <>
-          <ThemeProvider theme={theme}>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-      <Header/>
-          <Routes>
-          <Route path="/" element={<Portfolio/>}/>
-          <Route path="/accountInfo" element={<AccountInfo/>} />
-          <Route path="/leaderboard" element={<LeaderBoard/>} />
-          <Route path="/transferForm" element={<TransferForm/>} />
-          <Route path="/transactionList" element={<TransactionList data={mockData}/>} />
-          <Route path="/stockCryptoPage" element={ <StockCryptoPage
-          liveData={this.state.liveData}
-          stockObj={this.state.stockObj}
-          errorMsg={this.state.errorMsg}
-          handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-          barData={this.state.barData}
-          qouteData={this.state.qouteData} />} />
-             <Route path="/logout" element={<GoogleLogin/>}/>
-          <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-    </ThemeProvider>
-      </>
+  updateUser = (user) => {
+    this.setState(
+      { user: user }
     )
+  }
+
+  checkLoginState = () => {
+    axios.get('/status')
+      .then((response) => {
+        this.setState({
+          isReady: true,
+          user: response.data,
+        })
+        console.log('/status', response);
+      })
+      .catch((err) => {
+        console.log('logout error', err);
+      })
+  }
+
+  render() {
+    if (!this.state.isReady) {
+      <div></div>
+    }
+
+    if (!this.state.user) {
+      return (
+        <Login updateUser={this.updateUser} user={this.state.user} />
+      )
+    } else {
+      return (
+        <>
+          <ThemeProvider theme={theme}>
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
+            />
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            />
+            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
+            <Routes>
+              <Route path="/" element={<Portfolio />} />
+              <Route path="/accountInfo" element={<AccountInfo />} />
+              <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path="/transferForm" element={<TransferForm />} />
+              <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+              <Route path="/searchContent" element={<StockCryptoPage
+                liveData={this.state.liveData}
+                stockObj={this.state.stockObj}
+                errorMsg={this.state.errorMsg}
+                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                barData={this.state.barData}
+                qouteData={this.state.qouteData} />} />
+
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </ThemeProvider>
+        </>
+      )
+    }
   }
 }
 
 export default App;
+

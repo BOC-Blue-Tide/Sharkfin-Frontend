@@ -45,7 +45,7 @@ const searchBar = (props) => {
       <form onSubmit={handleSubmit}>
         <Stack direction="row" spacing={0.5}>
           <SearchIcon />
-          <input type="text" onInput={handleInput} />
+          <input className='searchInput' type="text" onInput={handleInput} placeholder="Search by symbol" />
           <Button variant="contained" onClick={handleClick}>
             {`${searchScope}`}
           </Button>

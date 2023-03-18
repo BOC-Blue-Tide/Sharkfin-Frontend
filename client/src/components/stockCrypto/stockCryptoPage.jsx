@@ -8,15 +8,16 @@ import Description from './description.jsx'
 import Stats from './stats.jsx'
 import Order from './orderForm/orderTab.jsx'
 
+
 const stockCryptoPage = (props) => {
   const fallback = 'Data unavailable'
   var stockObj = props.stockObj
   var qouteData = props.qouteData
 
   const [errMsg, setErrMsg] = useState(null)
-
   const [livePrice, setLivePrice] = useState('')
   const [change, setChange] = useState('')
+
 
 
   useEffect(() => {

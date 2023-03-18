@@ -1,5 +1,5 @@
 import React from 'react';
-import Axios from 'axios'
+const axios = require('axios').default;
 // import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
@@ -28,7 +28,6 @@ import Header from './header.jsx'
 
 //Mengna
 import Login from './Login/Login.jsx';
-import GoogleLogin from './Login/Login2.jsx';
 import AddFriends from './Friends/AddFriends.jsx';
 import ViewRequests from './Friends/ViewRequests.jsx';
 
@@ -67,13 +66,17 @@ class App extends React.Component {
       errorMsg: null,
       currentSymbol: null,
       start: defaultStartTime,
-      timeframe: '5Min'
+      timeframe: '5Min',
+
+      isReady: false,
+      user: "",
     }
   }
 
   componentDidMount() { // for development purpose only
     this.getStockData('msft', 'stock', 'search')
     this.getBarData('msft', this.state.start, this.state.timeframe)
+    this.checkLoginState();
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -168,7 +171,36 @@ class App extends React.Component {
     }
   }
 
+  updateUser = (user) => {
+    this.setState(
+      {user: user}
+    )
+  }
+
+  checkLoginState = () => {
+    axios.get('/status')
+    .then((response) => {
+      this.setState({
+        isReady: true,
+        user: response.data,
+      })
+      console.log('/status', response);
+    })
+    .catch((err) => {
+      console.log('logout error', err);
+    })
+  }
+
   render() {
+    if (!this.state.isReady) {
+      <div></div>
+    }
+
+    if (!this.state.user) {
+      return (
+        <Login updateUser = {this.updateUser} user = {this.state.user}/>
+      )
+    } else {
     return (
       <>
           <ThemeProvider theme={theme}>
@@ -180,7 +212,7 @@ class App extends React.Component {
           rel="stylesheet"
           href="https://fonts.googleapis.com/icon?family=Material+Icons"
         />
-      <Header/>
+      <Header updateUser = {this.updateUser}/>
           <Routes>
           <Route path="/" element={<Portfolio/>}/>
           <Route path="/accountInfo" element={<AccountInfo/>} />
@@ -194,12 +226,13 @@ class App extends React.Component {
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
           qouteData={this.state.qouteData} />} />
-             <Route path="/logout" element={<GoogleLogin/>}/>
+             {/* <Route path="/logout" element={<GoogleLogin/>}/> */}
           <Route path="*" element={<Navigate to="/" />} />
           </Routes>
     </ThemeProvider>
       </>
     )
+    }
   }
 }
 

@@ -20,7 +20,8 @@ const searchBar = (props) => {
 
 
   const handleSelect = (e) => {
-    const { scope } = e.currentTarget.dataset
+    const scope = e.target.innerText
+    console.log(scope)
     setSearchScope(scope)
   }
 
@@ -41,16 +42,16 @@ const searchBar = (props) => {
         <input type="text" onInput={handleInput} />
         <PopupState variant="popover" popupId="demo-popup-menu">
           {(popupState) => (
-            <React.Fragment>
+            <>
               <Button variant="contained" {...bindTrigger(popupState)}>
                 {`${searchScope}`}
               </Button>
               <Menu {...bindMenu(popupState)}>
-                <MenuItem data-scope={'stock'} onClick={handleSelect, popupState.close}>Stock</MenuItem>
-                <MenuItem data-scope={'crypto'} onClick={handleSelect, popupState.close}>Crypto</MenuItem>
+                <MenuItem data-scope={'stock'} onClose={handleSelect}>Stock</MenuItem>
+                <MenuItem data-scope={'crypto'} onClick={(e) => { handleSelect(e), popupState.close }}>Crypto</MenuItem>
 
               </Menu>
-            </React.Fragment>
+            </>
           )}
         </PopupState>
 

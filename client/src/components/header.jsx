@@ -76,17 +76,7 @@ const Header = (props) => {
               <img src={Logo} alt="Your Logo" height="50" />
             </Link>
           </Typography>
-          <div sx={styles.search}>
-            <InputBase
-              placeholder="Search…"
-              sx={{
-                ...styles.inputInput,
-              }}
-              inputProps={{ 'aria-label': 'search' }}
-              value={searchValue}
-              onChange={handleSearchChange}
-            />
-          </div>
+          <SearchBar getStockData={props.getStockData} />
           <Typography sx={styles.link(location.pathname === '/leaderboard')}>
             <Link component="button" to="/leaderboard">
               Leaderboard

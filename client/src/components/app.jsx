@@ -69,7 +69,8 @@ class App extends React.Component {
       start: defaultStartTime,
       timeframe: '5Min',
       isReady: false,
-      user: ""
+      user: "",
+      orderObj: null
     }
   }
 
@@ -77,6 +78,10 @@ class App extends React.Component {
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
   // }
+
+  handleOrderClick(orderObj) {
+    this.setState({ orderObj: orderObj })
+  }
 
   handleTimeRangeClick(start, timeframe) {
     this.setState({ start: start, timeframe: timeframe }, async () => {
@@ -232,7 +237,8 @@ class App extends React.Component {
                 errorMsg={this.state.errorMsg}
                 handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                 barData={this.state.barData}
-                qouteData={this.state.qouteData} />} />
+                qouteData={this.state.qouteData}
+                handleOrderClick={this.handleOrderClick.bind(this)} />} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

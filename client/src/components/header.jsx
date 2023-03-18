@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import Logo from '../img/logo.png';
 import { Link, useLocation } from 'react-router-dom';
+import SearchBar from './searchBar.jsx'
 
 const styles = {
   link: (isActive) => ({
@@ -38,7 +39,7 @@ const styles = {
   },
 };
 
-const Header = () => {
+const Header = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const location = useLocation();
 
@@ -70,17 +71,7 @@ const Header = () => {
             <img src={Logo} alt="Your Logo" height="50" />
           </Link>
         </Typography>
-        <div sx={styles.search}>
-          <InputBase
-            placeholder="Search…"
-            sx={{
-              ...styles.inputInput,
-            }}
-            inputProps={{ 'aria-label': 'search' }}
-            value={searchValue}
-            onChange={handleSearchChange}
-          />
-        </div>
+        <SearchBar getStockData={props.getStockData} />
         <Typography sx={styles.link(location.pathname === '/leaderboard')}>
           <Link component="button" to="/leaderboard">
             Leaderboard
@@ -97,10 +88,10 @@ const Header = () => {
           </Link>
         </Typography>
         <Typography sx={styles.link}>
-            <Link to="/signin" sx={styles.link}>
-              Signin
-            </Link>
-          </Typography>
+          <Link to="/signin" sx={styles.link}>
+            Signin
+          </Link>
+        </Typography>
         <Button
           onClick={handleLogout}
           variant="outlined" color="primary"

@@ -195,7 +195,7 @@ class App extends React.Component {
             rel="stylesheet"
             href="https://fonts.googleapis.com/icon?family=Material+Icons"
           />
-          <Header />
+          <Header getStockData={this.getStockData.bind(this)} />
           <Routes>
             <Route path="/" element={<Portfolio />} />
             <Route path="/accountInfo" element={<AccountInfo />} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import Axios from 'axios'
+const axios = require('axios').default;
 // import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
@@ -29,7 +29,6 @@ import Header from './header.jsx'
 
 //Mengna
 import Login from './Login/Login.jsx';
-import GoogleLogin from './Login/Login2.jsx';
 import AddFriends from './Friends/AddFriends.jsx';
 import ViewRequests from './Friends/ViewRequests.jsx';
 
@@ -67,21 +66,14 @@ class App extends React.Component {
       qouteData: null, // incoming data from api
       errorMsg: null,
       currentSymbol: null,
-      start: defaultStartTime, // default to show 1 day history when user search for a stock
-      timeframe: '5Min', // default to show 5 mins interval btween data points when user search for a stock
-      orderInput: null
+      start: defaultStartTime,
+      timeframe: '5Min'
     }
   }
 
   componentDidMount() { // for development purpose only
-    // this.getStockData('msft', 'stock', 'search')
-    // this.getBarData('msft', this.state.start, this.state.timeframe)
-    //this.getLiveData('MSFT')
-  }
-
-  handleOrderClick(orderInput) {
-    console.log(orderInput)
-    this.setState({ orderInput: orderInput })
+    this.getStockData('msft', 'stock', 'search')
+    this.getBarData('msft', this.state.start, this.state.timeframe)
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -183,72 +175,50 @@ class App extends React.Component {
     }
   }
 
-
   render() {
-    return (
-      <>
-        <ThemeProvider theme={theme}>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
-          />
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/icon?family=Material+Icons"
-          />
-          <Header getStockData={this.getStockData.bind(this)} />
-          <Routes>
-            <Route path="/" element={<Portfolio />} />
-            <Route path="/accountInfo" element={<AccountInfo />} />
-            <Route path="/leaderboard" element={<LeaderBoard />} />
-            <Route path="/transferForm" element={<TransferForm />} />
-            <Route path="/transactionList" element={<TransactionList data={mockData} />} />
-            <Route path="/searchContent" element={<StockCryptoPage
-              liveData={this.state.liveData}
-              stockObj={this.state.stockObj}
-              errorMsg={this.state.errorMsg}
-              handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-              barData={this.state.barData}
-              qouteData={this.state.qouteData} />} />
-            <Route path="/logout" element={<GoogleLogin />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-        </ThemeProvider>
-      </>
-    )
+    if (!this.state.isReady) {
+      <div></div>
+    }
+
+    if (!this.state.user) {
+      return (
+        <Login updateUser={this.updateUser} user={this.state.user} />
+      )
+    } else {
+      return (
+        <>
+          <ThemeProvider theme={theme}>
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
+            />
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            />
+            <Header />
+            <Routes>
+              <Route path="/" element={<Portfolio />} />
+              <Route path="/accountInfo" element={<AccountInfo />} />
+              <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path="/transferForm" element={<TransferForm />} />
+              <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+              <Route path="/stockCryptoPage" element={<StockCryptoPage
+                liveData={this.state.liveData}
+                stockObj={this.state.stockObj}
+                errorMsg={this.state.errorMsg}
+                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                barData={this.state.barData}
+                qouteData={this.state.qouteData} />} />
+              <Route path="/logout" element={<GoogleLogin />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </ThemeProvider>
+        </>
+      )
+    }
   }
 }
 
 export default App;
-
-
-
-// //const socket = new WebSocket(`wss://stream.data.alpaca.markets/v2/${SOURCE}`);
-    // const socket = new WebSocket(`wss://stream.data.alpaca.markets/v2/${SOURCE}`);
-    // socket.onmessage = (event) => {
-    //   const data = JSON.parse(event.data)
-    //   const message = data[0]['msg']
-    //   console.log('Message from server ', data);
-
-    //   if (message === 'connected') {
-    //     socket.send(JSON.stringify({ "action": "auth", "key": `${API_KEY}`, "secret": `${API_SECRET}` }))
-    //   }
-    //   if (message === 'authenticated') {
-    //     socket.send(JSON.stringify({ "action": "subscribe", "bars": ["IBM"] }))
-    //   }
-    // if (event.data === '{"type":"ping"}') {
-    //   this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-    //   unsubscribe(symbol)
-    //   socket.close()
-    // } else {
-    //   this.setState({ liveData: data })
-    // }
-
-    // }
-
-    //   socket.onerror = (event) => {
-    //   unsubscribe(symbol)
-    //   this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-    //   socket.close()
-    //   }
 

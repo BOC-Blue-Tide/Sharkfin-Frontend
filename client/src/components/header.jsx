@@ -3,6 +3,7 @@ import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui
 import Logo from '../img/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 import SearchBar from './searchBar.jsx'
+const axios = require('axios').default;
 
 const styles = {
   main: {
@@ -58,7 +59,14 @@ const Header = (props) => {
   };
 
   const handleLogout = () => {
-    // Handle logout logic here
+    axios.post('/logout')
+      .then((response) => {
+        props.updateUser('');
+        console.log('logout success', response);
+      })
+      .catch((err) => {
+        console.log('logout error', err);
+      })
   };
 
   return (
@@ -77,11 +85,8 @@ const Header = (props) => {
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {/* <Link to="searchContent"> */}
             <SearchBar getStockData={props.getStockData} />
-            {/* </Link> */}
           </Typography>
-
           <Typography sx={styles.link(location.pathname === '/leaderboard')}>
             <Link component="button" to="/leaderboard">
               Leaderboard
@@ -97,14 +102,14 @@ const Header = (props) => {
               Account
             </Link>
           </Typography>
-          <Link to="/logout">
-            <Button
-              onClick={handleLogout}
-              variant="outlined" color="primary"
-            >
-              Logout
-            </Button>
-          </Link>
+          {/* <Link to="/logout"> */}
+          <Button
+            onClick={handleLogout}
+            variant="outlined" color="primary"
+          >
+            Logout
+          </Button>
+          {/* </Link> */}
         </Toolbar>
       </AppBar>
     ));

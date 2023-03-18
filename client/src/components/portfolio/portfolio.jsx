@@ -15,7 +15,7 @@ const Portfolio = (props) => {
       <div className='portfolio-secondary-header'>
         <h3 className='portfolio-h3'>Good afternoon, User</h3>
       </div> */}
-      <div classNAme='greeting-net-worth-chart'>
+      <div className='greeting-net-worth-chart'>
         <div className="greeting-leaderboard">
           <Placement/>
         </div>

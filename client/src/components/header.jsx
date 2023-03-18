@@ -62,7 +62,7 @@ const Header = () => {
 
   return (
     
-  (location.pathname === '/transferForm' ? '' :
+  (location.pathname === '/transferForm' || location.pathname === '/logout' ? '' :
     <AppBar
       position="static"
       sx={styles.main}

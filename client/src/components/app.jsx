@@ -226,7 +226,7 @@ class App extends React.Component {
             />
             <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
-              <Route path="/" element={<Portfolio />} />
+              <Route exact path="/" element={<Portfolio />} />
               <Route path="/accountInfo" element={<AccountInfo />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />

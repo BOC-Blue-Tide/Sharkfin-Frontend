@@ -240,7 +240,7 @@ main {
 .request-num label {
   font-size: 10;
   position: absolute;
-  text-align: center;
+  padding: 30px;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%
@@ -292,6 +292,21 @@ main {
 
 .mainpage-greeting-leaderboard {
   width: 40%;
+}
+
+.friend-popup {
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%
+}
+
+.popup-content {
+  height: 400px;
+  width:700px;
+  background-color: white;
+  padding: 40px;
 }
 
 /*LeaderBoard page*/

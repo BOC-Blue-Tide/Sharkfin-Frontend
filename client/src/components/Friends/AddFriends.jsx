@@ -77,7 +77,7 @@ const AddFriends = (props) => {
   }
 
     return (
-      <div>
+      <div className = 'popup-content'>
         <div>Let's Make Friends!</div>
 
         {/* <SearchBar /> */}

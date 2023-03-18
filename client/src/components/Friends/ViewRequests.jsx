@@ -10,7 +10,7 @@ class ViewRequests extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className = 'popup-content'>
         <div>Friend Requests</div>
         <div>
           {friends.map((friend) => {

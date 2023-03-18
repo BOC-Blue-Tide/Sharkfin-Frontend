@@ -22,8 +22,9 @@ import { createTheme } from '@mui/material/styles';
 import { blue } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { Route, Routes } from 'react-router-dom';
-import AccountInfo from './accountInfo.jsx';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import AccountInfo from './accountInfo/accountInfo.jsx';
+import TransferForm from './accountInfo/transferForm.jsx'
 import Header from './header.jsx'
 
 //Mengna
@@ -200,6 +201,7 @@ class App extends React.Component {
             <Route path="/" element={<Portfolio />} />
             <Route path="/accountInfo" element={<AccountInfo />} />
             <Route path="/leaderboard" element={<LeaderBoard />} />
+            <Route path="/transferForm" element={<TransferForm />} />
             <Route path="/transactionList" element={<TransactionList data={mockData} />} />
             <Route path="/stockCryptoPage" element={<StockCryptoPage
               liveData={this.state.liveData}
@@ -208,7 +210,8 @@ class App extends React.Component {
               handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
               barData={this.state.barData}
               qouteData={this.state.qouteData} />} />
-            <Route path="/signin" element={<GoogleLogin />} />
+            <Route path="/logout" element={<GoogleLogin />} />
+            <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </ThemeProvider>
       </>

@@ -79,6 +79,10 @@ class App extends React.Component {
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
   // }
 
+  componentDidMount() {
+    this.checkLoginState();
+  }
+
   handleOrderClick(orderObj) {
     this.setState({ orderObj: orderObj })
   }
@@ -183,24 +187,28 @@ class App extends React.Component {
     }
   }
 
-  updateUser = (user) => {
-    this.setState(
-      { user: user }
-    )
+updateUser = (user) => {
+  this.setState({ user: user });
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    localStorage.removeItem("user");
   }
+};
 
   checkLoginState = () => {
     axios.get('/status')
-      .then((response) => {
-        this.setState({
-          isReady: true,
-          user: response.data,
-        })
-        console.log('/status', response);
-      })
-      .catch((err) => {
-        console.log('logout error', err);
-      })
+    .then((response) => {
+      const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+      this.setState({
+        isReady: true,
+        user: savedUser || response.data,
+      });
+      console.log('/status', response);
+    })
+    .catch((err) => {
+      console.log('logout error', err);
+    });
   }
 
   render() {

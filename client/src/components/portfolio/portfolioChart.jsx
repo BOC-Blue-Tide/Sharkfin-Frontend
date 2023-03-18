@@ -53,7 +53,7 @@ const chartOptions = {
     },
     y: {
       ticks: {
-        display: true
+        display: false
       },
       grid: {
         display: false

@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
-@import url('~@mui/material/styles');
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+@import url('~@mui/material/styles'); */
 
 *,
 *::before,
@@ -101,15 +101,21 @@ main {
 
 .header-container {
   margin-top: 20px;
-  height: 100px;
+  padding: 30px;
+  height: 100%;
   width: 100%;
-  background-color: antiquewhite;
+  display: flex;
+  justify-content: space-between;
+}
+
+.leaderboard-title {
+  display: flex;
 }
 
 .info-container {
   margin-top: 20px;
   margin-left: 20px;
-  max-width: 750px;
+  /* max-width: 750px; */
   width: 65%;
 }
 
@@ -117,23 +123,31 @@ main {
   display: flex;
 }
 
-.investment-profile {
-  height: 250px;
-  margin-top: 20px;
+.investment-profile-leaderboard {
+  padding-top: 20px;
+  padding: 20px;
 }
 
-.position-chart {
-  height: 250px;
+.investment-profile-leaderboard {
+  padding-top: 20px;
+  padding: 20px;
+}
+
+.position-chart-leaderboard {
+  padding-top: 20px;
+  padding: 20px;
   background-color: #FFD300;
 }
 
 .pie-chart {
-  height: 250px;
+  padding-top: 20px;
+  padding: 20px;
   background-color: #8AEADF;
 }
 
 .fg-container {
   display: flex;
+  text-align: center;
   margin-bottom: 25px;
 }
 
@@ -157,6 +171,21 @@ main {
   color: #278D9B;
   border-bottom: 1px #278D9B solid;
 }
+
+.mainpage-tf {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tf-box {
+  margin-left: 1px;
+  margin-right: 1px;
+  width: 50px;
+  text-align: center;
+}
+
+
+
 
 .fg-table {
   width: 100%;
@@ -211,7 +240,7 @@ main {
 .request-num label {
   font-size: 10;
   position: absolute;
-  text-align: center;
+  padding: 30px;
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%
@@ -222,6 +251,7 @@ main {
 }
 
 .main-wrapper {
+  text-align: center;
   width: 100%;
 }
 
@@ -233,4 +263,50 @@ main {
 .right-wrapper {
   width: 70%;
 }
+
+.mainpage-leaderboard {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.top-five-board {
+  border-radius: 10px;
+  margin: 20px;
+  height: 100%;
+  outline: 1px solid rgba(102, 0, 204, 0.3);
+}
+
+/***leaderboard in portfolio ***/
+.greeting-net-worth-chart {
+  display: flex;
+}
+
+.greeting-leaderboard {
+  margin-top: 20px;
+}
+
+.portfolio-my-net-worth-chart {
+  margin-top: 20px;
+  width: 60%
+}
+
+.mainpage-greeting-leaderboard {
+  width: 40%;
+}
+
+.friend-popup {
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%
+}
+
+.popup-content {
+  height: 400px;
+  width:700px;
+  background-color: white;
+  padding: 40px;
+}
+
 /*LeaderBoard page*/

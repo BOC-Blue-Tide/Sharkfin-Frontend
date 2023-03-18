@@ -101,12 +101,14 @@ const Header = () => {
             Account
           </Link>
         </Typography>
+          <Link to="/logout">
         <Button
           onClick={handleLogout}
           variant="outlined" color="primary"
         >
           Logout
         </Button>
+        </Link>
       </Toolbar>
     </AppBar>
   ));

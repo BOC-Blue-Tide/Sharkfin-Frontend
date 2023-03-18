@@ -26,6 +26,12 @@ import AccountInfo from './accountInfo/accountInfo.jsx';
 import TransferForm from './accountInfo/transferForm.jsx'
 import Header from './header.jsx'
 
+//Mengna
+import Login from './Login/Login.jsx';
+import GoogleLogin from './Login/Login2.jsx';
+import AddFriends from './Friends/AddFriends.jsx';
+import ViewRequests from './Friends/ViewRequests.jsx';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -188,8 +194,8 @@ class App extends React.Component {
           handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
           barData={this.state.barData}
           qouteData={this.state.qouteData} />} />
+             <Route path="/logout" element={<GoogleLogin/>}/>
           <Route path="*" element={<Navigate to="/" />} />
-
           </Routes>
     </ThemeProvider>
       </>

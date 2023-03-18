@@ -101,4 +101,4 @@ typings/
 
 .DS_Store
 BOCFrontEnd.pem
-package-lock.json
+# package-lock.json

@@ -76,7 +76,12 @@ const Header = (props) => {
               <img src={Logo} alt="Your Logo" height="50" />
             </Link>
           </Typography>
-          <SearchBar getStockData={props.getStockData} />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            {/* <Link to="searchContent"> */}
+            <SearchBar getStockData={props.getStockData} />
+            {/* </Link> */}
+          </Typography>
+
           <Typography sx={styles.link(location.pathname === '/leaderboard')}>
             <Link component="button" to="/leaderboard">
               Leaderboard

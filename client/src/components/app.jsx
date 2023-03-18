@@ -203,7 +203,7 @@ class App extends React.Component {
             <Route path="/leaderboard" element={<LeaderBoard />} />
             <Route path="/transferForm" element={<TransferForm />} />
             <Route path="/transactionList" element={<TransactionList data={mockData} />} />
-            <Route path="/stockCryptoPage" element={<StockCryptoPage
+            <Route path="/searchContent" element={<StockCryptoPage
               liveData={this.state.liveData}
               stockObj={this.state.stockObj}
               errorMsg={this.state.errorMsg}

@@ -4,25 +4,29 @@ import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
-
+import Stack from '@mui/material/Stack';
+import { useNavigate } from 'react-router-dom';
 
 const searchBar = (props) => {
 
   const [searchScope, setSearchScope] = useState('stock')
   const [searchInput, setSearchInput] = useState('')
-  // const [selection, setSelection] = useState(searchScope)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate()
 
 
   const handleInput = (e) => {
     setSearchInput(e.target.value)
   }
 
+  const handleClick = (e) => {
+    setAnchorEl(e.currentTarget);
+  }
 
-  const handleSelect = (e) => {
+  const handleClose = (e) => {
     const scope = e.target.innerText
-    console.log(scope)
     setSearchScope(scope)
+    setAnchorEl(null)
   }
 
 
@@ -31,6 +35,7 @@ const searchBar = (props) => {
     if (searchInput.length > 0) {
       props.getStockData(searchInput, searchScope, 'search')
       e.target.reset()
+      navigate(`/searchContent`);
     }
 
   }
@@ -38,23 +43,25 @@ const searchBar = (props) => {
   return (
     <div className="searchBar-container">
       <form onSubmit={handleSubmit}>
-        <SearchIcon />
-        <input type="text" onInput={handleInput} />
-        <PopupState variant="popover" popupId="demo-popup-menu">
-          {(popupState) => (
-            <>
-              <Button variant="contained" {...bindTrigger(popupState)}>
-                {`${searchScope}`}
-              </Button>
-              <Menu {...bindMenu(popupState)}>
-                <MenuItem data-scope={'stock'} onClose={handleSelect}>Stock</MenuItem>
-                <MenuItem data-scope={'crypto'} onClick={(e) => { handleSelect(e), popupState.close }}>Crypto</MenuItem>
-
-              </Menu>
-            </>
-          )}
-        </PopupState>
-
+        <Stack direction="row" spacing={0.5}>
+          <SearchIcon />
+          <input type="text" onInput={handleInput} />
+          <Button variant="contained" onClick={handleClick}>
+            {`${searchScope}`}
+          </Button>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'basic-button',
+            }}
+          >
+            <MenuItem data-scope={'stock'} onClick={handleClose}>Stock</MenuItem>
+            <MenuItem data-scope={'crypto'} onClick={handleClose}>Crypto</MenuItem>
+          </Menu>
+        </Stack>
       </form>
     </div >
   )

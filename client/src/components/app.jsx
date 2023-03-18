@@ -1,6 +1,6 @@
 import React from 'react';
 import Axios from 'axios'
-import SearchBar from './searchBar.jsx'
+// import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
 import moment from 'moment-timezone'
@@ -9,11 +9,51 @@ const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
+//Jacinthe
 import TransactionList from './TransactionList.jsx';
 import mockData from '../../../mockData.js';
+//Howard
+import Portfolio from './portfolio/portfolio.jsx';
+//Lenord
+import LeaderBoard from './leaderboard/leaderboard.jsx'
+//Daniel
+import { ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
+import { blue } from '@mui/material/colors';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import { Route, Routes } from 'react-router-dom';
+import AccountInfo from './accountInfo.jsx';
+import Header from './header.jsx'
 
+//Mengna
+import Login from './Login/Login.jsx';
+import GoogleLogin from './Login/Login2.jsx';
+import AddFriends from './Friends/AddFriends.jsx';
+import ViewRequests from './Friends/ViewRequests.jsx';
 
-
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#278D9B",
+    },
+    secondary: {
+      main: '#11cb5f',
+    },
+  },
+  typography: {
+    fontFamily: 'Inter, sans-Serif',
+    subtitle1: {
+      fontSize: 12,
+    },
+    body1: {
+      fontWeight: 500,
+    },
+    button: {
+      fontStyle: 'bold',
+    },
+  },
+});
 
 class App extends React.Component {
   constructor(props) {
@@ -146,19 +186,31 @@ class App extends React.Component {
   render() {
     return (
       <>
-        <SearchBar
-          getStockData={this.getStockData.bind(this)} />
-
-        <StockCryptoPage
-          liveData={this.state.liveData}
-          stockObj={this.state.stockObj}
-          errorMsg={this.state.errorMsg}
-          barData={this.state.barData}
-          qouteData={this.state.qouteData}
-          handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-          handleOrderClick={this.handleOrderClick.bind(this)}
-        />
-        {/* <TransactionList data={mockData}/> */}
+        <ThemeProvider theme={theme}>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
+          />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          />
+          <Header />
+          <Routes>
+            <Route path="/" element={<Portfolio />} />
+            <Route path="/accountInfo" element={<AccountInfo />} />
+            <Route path="/leaderboard" element={<LeaderBoard />} />
+            <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+            <Route path="/stockCryptoPage" element={<StockCryptoPage
+              liveData={this.state.liveData}
+              stockObj={this.state.stockObj}
+              errorMsg={this.state.errorMsg}
+              handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+              barData={this.state.barData}
+              qouteData={this.state.qouteData} />} />
+            <Route path="/signin" element={<GoogleLogin />} />
+          </Routes>
+        </ThemeProvider>
       </>
     )
   }

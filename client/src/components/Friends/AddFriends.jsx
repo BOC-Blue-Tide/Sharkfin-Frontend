@@ -113,4 +113,3 @@ const AddFriends = (props) => {
 
 export default AddFriends;
 
-

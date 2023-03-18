@@ -291,20 +291,23 @@ input[type=number] {
 
 /***leaderboard in portfolio ***/
 .greeting-net-worth-chart {
+  margin-top: 20px;
   display: flex;
+  width:100%;
 }
 
 .greeting-leaderboard {
-  margin-top: 20px;
+  margin-top: 30px;
+  width:40%
 }
 
 .portfolio-my-net-worth-chart {
-  margin-top: 20px;
+  margin-top: 30px;
   width: 60%
 }
 
 .mainpage-greeting-leaderboard {
-  width: 40%;
+  width: 100%;
 }
 
 .friend-popup {

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import Logo from '../img/logo.png';
 import { Link, useLocation } from 'react-router-dom';
+import SearchBar from './searchBar.jsx'
 const axios = require('axios').default;
 
 const styles = {
@@ -47,6 +48,7 @@ const styles = {
   },
 };
 
+
 const Header = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const location = useLocation();
@@ -57,7 +59,7 @@ const Header = (props) => {
   };
 
   const handleLogout = () => {
-      axios.post('/logout')
+    axios.post('/logout')
       .then((response) => {
         props.updateUser('');
         console.log('logout success', response);
@@ -69,56 +71,48 @@ const Header = (props) => {
 
   return (
 
-  (location.pathname === '/transferForm' ? '' :
-    <AppBar
-      position="static"
-      sx={styles.main}
-    >
-      <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: .5 }}>
-        </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          <Link to="/">
-            <img src={Logo} alt="Your Logo" height="50" />
-          </Link>
-        </Typography>
-        <div sx={styles.search}>
-          <InputBase
-            placeholder="Search…"
-            sx={{
-              ...styles.inputInput,
-            }}
-            inputProps={{ 'aria-label': 'search' }}
-            value={searchValue}
-            onChange={handleSearchChange}
-          />
-        </div>
-        <Typography sx={styles.link(location.pathname === '/leaderboard')}>
-          <Link component="button" to="/leaderboard">
-            Leaderboard
-          </Link>
-        </Typography>
-        <Typography sx={styles.link(location.pathname === '/transactionList')}>
-          <Link to="/transactionList">
-            Transactions
-          </Link>
-        </Typography>
-        <Typography sx={styles.link(location.pathname === '/accountInfo')}>
-          <Link to="/accountInfo">
-            Account
-          </Link>
-        </Typography>
+    (location.pathname === '/transferForm' ? '' :
+      <AppBar
+        position="static"
+        sx={styles.main}
+      >
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
+          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: .5 }}>
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Link to="/">
+              <img src={Logo} alt="Your Logo" height="50" />
+            </Link>
+          </Typography>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <SearchBar getStockData={props.getStockData} />
+          </Typography>
+          <Typography sx={styles.link(location.pathname === '/leaderboard')}>
+            <Link component="button" to="/leaderboard">
+              Leaderboard
+            </Link>
+          </Typography>
+          <Typography sx={styles.link(location.pathname === '/transactionList')}>
+            <Link to="/transactionList">
+              Transactions
+            </Link>
+          </Typography>
+          <Typography sx={styles.link(location.pathname === '/accountInfo')}>
+            <Link to="/accountInfo">
+              Account
+            </Link>
+          </Typography>
           {/* <Link to="/logout"> */}
-        <Button
-          onClick={handleLogout}
-          variant="outlined" color="primary"
-        >
-          Logout
-        </Button>
-        {/* </Link> */}
-      </Toolbar>
-    </AppBar>
-  ));
+          <Button
+            onClick={handleLogout}
+            variant="outlined" color="primary"
+          >
+            Logout
+          </Button>
+          {/* </Link> */}
+        </Toolbar>
+      </AppBar>
+    ));
 };
 
 export default Header;

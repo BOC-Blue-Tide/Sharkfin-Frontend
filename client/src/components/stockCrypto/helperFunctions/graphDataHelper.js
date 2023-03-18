@@ -7,6 +7,11 @@ const helpers = {
       graphData.push({ 'x': date, 'y': barData[i].c })
     }
     return graphData
+  },
+  addNewDataToGraph: async (graphDataArr, liveData) => {
+    let date = new Date(liveData[0].t)
+    graphDataArr.push({ 'x': date, 'y': liveData[0].p })
+    return graphDataArr
   }
 
 

@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import Person from './person.jsx'
 import Axios from 'axios';
 import {Pagination} from '@mui/material';
-import { Modal } from '@material-ui/core';
+import Modal from '@mui/material/Modal';
 
 //Mengna
 import AddFriends from '../Friends/AddFriends.jsx'

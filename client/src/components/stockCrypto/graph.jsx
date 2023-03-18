@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Line } from 'react-chartjs-2'
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
-import helper from './helperFunction/graphDataHelper.js'
+import helper from './helperFunctions/graphDataHelper.js'
 Chart.register(...registerables)
 
 
@@ -18,10 +18,19 @@ const Graph = (props) => {
         //console.log(graphData)
         setGraphData(graphData)
       }
-
     })()
-
   }, [props.barData]);
+
+  useEffect(() => {
+    (async () => {
+      if (graphData.length > 0 && props.liveData) {
+        let graphDataArr = graphData
+        var newGraphData = await helper.addNewDataToGraph(graphDataArr, props.liveData)
+        // console.log('newGraphData', newGraphData)
+        setGraphData(newGraphData)
+      }
+    })()
+  }, [props.liveData])
 
   return (
 

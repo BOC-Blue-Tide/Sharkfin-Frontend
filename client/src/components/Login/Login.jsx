@@ -4,16 +4,28 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import jwt_decode from "jwt-decode";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
+const axios = require('axios').default;
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
   }
 
-
   responseMessage = (response) => {
     var decoded = jwt_decode(response.credential);
-    console.log('success', response, decoded);
+    //console.log('success', response, decoded);
+    axios.post('/login', {
+      email: decoded.email,
+      credential: response.credential,
+    })
+    .then((response) =>{
+      console.log('success', response);
+      this.setState({user: decoded.email});
+      this.props.updateUser(decoded.email);
+    })
+    .catch((error) => {
+      console.log('fail', error);
+    });
 
 };
   errorMessage = (error) => {
@@ -21,23 +33,31 @@ class Login extends React.Component {
 };
 
 logout = () => {
-
-    document.location.href = "https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=http://localhost:3000";
-  console.log('logout');
-  googleLogout();
+  axios.post('/logout')
+  .then((response) => {
+    this.props.updateUser('');
+    console.log('logout success', response);
+  })
+  .catch((err) => {
+    console.log('logout error', err);
+  })
 }
+
 
   render() {
     return (
+      <div>
+        <h1>  Welcome to Shark Fin </h1>
+        <div> The gamified stock market experience</div>
 
+        {!this.props.user ?
+        (<div>
+          <GoogleLogin onSuccess={this.responseMessage.bind(this)} onError={this.errorMessage.bind(this)} />
+        </div>)
+        :  <button onClick={this.logout}>Log out</button>
 
-
-   <div>
-      <GoogleLogin onSuccess={this.responseMessage} onError={this.errorMessage} />
-            <button onClick={this.logout}>Log out</button>
-  </div>
-
-
+        }
+      </div>
     )
   }
 }

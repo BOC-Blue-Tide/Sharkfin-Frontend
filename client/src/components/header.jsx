@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import Logo from '../img/logo.png';
 import { Link, useLocation } from 'react-router-dom';
+const axios = require('axios').default;
 
 const styles = {
   main: {
@@ -46,22 +47,28 @@ const styles = {
   },
 };
 
-
-const Header = () => {
+const Header = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const location = useLocation();
-  
+
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
   };
 
   const handleLogout = () => {
-    // Handle logout logic here
+      axios.post('/logout')
+      .then((response) => {
+        props.updateUser('');
+        console.log('logout success', response);
+      })
+      .catch((err) => {
+        console.log('logout error', err);
+      })
   };
 
   return (
-    
+
   (location.pathname === '/transferForm' ? '' :
     <AppBar
       position="static"
@@ -101,14 +108,14 @@ const Header = () => {
             Account
           </Link>
         </Typography>
-          <Link to="/logout">
+          {/* <Link to="/logout"> */}
         <Button
           onClick={handleLogout}
           variant="outlined" color="primary"
         >
           Logout
         </Button>
-        </Link>
+        {/* </Link> */}
       </Toolbar>
     </AppBar>
   ));

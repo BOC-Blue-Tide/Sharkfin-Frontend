@@ -67,7 +67,9 @@ class App extends React.Component {
       errorMsg: null,
       currentSymbol: null,
       start: defaultStartTime,
-      timeframe: '5Min'
+      timeframe: '5Min',
+      isReady: false,
+      user: ""
     }
   }
 
@@ -83,6 +85,7 @@ class App extends React.Component {
   }
 
   async getStockData(input, scope, operation) {
+
     var symbol = input.toUpperCase()
     if (operation === 'search') {
       if (scope === 'stock') {
@@ -175,6 +178,26 @@ class App extends React.Component {
     }
   }
 
+  updateUser = (user) => {
+    this.setState(
+      { user: user }
+    )
+  }
+
+  checkLoginState = () => {
+    axios.get('/status')
+      .then((response) => {
+        this.setState({
+          isReady: true,
+          user: response.data,
+        })
+        console.log('/status', response);
+      })
+      .catch((err) => {
+        console.log('logout error', err);
+      })
+  }
+
   render() {
     if (!this.state.isReady) {
       <div></div>
@@ -196,21 +219,21 @@ class App extends React.Component {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header />
+            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
               <Route path="/" element={<Portfolio />} />
               <Route path="/accountInfo" element={<AccountInfo />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
-              <Route path="/stockCryptoPage" element={<StockCryptoPage
+              <Route path="/searchContent" element={<StockCryptoPage
                 liveData={this.state.liveData}
                 stockObj={this.state.stockObj}
                 errorMsg={this.state.errorMsg}
                 handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                 barData={this.state.barData}
                 qouteData={this.state.qouteData} />} />
-              <Route path="/logout" element={<GoogleLogin />} />
+
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </ThemeProvider>

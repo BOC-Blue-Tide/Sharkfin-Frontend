@@ -4,6 +4,14 @@ import Logo from '../img/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 
 const styles = {
+  main: {
+    flexGrow: 1,
+    width: '100%',
+    margin: '0 auto 50px 0',
+    backgroundColor: 'white',
+    boxShadow: 'none',
+    '@media (min-width: 960px)': { maxWidth: 'none' },
+  },
   link: (isActive) => ({
     margin: '0  20px',
     textDecoration: 'none',
@@ -38,9 +46,11 @@ const styles = {
   },
 };
 
+
 const Header = () => {
   const [searchValue, setSearchValue] = useState('');
   const location = useLocation();
+  
 
   const handleSearchChange = (event) => {
     setSearchValue(event.target.value);
@@ -51,16 +61,11 @@ const Header = () => {
   };
 
   return (
+    
+  (location.pathname === '/transferForm' ? '' :
     <AppBar
       position="static"
-      sx={{
-        flexGrow: 1,
-        width: '100%',
-        margin: '0 auto',
-        backgroundColor: 'white',
-        boxShadow: 'none',
-        '@media (min-width: 960px)': { maxWidth: 'none' },
-      }}
+      sx={styles.main}
     >
       <Toolbar sx={{ justifyContent: 'space-between' }}>
         <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: .5 }}>
@@ -96,20 +101,17 @@ const Header = () => {
             Account
           </Link>
         </Typography>
-        <Typography sx={styles.link}>
-            <Link to="/signin" sx={styles.link}>
-              Signin
-            </Link>
-          </Typography>
+          <Link to="/logout">
         <Button
           onClick={handleLogout}
           variant="outlined" color="primary"
         >
           Logout
         </Button>
+        </Link>
       </Toolbar>
     </AppBar>
-  );
+  ));
 };
 
 export default Header;

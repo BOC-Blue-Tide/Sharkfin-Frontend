@@ -50,6 +50,17 @@ const chartOptions = {
         drawBorder: false,
         display: false,
       }
+    },
+    y: {
+      ticks: {
+        display: true
+      },
+      grid: {
+        display: false
+      },
+      border: {
+        display: false
+      }
     }
   }
 }

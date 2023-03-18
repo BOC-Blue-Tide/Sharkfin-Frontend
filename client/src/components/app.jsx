@@ -71,10 +71,10 @@ class App extends React.Component {
     }
   }
 
-  componentDidMount() { // for development purpose only
-    this.getStockData('msft', 'stock', 'search')
-    this.getBarData('msft', this.state.start, this.state.timeframe)
-  }
+  // componentDidMount() { // for development purpose only
+  //   this.getStockData('msft', 'stock', 'search')
+  //   this.getBarData('msft', this.state.start, this.state.timeframe)
+  // }
 
   handleTimeRangeClick(start, timeframe) {
     this.setState({ start: start, timeframe: timeframe }, async () => {

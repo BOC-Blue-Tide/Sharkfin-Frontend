@@ -1,163 +1,294 @@
 import React, { useState } from 'react';
-import { Button, TextField, Typography, IconButton, Grid, Box, Slider } from '@mui/material';
+import {
+    Button,
+    TextField,
+    Typography,
+    IconButton,
+    Grid,
+    Box,
+    Slider,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    RadioGroup,
+    Radio,
+} from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Logo from '../../img/logo.png';
 
+let userInfo = {
+    firstName: 'Daniel',
+    lastName: 'Halper',
+    userName: 'Dhalper',
+    email: 'Dhalper@test.org',
+};
 
-
+const style = {
+    gridCard: {
+        width: '100%',
+        height: '100%',
+        borderRadius: '30px',
+        padding: '5% 10% 10% 10%',
+    },
+    parentGrid: {
+        height: '100vh',
+    },
+    headerText: {
+        color: 'primary',
+        margin: '20px 0px',
+    },
+    background: {
+        height: '100vh',
+        background: 'linear-gradient(180deg, #FFD300 0%, #FFE879 100%)',
+    },
+};
 
 function TransferForm() {
 
     const [page, setPage] = useState(1);
-    const [inputValue, setInputValue] = useState(1000)
+    const [accountNumber, setAccountNumber] = useState(null);
+    const [transferAmount, setTransferAmount] = useState(1000);
+    const [errors, setErrors] = useState({
+      accountNumber: false,
+      routingNumber: false,
+      swiftCode: false,
+    });
+    const [helperTexts, setHelperTexts] = useState({
+      accountNumber: "",
+      routingNumber: "",
+      swiftCode: "",
+    });
 
     const navigate = useNavigate();
 
     const handleBack = () => {
-        if (page === 1 || page === 4) {
+        if (page === 1) {
             navigate('/AccountInfo');
         } else {
             setPage(page - 1);
         }
     };
 
+    const handleSubmit = () => { };
 
-    let userInfo = {
-        firstName: "Daniel",
-        lastName: "Halper",
-        userName: "Dhalper",
-        email: "Dhalper@test.org",
-    }
 
-    const style = {
-        gridCard: {
-            width: "100%",
-            height: "100%",
-            borderRadius: "30px",
-            padding: "5% 10% 10% 10%"
-        },
-        parentGrid: {
-            height: "100vh"
 
-        },
-        headerText: {
-            color: "primary",
-            margin: "20px 0px"
-        },
-        background: {
-            height: "100vh",
-            background: "linear-gradient(180deg, #FFD300 0%, #FFE879 100%)"
+    const validateAccountNumber = (value) => {
+      if (value.length < 8 || value.length > 12) {
+        setErrors((prevErrors) => ({ ...prevErrors, accountNumber: true }));
+        setHelperTexts((prevHelperTexts) => ({
+          ...prevHelperTexts,
+          accountNumber: "Account number should be between 8 and 12 digits",
+        }));
+      } else {
+        setErrors((prevErrors) => ({ ...prevErrors, accountNumber: false }));
+        setHelperTexts((prevHelperTexts) => ({
+          ...prevHelperTexts,
+          accountNumber: "",
+        }));
+      }
+    };
+
+    const validateRoutingNumber = (value) => {
+      if (value.length !== 9) {
+        setErrors((prevErrors) => ({ ...prevErrors, routingNumber: true }));
+        setHelperTexts((prevHelperTexts) => ({
+          ...prevHelperTexts,
+          routingNumber: "Routing number should be 9 digits",
+        }));
+      } else {
+        setErrors((prevErrors) => ({ ...prevErrors, routingNumber: false }));
+        setHelperTexts((prevHelperTexts) => ({
+          ...prevHelperTexts,
+          routingNumber: "",
+        }));
+      }
+    };
+
+    const validateSwiftCode = (value) => {
+      const regex = /^[A-Za-z]{6}[A-Za-z\d]{2}(\d{3})?$/;
+      if (!regex.test(value)) {
+        setErrors((prevErrors) => ({ ...prevErrors, swiftCode: true }));
+        setHelperText
+        setHelperTexts((prevHelperTexts) => ({
+            ...prevHelperTexts,
+            swiftCode: "Invalid SWIFT code",
+          }));
+        } else {
+          setErrors((prevErrors) => ({ ...prevErrors, swiftCode: false }));
+          setHelperTexts((prevHelperTexts) => ({
+            ...prevHelperTexts,
+            swiftCode: "",
+          }));
         }
-    }
-
-
-
-    const FirstPage = () => (
-        <Box display="flex" flexDirection="column" sx={style.gridCard}>
-            <Typography variant="h2" sx={style.headerText}> Lets get some Info, {userInfo.firstName} </Typography>
-
-            <Grid sx={{ marginBottom: "30px" }} container spacing={2}>
-                <Grid item xs={6} sm={6}>
-                    <TextField
-                        id="first-name-input-1"
-                        label="Legal First Name"
-                        placeholder={userInfo.firstName}
-                    />
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                    <TextField
-                        id="last-name-input-2"
-                        label="Legal Last Name"
-                        placeholder={userInfo.lastName}
-                    />
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                    <TextField
-                        id="back-account"
-                        label="Bank Account Number"
-                    />
-                </Grid>
-                <Grid item xs={6} sm={6}>
-                    <TextField
-                        id="username-input-4"
-                        label="Routing Number"
-                    />
-                </Grid>
-            </Grid>
-            <Button onClick={() => setPage(page + 1)} variant="contained" color="primary">Connect to Bank Account</Button>
-        </Box>
-    )
-
-    const changeValue = async ( _, value) => {
-        setInputValue(value);
       };
 
-    const SecondPage = () => (
-        <Box display="flex" flexDirection="column" sx={style.gridCard}>
-            <Typography variant="h2" sx={style.headerText}> How much would you like to invest? </Typography>
-            <Typography variant="h3" inline="true">${inputValue}</Typography>
-            {inputValue === 1000 ? <Typography variant="body1" inline="true">(recommended)</Typography> : ''}
-           <Slider defaultValue={1000} aria-label="Default" valueLabelDisplay="auto" step={10} min={10} max={1000}  onChange={changeValue}/>
-           <Button onClick={() => setPage(page + 1)} variant="contained" color="primary">Next</Button>
-        </Box>
-    )
-
-    
-
-    const ThirdPage = () => (
-        <Box display="flex" flexDirection="column" sx={style.gridCard}>
+      const accountNumberTrimmer = () => {
+        return accountNumber.slice(-4);
+      }
+  
+      const firstPage = () => {
+          return (
+              <Box key="firstPage" display="flex" flexDirection="column" sx={style.gridCard}>
+                  <Typography variant="h2" sx={style.headerText}>
+                      Let's get some info, {userInfo.firstName}
+                  </Typography>
+  
+                  <Grid sx={{ marginBottom: '30px' }} container spacing={2}>
+                      <Grid item xs={6} sm={6}>
+                          <TextField
+                              id="first-name-input-1"
+                              label="Legal First Name"
+                              placeholder={userInfo.firstName}
+                          />
+                      </Grid>
+                      <Grid item xs={6} sm={6}>
+                          <TextField
+                              id="last-name-input-2"
+                              label="Legal Last Name"
+                              placeholder={userInfo.lastName}
+                          />
+                      </Grid>
+                  </Grid>
+                  <TextField
+                      key="bank-account"
+                      id="bank-account"
+                      label="Bank Account Number"
+                      value={accountNumber}
+                      error={errors.accountNumber}
+                      helperText={helperTexts.accountNumber}
+                      onBlur={(event) => validateAccountNumber(event.target.value)}
+                      onChange={(event) => {
+                          setAccountNumber(event.target.value);
+                      }}
+                  />
+                  <TextField
+                      id="username-input-4"
+                      label="Routing Number"
+                      error={errors.routingNumber}
+                      helperText={helperTexts.routingNumber}
+                      onBlur={(event) => validateRoutingNumber(event.target.value)}
+                  />
+                  <TextField
+                      id="Swift-code"
+                      label="Swift code"
+                      error={errors.swiftCode}
+                      helperText={helperTexts.swiftCode}
+                      onBlur={(event) => validateSwiftCode(event.target.value)}
+                  />
+                  <FormControl component="fieldset">
+                      <FormLabel component="legend">Account type</FormLabel>
+                      <RadioGroup
+                          row
+                          aria-label="options"
+                          name="options"
+                      //   value={bankInfo.accountType}
+                      //   onChange={(event) => {
+                      //     setBankInfo((bankInfo) => ({
+                      //       ...bankInfo,
+                      //       accountType: event.target.value,
+                      //     }));
+                      //   }}
+                      >
+                          <FormControlLabel value="Checkings" control={<Radio />} label="Checkings" />
+                          <FormControlLabel value="Savings" control={<Radio />} label="Savings" />
+                          <FormControlLabel value="Other" control={<Radio />} label="Other" />
+                      </RadioGroup>
+                  </FormControl>
+  
+                  <Button onClick={() => setPage(page + 1)} variant="contained" color="primary">
+                      Connect to Bank Account
+                  </Button>
+              </Box>
+          )
+      };
+  
+      const SecondPage = () => (
+          <Box display="flex" flexDirection="column" sx={style.gridCard}>
+              <Typography variant="h2" sx={style.headerText}>
+                  How much would you like to invest?
+              </Typography>
+              <Box sx={{ display: 'inline' }}>
+                  <Typography sx={{ display: 'inline' }} variant="h3">${transferAmount}</Typography>
+                  {transferAmount === 1000 ? (
+                      <Typography sx={{ display: 'inline' }} variant="body1">  (recommended)</Typography>
+                      ) : (
+                        ''
+                    )}
+                </Box>
+                <Slider
+                    defaultValue={1000}
+                    value={transferAmount}
+                    aria-label="Default"
+                    valueLabelDisplay="auto"
+                    min={100}
+                    step={10}
+                    max={1000}
+                    onChangeCommitted={(_, newValue) => setTransferAmount(newValue)}
+                />
+                <Button
+                    onClick={() => setPage(page + 1)}
+                    variant="contained"
+                    color="primary"
+                >
+                    Next
+                </Button>
+            </Box>
+        );
+        
+        const ThirdPage = () => (
+            <Box display="flex" flexDirection="column" sx={style.gridCard}>
                 <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
-                <Typography variant="body2" >You are about to transfer ${inputValue} from your linked bank account ending in 2983. Are you sure you want to proceed?</Typography>
-                <Box display="flex" flexDirection="column">
-                <Button onClick={() => setPage(page + 1)} variant="outlined" color="primary">Cancel</Button>
-                <Button onClick={() => setPage(page + 1)} variant="outlined" color="primary">Next</Button>
-        </Box>
-        </Box>
-    )
-
-    let currentPage = (
-        <>
-            {page === 1 ? (
-                <FirstPage />
-            ) : page === 2 ? (
-                <SecondPage />
-            ) : page === 3 ? (
-                <ThirdPage />
-            ) : <FirstPage />}
-        </>
-    )
-
-    return (
-        <Box sx={style.parentGrid}>
-            <Grid container spacing={2}>
-                <Grid item xs={6} sm={6}>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <IconButton onClick={handleBack}>
-                            <ArrowBackIcon />
-                        </IconButton>
-                    </Box>
-                    {currentPage}
-                </Grid>
-                <Grid sx={style.background} item xs={6} sm={6}>
-                    <Grid sx={{ float: "right" }} item xs={6} sm={6}>
-                        <Link to="/">
-                            <Button>
-                                Black version of logo here</Button>
-                            {/* <Logo/> */}
-                        </Link>
-                    </Grid>
+                <Typography variant="body2" >You are about to transfer <Box fontWeight='fontWeightMedium' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='fontWeightMedium' display='inline'>{accountNumberTrimmer()}</Box>. Are you sure you want to proceed?</Typography>
+                <Box display="flex" flexDirection="row">
+                    <Button onClick={handleSubmit} variant="outlined" color="primary">Cancel</Button>
+                    <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Confirm</Button></Link>
+                </Box>
+            </Box>
+        )
+        
+        let currentPage = (
+            <>
+                {page === 1 ? (
+                    firstPage()
+                ) : page === 2 ? (
+                    <SecondPage />
+                ) : page === 3 ? (
+                    <ThirdPage />
+                ) : firstPage()
+                }
+            </>
+        )
+        
+        return (
+            <Box sx={style.parentGrid}>
+                <Grid container spacing={2}>
                     <Grid item xs={6} sm={6}>
-                        IMAGE HERE
+                        <Box sx={{ flexGrow: 1 }}>
+                            <IconButton onClick={handleBack}>
+                                <ArrowBackIcon />
+                            </IconButton>
+                        </Box>
+                        {currentPage}
+                    </Grid>
+                    <Grid sx={style.background} item xs={6} sm={6}>
+                        <Grid sx={{ float: "right" }} item xs={6} sm={6}>
+                            <Link to="/">
+                                <Button>
+                                    Black version of logo here</Button>
+                                {/* <Logo/> */}
+                            </Link>
+                        </Grid>
+                        <Grid item xs={6} sm={6}>
+                            IMAGE HERE
+                        </Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </Box>
-    );
-}
+            </Box>
+        );
+    }
 
-export default TransferForm;
-
-
-
-
+    export default TransferForm;
+    
+    

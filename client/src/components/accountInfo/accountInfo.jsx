@@ -55,6 +55,7 @@ function AccountInfo() {
                         id="first-name-input-1"
                         label="First Name"
                         placeholder={userInfo.firstName}
+                        variant="standard"
                         disabled
                         InputLabelProps={{ shrink: true }}
                      />
@@ -64,6 +65,7 @@ function AccountInfo() {
                         id="last-name-input-2"
                         label="Last Name"
                         placeholder={userInfo.lastName}
+                        variant="standard"
                         disabled
                         InputLabelProps={{ shrink: true }}
                      />
@@ -73,6 +75,7 @@ function AccountInfo() {
                         id="email-input"
                         label="Email"
                         placeholder={userInfo.email}
+                        variant="standard"
                         disabled
                         InputLabelProps={{ shrink: true }}
                      />
@@ -82,6 +85,7 @@ function AccountInfo() {
                         id="username-input-4"
                         label="Username"
                         placeholder={userInfo.userName}
+                        variant="standard"
                         disabled
                         InputLabelProps={{ shrink: true }}
                      />

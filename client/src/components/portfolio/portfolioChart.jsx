@@ -10,42 +10,40 @@ var stockHistory = mockDataP.mockHistory;
 var netWorth = portfolioHelper.GainAndLoss('GOOGL','03/08/2023', myPortfolio, stockHistory);
 var xData = netWorth.timestamp;
 var yData = netWorth.gainlossArr;
+const NetWorthChart = (props) => {
 
+  const data = {
+    labels: xData,
+    datasets: [
+      {
+        data: yData,
+        tension: 0.2
+      }
+    ]
+  };
 
-const data = {
-  labels: xData,
-  datasets: [
-    {
-      data: yData,
-      tension: 0.2
-    }
-  ]
-};
-
-const chartOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-
-  // Modify the axis by adding scales
-  scales: {
-    // to remove the labels
-    x: {
-      ticks: {
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
         display: false,
       },
-      grid: {
-        drawBorder: false,
-        display: false,
+    },
+
+    // Modify the axis by adding scales
+    scales: {
+      // to remove the labels
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          drawBorder: false,
+          display: false,
+        }
       }
     }
   }
-}
-
-const NetWorthChart = (props) => {
   return (
     <div>
       <Line

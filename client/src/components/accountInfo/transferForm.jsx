@@ -16,6 +16,8 @@ import {
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Logo from '../../img/logo-dark.png';
+import Graphic from '../../img/sharkfin-graphic.png';
+
 
 
 let userInfo = {
@@ -316,9 +318,11 @@ function TransferForm() {
                         <img src={Logo} alt="SharkFin Trading" height="50" />                        </Link>
                     </Grid>
                     <Grid item xs={6} sm={6}>
-                        IMAGE HERE
                     </Grid>
-                </Grid>
+                    <Box sx={{ width:'100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
+</Box>                
+</Grid>
             </Grid>
         </Box>
     );

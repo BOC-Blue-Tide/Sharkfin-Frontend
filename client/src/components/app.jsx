@@ -73,7 +73,18 @@ const theme = createTheme({
       fontStyle: 'bold',
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        outlined: {
+          borderWidth: "3px",
+          borderRadius: "4px",
+        },
+      },
+    },
+  }
 });
+
 
 class App extends React.Component {
   constructor(props) {
@@ -278,4 +289,3 @@ updateUser = (user) => {
 }
 
 export default App;
-

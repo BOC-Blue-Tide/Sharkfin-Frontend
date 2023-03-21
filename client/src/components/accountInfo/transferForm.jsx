@@ -17,6 +17,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Graphic from '../../../dist/sharkfin-graphic.png';
 import Logo from '../../../dist/logo-dark.png';
+import BankSearch from './bankSearch.jsx'
 
 
 
@@ -193,6 +194,7 @@ function TransferForm() {
                         />
                     </Grid>
                 </Grid>
+                <BankSearch/>
                 <TextField
                     key="bank-account"
                     id="bank-account"
@@ -237,7 +239,6 @@ function TransferForm() {
                         <FormControlLabel value="Other" control={<Radio />} label="Other" />
                     </RadioGroup>
                 </FormControl>
-
                 <Button disabled={isButtonDisabled} onClick={() => setPage(page + 1)} variant="contained" color="primary">
                     Connect to Bank Account
                 </Button>

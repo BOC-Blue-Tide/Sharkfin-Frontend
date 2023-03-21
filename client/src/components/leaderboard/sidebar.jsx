@@ -3,6 +3,7 @@ import Person from './person.jsx'
 import Axios from 'axios';
 import {Pagination} from '@mui/material';
 import Modal from '@mui/material/Modal';
+import { Button } from '@mui/material';
 
 //Mengna
 import AddFriends from '../Friends/AddFriends.jsx'
@@ -40,8 +41,12 @@ const SideBar = () => {
         setFriendPage(1)
       } else {
         setFriendCurrent(data.slice(0, 10))
-        var friendPageNumber = Math.floor(data.length / 10)
-        setFriendPage(friendPageNumber)
+        if (data.length%10 === 0) {
+          setFriendPage(data.length / 10)
+        } else {
+          var pageNumber = Math.floor(data.length / 10) + 1
+          setFriendPage(pageNumber)
+        }
       }
     })
   }
@@ -56,8 +61,12 @@ const SideBar = () => {
         setGlobalPage(1)
       } else {
         setGlobalCurrent(data.slice(0, 10))
-        var pageNumber = Math.floor(data.length / 10) + 1
-        setGlobalPage(pageNumber)
+        if (data.length%10 === 0) {
+          setGlobalPage(data.length / 10)
+        } else {
+          var pageNumber = Math.floor(data.length / 10) + 1
+          setGlobalPage(pageNumber)
+        }
       }
     })
   }
@@ -162,21 +171,20 @@ const SideBar = () => {
         }
       </div>
       <div className = "friend-btns">
-      <button className="addFriend-btn" onClick= {openAddFriendModal}>Add New Friend</button>
+      <Button onClick= {openAddFriendModal} variant="outlined">Add New Friend</Button>
       <Modal open={addFriend} onClose={closeAddFriendModal}>
         <div className = "friend-popup">
           <AddFriends/>
         </div>
       </Modal>
-      <button className="requestFriend-btn" onClick= {openFriendRequestModal}>View Requests</button>
+      <Button onClick= {openFriendRequestModal} variant="outlined">View Requests <span className="request-num">
+        <label>6</label>
+      </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">
           <ViewRequests/>
         </div>
       </Modal>
-      <span className="request-num">
-        <label>6</label>
-      </span>
       </div>
     </div>
   )

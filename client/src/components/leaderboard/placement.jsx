@@ -4,10 +4,12 @@ import Axios from 'axios';
 import Topfive from './topfive.jsx'
 import { Pagination } from '@mui/material';
 import {daysUntilNextQuarter} from '../helper/leaderboardHelper.js'
+import { Button, TextField, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 const Placement = () => {
   const [topFive, setTopFive] = useState([])
-  const [selfPlace, setSelfPlace] = useState ({name: 'Lenord', placement:'1st', gain: 10})
+  const [selfPlace, setSelfPlace] = useState ({name: 'Lenord', placement:'5th', gain: 10})
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
@@ -38,22 +40,26 @@ const Placement = () => {
 
   return (
     <div className="mainpage-greeting-leaderboard">
-      <div><h1>Good Afternoon, {selfPlace.name}</h1></div>
+      <div className="greeting-title"><h1>Good Afternoon, {selfPlace.name}</h1></div>
       <div>
-        <h2>{selfPlace.gain}% growth this quarter</h2>
+        <h2><span style={{color:"#2AD6A2"}}>{selfPlace.gain}% growth </span>this quarter</h2>
         <br></br>
-        {selfPlace.placement} place out of {topFive.length} friends
+        <h3><span style={{color:"#FFA400"}}>{selfPlace.placement} place </span>out of {topFive.length} friends</h3>
         <br></br>
-        {QuarterLeft} more days in the quarter
+        <h3><span style={{color:"#FF3D3D"}}>{QuarterLeft} more days </span>in the quarter</h3>
         <br></br>
-        ${invested} invested, ${remaining} remaining funds
+        <h3><span style={{color:"#2AD6A2"}}>${invested} </span>invested, <span style={{color:"#2AD6A2"}}>${remaining} </span>remaining funds</h3>
       </div>
       <div className="mainpage-leaderboard">
         <h3>Leaderboard</h3>
         <div className="top-five-board">
           <Topfive/>
         </div>
-        <p>More</p>
+        <Link to="/leaderboard">
+          <Button disabled variant="contained" color="primary">
+            More
+          </Button>
+        </Link>
       </div>
     </div>
   )

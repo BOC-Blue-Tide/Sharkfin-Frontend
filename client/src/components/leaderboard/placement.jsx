@@ -1,12 +1,11 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Person from './person.jsx'
-import Axios from 'axios';
-import Topfive from './topfive.jsx'
-import { Pagination } from '@mui/material';
-import {daysUntilNextQuarter} from '../helper/leaderboardHelper.js'
-import { Button, TextField, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
+import Axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
+import Topfive from './topfive.jsx';
 
 const Placement = () => {
   const [topFive, setTopFive] = useState([])
@@ -61,9 +60,15 @@ const Placement = () => {
 
   return (
     <div className="mainpage-greeting-leaderboard">
+      <div className="greeting-title"><h1>Good Afternoon, {selfPlace.name}</h1></div>
       <div className="profilePic-greeting-container">
         <div className="profilePic">
-          <div className="profile-img" style={{ backgroundImage: "url('" + profilePic + "')" }} ></div>
+          {/* BG -> IMG */}
+          <div className="profile-box">
+
+            {/* <img src={ profilePic }></img> */}
+            <img src={profilePic}></img>
+          </div>
           <div className = "friend-btns">
             <Button onClick= {openPicSlect} variant="outlined">Chage Photo</Button>
             <Modal open={picSlect} onClose={closePicSlect}>
@@ -74,15 +79,11 @@ const Placement = () => {
           </div>
         </div>
         <div className="greeting">
-          <div className="greeting-title"><h1>Good Afternoon, {selfPlace.name}</h1></div>
           <div>
-            <h2><span style={{color:"#2AD6A2"}}>{selfPlace.gain}% growth </span>this quarter</h2>
-            <br></br>
-            <h3><span style={{color:"#FFA400"}}>{selfPlace.placement} place </span>out of {topFive.length} friends</h3>
-            <br></br>
-            <h3><span style={{color:"#FF3D3D"}}>{QuarterLeft} more days </span>in the quarter</h3>
-            <br></br>
-            <h3><span style={{color:"#2AD6A2"}}>${invested} </span>invested, <span style={{color:"#2AD6A2"}}>${remaining} </span>remaining funds</h3>
+            <h2><span className="color-lightblue">{selfPlace.gain}% growth </span>this quarter</h2>
+            <h3><span className="color-gold">{selfPlace.placement} place </span>out of {topFive.length} friends</h3>
+            <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
+            <h3><span className="color-lightblue">${invested} </span>invested, <span className="color-lightblue">${remaining} </span>remaining funds</h3>
           </div>
         </div>
       </div>
@@ -90,12 +91,12 @@ const Placement = () => {
         <h3>Leaderboard</h3>
         <div className="top-five-board">
           <Topfive/>
-        </div>
-        <Link to="/leaderboard">
+          <Link to="/leaderboard">
           <Button disabled variant="contained" color="primary">
             More
           </Button>
         </Link>
+        </div>
       </div>
     </div>
   )

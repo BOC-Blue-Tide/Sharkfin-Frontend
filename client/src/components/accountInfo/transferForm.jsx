@@ -15,8 +15,9 @@ import {
 } from '@mui/material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Logo from '../../img/logo-dark.png';
-import Graphic from '../../img/sharkfin-graphic.png';
+import Graphic from '../../../dist/sharkfin-graphic.png';
+import Logo from '../../../dist/logo-dark.png';
+
 
 
 

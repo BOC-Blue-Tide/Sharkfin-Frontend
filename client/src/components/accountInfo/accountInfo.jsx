@@ -3,7 +3,7 @@ import { Button, TextField, Typography } from '@mui/material';
 import { Grid, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
-import ProfilePic from '../../../dist/mockProfile.png'; // Replace with your profile picture
+import ProfilePic from '../../../dist/mockProfile.png';
 
 function AccountInfo() {
 

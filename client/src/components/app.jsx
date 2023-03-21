@@ -69,7 +69,8 @@ class App extends React.Component {
       start: defaultStartTime,
       timeframe: '5Min',
       isReady: false,
-      user: ""
+      user: "",
+      orderObj: null
     }
   }
 
@@ -77,6 +78,14 @@ class App extends React.Component {
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
   // }
+
+  componentDidMount() {
+    this.checkLoginState();
+  }
+
+  handleOrderClick(orderObj) {
+    this.setState({ orderObj: orderObj })
+  }
 
   handleTimeRangeClick(start, timeframe) {
     this.setState({ start: start, timeframe: timeframe }, async () => {
@@ -178,24 +187,28 @@ class App extends React.Component {
     }
   }
 
-  updateUser = (user) => {
-    this.setState(
-      { user: user }
-    )
+updateUser = (user) => {
+  this.setState({ user: user });
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    localStorage.removeItem("user");
   }
+};
 
   checkLoginState = () => {
     axios.get('/status')
-      .then((response) => {
-        this.setState({
-          isReady: true,
-          user: response.data,
-        })
-        console.log('/status', response);
-      })
-      .catch((err) => {
-        console.log('logout error', err);
-      })
+    .then((response) => {
+      const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+      this.setState({
+        isReady: true,
+        user: savedUser || response.data,
+      });
+      console.log('/status', response);
+    })
+    .catch((err) => {
+      console.log('logout error', err);
+    });
   }
 
   render() {
@@ -221,7 +234,7 @@ class App extends React.Component {
             />
             <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
-              <Route path="/" element={<Portfolio />} />
+              <Route exact path="/" element={<Portfolio />} />
               <Route path="/accountInfo" element={<AccountInfo />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
@@ -232,7 +245,8 @@ class App extends React.Component {
                 errorMsg={this.state.errorMsg}
                 handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                 barData={this.state.barData}
-                qouteData={this.state.qouteData} />} />
+                qouteData={this.state.qouteData}
+                handleOrderClick={this.handleOrderClick.bind(this)} />} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

@@ -73,6 +73,10 @@ main {
   font-weight: bold;
 }
 
+.searchInput {
+  font-size: small;
+}
+
 /*seach bar*/
 /*Stock & Crypto page*/
 .description-title {
@@ -293,12 +297,12 @@ input[type=number] {
 .greeting-net-worth-chart {
   margin-top: 20px;
   display: flex;
-  width:100%;
+  width: 100%;
 }
 
 .greeting-leaderboard {
   margin-top: 30px;
-  width:40%
+  width: 40%
 }
 
 .portfolio-my-net-worth-chart {

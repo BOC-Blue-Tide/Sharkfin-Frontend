@@ -23,7 +23,8 @@ const orderCard = (props) => {
 
   const handleReviewClick = () => {
     if (!openErr) {
-      if (amount === 0) {
+      if (amount === 0 || amount === undefined) {
+
         setErrMsg('Invalid number')
       } else {
         let orderInputObj = {

@@ -7,7 +7,7 @@ import { Line } from "react-chartjs-2";
 var myPortfolio = mockDataP.mockPortfolioData;
 var stockHistory = mockDataP.mockHistory;
 
-var netWorth = portfolioHelper.GainAndLoss('GOOGL','03/08/2023', myPortfolio, stockHistory);
+var netWorth = portfolioHelper.GainAndLoss('GOOGL', '03/08/2023', myPortfolio, stockHistory);
 var xData = netWorth.timestamp;
 var yData = netWorth.gainlossArr;
 
@@ -17,7 +17,16 @@ const data = {
   datasets: [
     {
       data: yData,
-      tension: 0.2
+      tension: 0.2,
+      backgroundColor: "black",
+      borderColor: "#5AC53B",
+      borderWidth: 2,
+      pointBorderColor: 'rgba(0, 0, 0, 0)',
+      pointBackgroundColor: 'rgba(0, 0, 0, 0)',
+      pointHoverBackgroundColor: '#5AC53B',
+      pointHoverBorderColor: '#000000',
+      pointHoverBorderWidth: 4,
+      pointHoverRadius: 6
     }
   ]
 };
@@ -40,6 +49,17 @@ const chartOptions = {
       grid: {
         drawBorder: false,
         display: false,
+      }
+    },
+    y: {
+      ticks: {
+        display: false
+      },
+      grid: {
+        display: false
+      },
+      border: {
+        display: false
       }
     }
   }

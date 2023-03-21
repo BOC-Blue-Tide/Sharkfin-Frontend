@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import Logo from '../img/logo.png';
+import Logo from '../../dist/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 import SearchBar from './searchBar.jsx'
 const axios = require('axios').default;

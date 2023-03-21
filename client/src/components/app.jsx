@@ -46,8 +46,28 @@ const theme = createTheme({
     subtitle1: {
       fontSize: 12,
     },
+    h1: {
+      fontSize: '4.25rem',
+    },
+    h2: {
+      fontSize: '3.1rem',
+      // fontWeight: '500'
+
+    },
+    h3: {
+      fontSize: '2rem',
+    },
+    h4: {
+      fontSize: '1.5rem',
+      fontWeight: '500'
+
+    },
     body1: {
-      fontWeight: 500,
+      fontSize: '1.08rem',
+      fontWeight: 500
+    },
+    body2: {
+      fontSize: '0.875rem',
     },
     button: {
       fontStyle: 'bold',

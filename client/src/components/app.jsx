@@ -311,7 +311,7 @@ updateUser = (user) => {
             <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
               <Route exact path="/" element={<Portfolio />} />
-              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={updateUserInfo} userInfo={this.state.userInfo}/>} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />

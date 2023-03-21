@@ -81,7 +81,7 @@ const Header = (props) => {
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">
-              <img src={Logo} alt="Your Logo" height="50" />
+              <img src={Logo} alt="SharkFin Trading" height="50" />
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

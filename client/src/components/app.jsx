@@ -1,5 +1,6 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 const axios = require('axios').default;
+
 // import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
@@ -63,7 +64,7 @@ const theme = createTheme({
 
     },
     body1: {
-      fontSize: '1.08rem',
+      fontSize: '1.03rem',
       fontWeight: 500
     },
     body2: {
@@ -71,9 +72,39 @@ const theme = createTheme({
     },
     button: {
       fontStyle: 'bold',
+      fontSize: "14px"
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          padding: "9px 28px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+        outlined: {
+          padding: "7px 26px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+      },
+    },
+  }
 });
+
 
 class App extends React.Component {
   constructor(props) {
@@ -90,10 +121,35 @@ class App extends React.Component {
       timeframe: '5Min',
       isReady: false,
       user: "",
-      orderObj: null
+      orderObj: null,
+      userInfo: {
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        bank: '',
+        accountNumber: 0,
+        profilePic: ''
+      }
     }
   }
 
+  //Axios get request in componentdidmountto get this information
+  async updateUserInfo() {
+  //add axios get request and set state for userInfo
+    let updatedUserInfo = {
+      firstName: "Fred",
+      lastName: "Flinstone",
+      userName: "Dhalper",
+      email: "Fred@test.org",
+      bank: "CITI Bank",
+      accountNumber: "1234",
+      profilePic: "../../../dist/mockProfile.png"
+   }
+   this.setState({userInfo: updatedUserInfo})
+   console.log(this.state.userInfo);
+  }
+  
   // componentDidMount() { // for development purpose only
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
@@ -101,6 +157,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.checkLoginState();
+    this.updateUserInfo();
   }
 
   handleOrderClick(orderObj) {
@@ -163,7 +220,6 @@ class App extends React.Component {
       this.setState({ errorMsg: 'Something went wrong.' })
     }
   }
-
 
   getLiveData(symbol) {
     const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
@@ -255,7 +311,7 @@ updateUser = (user) => {
             <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
               <Route exact path="/" element={<Portfolio />} />
-              <Route path="/accountInfo" element={<AccountInfo />} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
@@ -278,4 +334,3 @@ updateUser = (user) => {
 }
 
 export default App;
-

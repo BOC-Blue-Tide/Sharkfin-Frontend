@@ -17,9 +17,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Graphic from '../../../dist/sharkfin-graphic.png';
 import Logo from '../../../dist/logo-dark.png';
-
-
-
+import BankSearch from './bankSearch.jsx'
 
 let userInfo = {
     firstName: 'Daniel',
@@ -58,6 +56,7 @@ function TransferForm() {
     const [accountNumber, setAccountNumber] = useState(0);
     const [routingNumber, setRoutingNumber] = useState(0);
     const [swiftCode, setSwiftCode] = useState("");
+    const [bank, setBank] = useState("");
     const [transferAmount, setTransferAmount] = useState(1000);
     const [errors, setErrors] = useState({
         accountNumber: false,
@@ -81,12 +80,21 @@ function TransferForm() {
         }
     };
 
-    const handleSubmit = () => { };
+    const handleBankSubmit = () => { 
+        //Post request here to user's table
+        console.log("Bank:", bank, "Account Number", accountNumber);
+        setPage(page + 1)
+    };
 
+    const handleTransferSubmit = () => { 
+        //Post request here to user's table
+        console.log( 'Transfer Amount', transferAmount);
+        setPage(page + 1)
+    };
 
     useEffect(() => {
         setIsButtonDisabled(
-            routingNumber === 0 || // add any other conditions for invalid input fields
+            routingNumber === 0 || 
             accountNumber === 0 ||
             swiftCode === "" ||
             errors.routingNumber ||
@@ -145,18 +153,9 @@ function TransferForm() {
         }
     };
 
-    const inputsAllFilled = () => {
-        if (
-            routingNumber &&
-            accountNumber &&
-            swiftCode &&
-            !errors.routingNumber &&
-            !errors.accountNumber &&
-            !errors.swiftCode
-        ) {
-            setPage(page + 1);
-        }
-    };
+    const handleBankInput = (input) => {
+        setBank(input);
+    }
 
     let mockDatabaseAccountNumber = 1234;
 
@@ -193,6 +192,7 @@ function TransferForm() {
                         />
                     </Grid>
                 </Grid>
+                <BankSearch handleBankInput={handleBankInput}/>
                 <TextField
                     key="bank-account"
                     id="bank-account"
@@ -237,8 +237,7 @@ function TransferForm() {
                         <FormControlLabel value="Other" control={<Radio />} label="Other" />
                     </RadioGroup>
                 </FormControl>
-
-                <Button disabled={isButtonDisabled} onClick={() => setPage(page + 1)} variant="contained" color="primary">
+                <Button disabled={isButtonDisabled} onClick={handleBankSubmit} variant="contained" color="primary">
                     Connect to Bank Account
                 </Button>
             </Box>
@@ -283,8 +282,8 @@ function TransferForm() {
             <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
             <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer()}</Box>. Are you sure you want to proceed?</Typography>
             <Box display="flex" flexDirection="row">
-                <Button onClick={handleSubmit} variant="outlined" color="primary">Cancel</Button>
-                <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Confirm</Button></Link>
+            <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
+                <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} variant="outlined" color="primary">Confirm</Button></Link>
             </Box>
         </Box>
     )

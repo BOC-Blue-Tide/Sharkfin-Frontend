@@ -63,7 +63,7 @@ const theme = createTheme({
 
     },
     body1: {
-      fontSize: '1.08rem',
+      fontSize: '1.03rem',
       fontWeight: 500
     },
     body2: {
@@ -71,14 +71,33 @@ const theme = createTheme({
     },
     button: {
       fontStyle: 'bold',
+      fontSize: "14px"
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
-        outlined: {
+        contained: {
+          padding: "9px 28px",
           borderWidth: "3px",
           borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+        outlined: {
+          padding: "7px 26px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
         },
       },
     },

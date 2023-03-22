@@ -11,18 +11,8 @@ function TransactionList(props) {
 const [recentTrans, setSeeMoreTrans] = useState(5);
 const [filter, setFilter] = useState('recent');
 const [transArray, setTransArray] = useState(props.data);
-// let transArray = props.data;
+
 let shownArray = transArray.slice(0, recentTrans);
-
-// if (filter === 'buy') {
-//   let buyArray = props.data.filter(element => element.transactionType === 'buy');
-//   transArray = buyArray;
-// }
-
-// if (filter === 'sell') {
-//   let sellArray = props.data.filter(element => element.transactionType === 'sell');
-//   transArray = sellArray;
-// }
 
 const handleSeeMore = function(e) {
   setSeeMoreTrans(recentTrans + 5);
@@ -45,9 +35,7 @@ if (shownArray.length === transArray.length) {
 
 let transactionMap = shownArray.map((element, index) => {
   return <Transactions key={index} data={element} />
-})
-
-
+});
 
 return <>
 <h1>Recent Transaction History</h1>

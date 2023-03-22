@@ -216,7 +216,7 @@ const OnboardingSlide = () => {
       )}
       {displayStep >= 2 && (
         <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          2. Compete against other players to achieve the highest returns at the end of the quarter.
+          2. Compete for the highest quarterly returns against other players.
         </Typography>
       )}
       {displayStep >= 3 && (

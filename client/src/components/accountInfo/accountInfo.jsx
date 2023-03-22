@@ -97,14 +97,21 @@ function AccountInfo(props) {
             {userInfo.accountNumber ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
                <Typography sx={style.headerText} variant="body1">You have ${remainingFunds} available funds for trading.</Typography>
 
+               <Link state={{ page: -1 }} to="/transferForm">
+                  <Button variant="contained" color="primary">
+                     Demo
+                  </Button>
+               </Link>
                <Link state={{ page: 2 }} to="/transferForm">
                   <Button variant="contained" color="primary">
                      Transfer to Sharkfin
                   </Button>
                </Link>
-               <Button variant="outlined" color="primary">
+               {/* <Tooltip label="Withdraw disabled until ">
+               <Button disabled variant="outlined" color="primary">
                   Withdraw Remaining Funds
                </Button>
+               </Tooltip> */}
             </> :
                <>
                   <Typography sx={style.headerText} variant="h4">You have no funds! Connect your bank account to get started...</Typography>

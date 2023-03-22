@@ -73,7 +73,7 @@ function TransferForm() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        if (page === 1) {
+        if (page === 1 || !accountNumber) {
             navigate('/AccountInfo');
         } else {
             setPage(page - 1);
@@ -167,8 +167,67 @@ function TransferForm() {
         }
     }
 
+const OnboardingSlide = () => {
+  const [displayStep, setDisplayStep] = useState(0);
 
+  useEffect(() => {
+    const timer1 = setTimeout(() => setDisplayStep(1), 1000);
+    const timer2 = setTimeout(() => setDisplayStep(2), 2000);
+    const timer3 = setTimeout(() => setDisplayStep(3), 3000);
 
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
+  const stepStyle = {
+    // background: 'linear-gradient(to right, #FFE879 0%, #FFD300 100%)',
+    borderRadius: '5px',
+    padding: '5px',
+    marginBottom: '8px',
+    fontWeight: 'light',
+    // boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        justifyContent: 'center',
+        height: '100%',
+        textAlign: 'left',
+        padding: 2,
+      }}
+    >
+      <Typography variant="h2" component="h2" gutterBottom>
+        You're in!
+      </Typography>
+      <Typography variant="h4" component="p" gutterBottom>
+        Now, let's go over some ground rules...
+      </Typography>
+      {displayStep >= 1 && (
+        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+          1. Invest up to $1,000 of real cash into the stock market!
+        </Typography>
+      )}
+      {displayStep >= 2 && (
+        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+          2. Compete against other players to achieve the highest returns at the end of the quarter.
+        </Typography>
+      )}
+      {displayStep >= 3 && (
+        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+          3. Cash out your gains at the end of the competition.
+        </Typography>
+      )}
+      <Button variant="contained" onClick={() => setPage(1)}>Get started</Button>
+    </Box>
+  );
+};
     const firstPage = () => {
         return (
             <Box key="firstPage" display="flex" flexDirection="column" sx={style.gridCard}>
@@ -290,7 +349,9 @@ function TransferForm() {
 
     let currentPage = (
         <>
-            {page === 1 ? (
+            { page === -1 ? (
+                <OnboardingSlide/> 
+            ) : page === 1 ? (
                 firstPage()
             ) : page === 2 ? (
                 <SecondPage />

@@ -123,6 +123,7 @@ class App extends React.Component {
       user: "",
       orderObj: null,
       userInfo: {
+        userId: 0,
         firstName: '',
         lastName: '',
         userName: '',
@@ -136,7 +137,17 @@ class App extends React.Component {
 
   //Axios get request in componentdidmountto get this information
   async updateUserInfo() {
-  //add axios get request and set state for userInfo
+    var id = localStorage.getItem("id")
+    var request = {
+      headers: {
+        "user_id": id
+      }
+    }
+
+    //add axios get request using userid (stored in local storage) and set state for userInfo
+    axios.get('/user', request);
+    // const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+
     let updatedUserInfo = {
       firstName: "Fred",
       lastName: "Flinstone",
@@ -146,8 +157,9 @@ class App extends React.Component {
       accountNumber: "1234",
       profilePic: "../../../dist/mockProfile.png"
    }
-   this.setState({userInfo: updatedUserInfo})
-   console.log(this.state.userInfo);
+    this.setState({userInfo: updatedUserInfo})
+    console.log(this.state.userInfo);
+    
   }
   
   // componentDidMount() { // for development purpose only
@@ -263,14 +275,14 @@ class App extends React.Component {
     }
   }
 
-updateUser = (user) => {
-  this.setState({ user: user });
-  if (user) {
-    localStorage.setItem("user", JSON.stringify(user));
-  } else {
-    localStorage.removeItem("user");
-  }
-};
+  updateUser = (user) => {
+    this.setState({ user: user });
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  };
 
   checkLoginState = () => {
     axios.get('/status')

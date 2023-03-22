@@ -9,6 +9,7 @@ const Person = (props) => {
   }
   var selfHTML = `<tr class="self-tr">
   <th><h6>${props.selfPlacement.placement}.</h6></th>
+  <th><div class = "small-profile-box"><img src="pic1.png"></img></div></th>
   <th><h6>${props.selfPlacement.name}</h6></th>
   ${selfLine}
 </tr>`
@@ -19,6 +20,21 @@ const Person = (props) => {
     var number = Number(props.data[x].gain)
     var third = ""
     var forth = ""
+    var firstLine = ""
+    var pic = ""
+    if (first == 1) {
+      firstLine = `<h6 class="number-one-place">1st</h6>`
+      pic = `<div class = "small-profile-box first-place"><img src="pic2.png"></img></div>`
+    } else if (first == 2){
+      firstLine = `<h6 class="number-two-place">2nd</h6>`
+      pic = `<div class = "small-profile-box second-place"><img src="pic3.png"></img></div>`
+    } else if (first == 3){
+      firstLine = `<h6 class="number-three-place">3rd</h6>`
+      pic = `<div class = "small-profile-box third-place"><img src="pic5.png"></img></div>`
+    } else {
+      firstLine = `<h6>${first}.</h6>`
+      pic = `<div class = "small-profile-box"><img src="pic4.png"></img></div>`
+    }
     if (number > 0) {
       third = `<img src="arrow-up.png" alt="arrow up" width="20">`
       forth = `<h6 style="color:green;">${props.data[x].gain}%</h6>`
@@ -27,7 +43,8 @@ const Person = (props) => {
       forth = `<h6 style="color:red;">${props.data[x].gain}%</h6>`
     }
     var insert = `<tr>
-      <th><h6>${first}.</h6></th>
+      <th>${firstLine}</th>
+      <th>${pic}</th>
       <th><h6>${second}</h6></th>
       <th>${third}</th>
       <th>${forth}</th>

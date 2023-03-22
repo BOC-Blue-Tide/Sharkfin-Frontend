@@ -11,7 +11,7 @@ const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
-import TransactionList from './TransactionList.jsx';
+import TransactionList from './transactions/TransactionList.jsx';
 import mockData from '../../../mockData.js';
 //Howard
 import Portfolio from './portfolio/portfolio.jsx';
@@ -149,7 +149,7 @@ class App extends React.Component {
    this.setState({userInfo: updatedUserInfo})
    console.log(this.state.userInfo);
   }
-  
+
   // componentDidMount() { // for development purpose only
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
@@ -161,7 +161,12 @@ class App extends React.Component {
   }
 
   handleOrderClick(orderObj) {
-    this.setState({ orderObj: orderObj })
+    this.setState({ orderObj: orderObj });
+    axios({
+      method: 'post',
+      url: 'http://localhost:8080/transactions',
+      data: orderObj,
+    });
   }
 
   handleTimeRangeClick(start, timeframe) {

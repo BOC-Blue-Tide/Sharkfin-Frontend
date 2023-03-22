@@ -12,29 +12,41 @@ const Portfolio = (props) => {
   const [userID, setUserID] = useState(props.userID);
   const [timeWindow, setTimeWindow] = useState('1W');
   const [chartData, setChartData] = useState({});
-  const [alloPosData, setAlloPosData] = useState({});
+  const [alloPosData, setAlloPosData] = useState({position: [], allocation : {symbol: [], ratios: []}});
   useEffect(() => {
     var paramsC = {
       userID : userID,
       timeSelect: timeWindow
+    };
+    var paramsAP = {
+      userID : userID
     };
     var fetchChartData = async () => {
-      var result = await Axios.get('/pchart', {params: paramsC});
-      setChartData(result.data);
+      await Axios.get('/pchart', {params: paramsC})
+        .then((result) => {
+          setChartData(result.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     };
     fetchChartData();
-  }, [timeWindow])
+  }, [timeWindow]);
 
   useEffect(() => {
-    var paramsC = {
-      userID : userID,
-      timeSelect: timeWindow
+    var paramsAP = {
+      userID : userID
     };
-    const fetchData = async () => {
-      var result = await Axios.get('/pallopos', {params: paramsC});
-      setAlloPosData(result.data);
+    const fetchAlloPosData = async () => {
+      await Axios.get('/pallopos', {params: paramsAP})
+        .then((result) => {
+          setAlloPosData(result.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     };
-    fetchData();
+    fetchAlloPosData();
   }, [])
 
   const handleTimeWindowClick = (timewindow) => {

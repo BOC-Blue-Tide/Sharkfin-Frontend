@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Chart from 'chart.js/auto';
-import mockDataP from '../../../../mockDataP.js';
-import portfolioHelper from '../helper/portfolioHelper.js';
 import { Line } from "react-chartjs-2";
 
 const NetWorthChart = (props) => {
+  console.log(props);
   var timeData = props.data.time;
   var netData = props.data.net;
   const data = {

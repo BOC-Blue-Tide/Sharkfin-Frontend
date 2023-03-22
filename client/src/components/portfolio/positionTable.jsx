@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import PropTypes from 'prop-types'
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -10,7 +10,6 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-import mockDataP from '../../../../mockDataP.js';
 
 const headCells = [
   {id: 'symbol', numeric: false, label: 'Symbol'},
@@ -21,8 +20,6 @@ const headCells = [
   {id: 'qty', numeric: true, label: 'Quantity'},
   {id: 'avgCost', numeric: true, label: 'Average Cost Basis'}
 ];
-
-const rows = mockDataP.mockPortfolioData;
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -93,6 +90,7 @@ PositionTableHead.propTypes = {
 };
 
 const PositionTable = (props) => {
+  var rows = props.data.position;
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('symbol');
   const [page, setPage] = React.useState(0);

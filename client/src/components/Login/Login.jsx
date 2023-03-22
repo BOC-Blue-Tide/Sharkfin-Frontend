@@ -19,9 +19,17 @@ class Login extends React.Component {
       credential: response.credential,
     })
     .then((response) =>{
-      console.log('success', response);
-      this.setState({user: decoded.email});
-      this.props.updateUser(decoded.email);
+      console.log('success', decoded);
+      var googleInfo = {
+        id: 12345,  // placeholder for user_id
+        email: decoded.email,
+        username: decoded.name,
+        firstname: decoded.given_name,
+        lastname: decoded.family_name,
+        picture: decoded.picture
+      };
+      this.props.updateEmail(googleInfo.email);
+      localStorage.setItem("googleInfo", JSON.stringify(googleInfo));
     })
     .catch((error) => {
       console.log('fail', error);
@@ -35,7 +43,8 @@ class Login extends React.Component {
 logout = () => {
   axios.post('/logout')
   .then((response) => {
-    this.props.updateUser('');
+    this.props.updateEmail('');
+    localStorage.removeItem("googleInfo");
     console.log('logout success', response);
   })
   .catch((err) => {

@@ -11,7 +11,7 @@ const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
-import TransactionList from './TransactionList.jsx';
+import TransactionList from './transactions/TransactionList.jsx';
 import mockData from '../../../mockData.js';
 //Howard
 import Portfolio from './portfolio/portfolio.jsx';
@@ -131,7 +131,8 @@ class App extends React.Component {
         bank: '',
         accountNumber: 0,
         profilePic: ''
-      }
+      },
+      logged_email: ''
     }
   }
 
@@ -161,7 +162,7 @@ class App extends React.Component {
     console.log(this.state.userInfo);
     
   }
-  
+
   // componentDidMount() { // for development purpose only
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
@@ -173,7 +174,12 @@ class App extends React.Component {
   }
 
   handleOrderClick(orderObj) {
-    this.setState({ orderObj: orderObj })
+    this.setState({ orderObj: orderObj });
+    axios({
+      method: 'post',
+      url: 'http://localhost:8080/transactions',
+      data: orderObj,
+    });
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -275,14 +281,21 @@ class App extends React.Component {
     }
   }
 
-  updateUser = (user) => {
-    this.setState({ user: user });
-    if (user) {
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      localStorage.removeItem("user");
-    }
-  };
+
+updateUser = (user) => {
+  this.setState({ user: user });
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    localStorage.removeItem("user");
+  }
+}
+
+updateEmail = (user) => {
+    this.setState(
+      {logged_email: user}
+    )
+}
 
   checkLoginState = () => {
     axios.get('/status')
@@ -291,6 +304,7 @@ class App extends React.Component {
       this.setState({
         isReady: true,
         user: savedUser || response.data,
+        logged_email: response.data
       });
       console.log('/status', response);
     })
@@ -304,9 +318,9 @@ class App extends React.Component {
       <div></div>
     }
 
-    if (!this.state.user) {
+    if (!this.state.logged_email) {
       return (
-        <Login updateUser={this.updateUser} user={this.state.user} />
+        <Login updateEmail = {this.updateEmail} user = {this.state.logged_email}/>
       )
     } else {
       return (
@@ -320,7 +334,18 @@ class App extends React.Component {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
+            <Header getStockData={this.getStockData.bind(this)} updateEmail = {this.updateEmail} />
+
+          {/* test only, will delete later */}
+          {/* <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
+          <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
+          <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
+          <div>email: {JSON.parse(localStorage.getItem("googleInfo")).email}</div>
+          <div>
+            image:
+            <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
+          </div> */}
+
             <Routes>
               <Route exact path="/" element={<Portfolio />} />
               <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />

@@ -4,10 +4,9 @@ const schedule = require('node-schedule');
 
 
 module.exports = {
-
-  getFriendBoard: (req, res) => {
+  getGlobalBoard: (req, res) => {
     //console.log('review req', req.body)
-    var dummyData = [{"name":"Cosetta","gain":-33},
+    var dummyData = [{"name":"Lenord","gain":-33},
     {"name":"Ezequiel","gain":39},
     {"name":"Ase","gain":-9},
     {"name":"Dannye","gain":40},
@@ -110,7 +109,7 @@ module.exports = {
     res.send(dummyData)
   },
 
-  getGlobalBoard: (req, res) => {
+  getFriendBoard: (req, res) => {
     //console.log('metadata req', req.body)
     var dummyData = [{"name":"Theodoric","gain":24},
     {"name":"Cchaddie","gain":21},
@@ -144,7 +143,7 @@ module.exports = {
     {"name":"Bern","gain":17},
     {"name":"Courtney","gain":-6},
     {"name":"Goober","gain":24},
-    {"name":"Paulie","gain":10},
+    {"name":"Lenord","gain":10},
     {"name":"Ginger","gain":-18},
     {"name":"Farris","gain":40},
     {"name":"Lavina","gain":24},

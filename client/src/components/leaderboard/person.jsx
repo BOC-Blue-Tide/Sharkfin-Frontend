@@ -7,7 +7,6 @@ const Person = (props) => {
   } else {
     selfLine = `<th><img src="arrow-down.png" alt="arrow down" width="20"></th><th><h6 style="color:red;">${props.selfPlacement.gain}%</h6></th>`
   }
-  // CSS 加入外框凸顯
   var selfHTML = `<tr class="self-tr">
   <th><h6>${props.selfPlacement.placement}.</h6></th>
   <th><h6>${props.selfPlacement.name}</h6></th>

@@ -2,6 +2,12 @@ import React, { useRef, useState, useEffect } from 'react';
 import Person from './person.jsx'
 import Axios from 'axios';
 import {Pagination} from '@mui/material';
+import Modal from '@mui/material/Modal';
+import { Button } from '@mui/material';
+
+//Mengna
+import AddFriends from '../Friends/AddFriends.jsx'
+import ViewRequests from '../Friends/ViewRequests.jsx'
 
 const SideBar = () => {
   const [friendBoard, setFriendBoard] = useState([])
@@ -15,15 +21,14 @@ const SideBar = () => {
   const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, name: null, gain: null})
   const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
 
-
   useEffect(() => {
     getFriendBoardData()
     getGlobalBoardData()
   }, [])
 
   useEffect(() => {
-    checkFriendPlacement("Ab")
-    checkGlobalPlacement("Farris")
+    checkFriendPlacement("Lenord")
+    checkGlobalPlacement("Lenord")
   }, [friendBoard, globalBoard])
 
   const getFriendBoardData = async () => {
@@ -36,8 +41,12 @@ const SideBar = () => {
         setFriendPage(1)
       } else {
         setFriendCurrent(data.slice(0, 10))
-        var friendPageNumber = Math.floor(data.length / 10)
-        setFriendPage(friendPageNumber)
+        if (data.length%10 === 0) {
+          setFriendPage(data.length / 10)
+        } else {
+          var pageNumber = Math.floor(data.length / 10) + 1
+          setFriendPage(pageNumber)
+        }
       }
     })
   }
@@ -52,8 +61,12 @@ const SideBar = () => {
         setGlobalPage(1)
       } else {
         setGlobalCurrent(data.slice(0, 10))
-        var pageNumber = Math.floor(data.length / 10) + 1
-        setGlobalPage(pageNumber)
+        if (data.length%10 === 0) {
+          setGlobalPage(data.length / 10)
+        } else {
+          var pageNumber = Math.floor(data.length / 10) + 1
+          setGlobalPage(pageNumber)
+        }
       }
     })
   }
@@ -86,7 +99,7 @@ const SideBar = () => {
   const checkGlobalPlacement = (name) => {
     for (var x = 0; x < globalBoard.length; x ++) {
       if (globalBoard[x].name == name) {
-        setSelfGlobalPlacement({placement: x + 1, name: name, gain: friendBoard[x].gain})
+        setSelfGlobalPlacement({placement: x + 1, name: name, gain: globalBoard[x].gain})
       }
     }
   }
@@ -102,6 +115,26 @@ const SideBar = () => {
     setFriend(false)
     setGlobal(true)
   }
+
+  //friend
+  const [addFriend, openAddFriend] = useState(false);
+  const [friendRequest, openFriendRequest] = useState(false);
+
+  const openAddFriendModal = () => {
+    openAddFriend(true);
+  };
+  const closeAddFriendModal = () => {
+    openAddFriend(false);
+  };
+  const openFriendRequestModal = () => {
+    openFriendRequest(true);
+  };
+  const closeFriendRequestModal = () => {
+    openFriendRequest(false);
+  };
+
+
+
 
   return (
     <div className = "main-wrapper">
@@ -138,11 +171,20 @@ const SideBar = () => {
         }
       </div>
       <div className = "friend-btns">
-      <button className="addFriend-btn" onClick= {()=>{}}>Add New Friend</button>
-      <button className="requestFriend-btn" onClick= {()=>{}}>View Requests</button>
-      <span className="request-num">
-        <label>99</label>
-      </span>
+      <Button onClick= {openAddFriendModal} variant="outlined">Add New Friend</Button>
+      <Modal open={addFriend} onClose={closeAddFriendModal}>
+        <div className = "friend-popup">
+          <AddFriends/>
+        </div>
+      </Modal>
+      <Button onClick= {openFriendRequestModal} variant="outlined">View Requests <span className="request-num">
+        <label>6</label>
+      </span></Button>
+      <Modal open={friendRequest} onClose={closeFriendRequestModal}>
+        <div className = "friend-popup">
+          <ViewRequests/>
+        </div>
+      </Modal>
       </div>
     </div>
   )

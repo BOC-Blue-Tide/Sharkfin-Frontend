@@ -1,13 +1,14 @@
-import React from 'react';
-import Axios from 'axios'
-//Jason
-import SearchBar from './searchBar.jsx'
+import React,  { useState, useEffect } from 'react';
+const axios = require('axios').default;
+
+// import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
 import moment from 'moment-timezone'
-const API_KEY = process.env.REACT_APP_ALPACA_ID;
-const API_SECRET = process.env.REACT_APP_ALPACA_KEY;
+const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
+const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
+const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
 import TransactionList from './TransactionList.jsx';
@@ -19,18 +20,26 @@ import LeaderBoard from './leaderboard/leaderboard.jsx'
 //Daniel
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-import { purple } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
-import { Route, Routes } from 'react-router-dom';
-import AccountInfo from './accountInfo.jsx';
-import Dashboard from './exampleComponent.jsx'
+import { Route, Routes, Navigate } from 'react-router-dom';
+import AccountInfo from './accountInfo/accountInfo.jsx';
+import TransferForm from './accountInfo/transferForm.jsx'
 import Header from './header.jsx'
+
+//Mengna
+import Login from './Login/Login.jsx';
+import AddFriends from './Friends/AddFriends.jsx';
+import ViewRequests from './Friends/ViewRequests.jsx';
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: purple[500],
+      main: "#278D9B",
+    },
+    secondary: {
+      main: '#11cb5f',
     },
   },
   typography: {
@@ -38,76 +47,153 @@ const theme = createTheme({
     subtitle1: {
       fontSize: 12,
     },
+    h1: {
+      fontSize: '4.25rem',
+    },
+    h2: {
+      fontSize: '3.1rem',
+      // fontWeight: '500'
+
+    },
+    h3: {
+      fontSize: '2rem',
+    },
+    h4: {
+      fontSize: '1.5rem',
+      fontWeight: '500'
+
+    },
     body1: {
-      fontWeight: 500,
+      fontSize: '1.03rem',
+      fontWeight: 500
+    },
+    body2: {
+      fontSize: '0.875rem',
     },
     button: {
       fontStyle: 'bold',
+      fontSize: "14px"
     },
   },
   components: {
-    MuiCssBaseline: {
-      // styleOverrides: `
-      // @font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 400; src: local('Inter'), local('Inter-Regular'), url(${InterWoff2}) format('woff2'); unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF; }
-      // `,
-    },
-    Link: {
+    MuiButton: {
       styleOverrides: {
-        // Name of the slot
-        root: {
-          // Some CSS
-          fontSize: '1rem',
+        contained: {
+          padding: "9px 28px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+        outlined: {
+          padding: "7px 26px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
         },
       },
     },
   }
 });
 
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       currency: 'USD',// can be dynaimc if offers currency selection
-      stockObj: null,
-      liveData: null,
-      barData: null,
-      qouteData: null,
+      stockObj: null, // incoming data from api
+      liveData: null, // incoming data from api
+      barData: null, // incoming data from api
+      qouteData: null, // incoming data from api
       errorMsg: null,
       currentSymbol: null,
       start: defaultStartTime,
-      timeframe: '5Min'
+      timeframe: '5Min',
+      isReady: false,
+      user: "",
+      orderObj: null,
+      userInfo: {
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        bank: '',
+        accountNumber: 0,
+        profilePic: ''
+      }
     }
   }
 
-  componentDidMount() { // for development purpose only
-    this.getStockData('msft', 'stock', 'search')
-    this.getBarData('msft', this.state.start, this.state.timeframe)
+  //Axios get request in componentdidmountto get this information
+  async updateUserInfo() {
+  //add axios get request and set state for userInfo
+    let updatedUserInfo = {
+      firstName: "Fred",
+      lastName: "Flinstone",
+      userName: "Dhalper",
+      email: "Fred@test.org",
+      bank: "CITI Bank",
+      accountNumber: "1234",
+      profilePic: "../../../dist/mockProfile.png"
+   }
+   this.setState({userInfo: updatedUserInfo})
+   console.log(this.state.userInfo);
+  }
+  
+  // componentDidMount() { // for development purpose only
+  //   this.getStockData('msft', 'stock', 'search')
+  //   this.getBarData('msft', this.state.start, this.state.timeframe)
+  // }
+
+  componentDidMount() {
+    this.checkLoginState();
+    this.updateUserInfo();
+  }
+
+  handleOrderClick(orderObj) {
+    this.setState({ orderObj: orderObj })
   }
 
   handleTimeRangeClick(start, timeframe) {
     this.setState({ start: start, timeframe: timeframe }, async () => {
-      this.getBarData('msft', this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
+      this.getBarData(this.state.currentSymbol, this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
     })
   }
 
   async getStockData(input, scope, operation) {
+
     var symbol = input.toUpperCase()
     if (operation === 'search') {
       if (scope === 'stock') {
         try {
-          this.setState({ symbol: symbol }, async () => {
+          this.setState({ currentSymbol: symbol }, async () => {
             var symbolData = await helpers.symbolLookup(symbol)
               .then(async (symbolData) => {
 
                 //console.log(symbolData.data)
                 this.setState({ stockObj: symbolData.data })
-                //this.getLiveData(symbol)
+                this.getLiveData(symbol)
               })
               .then(async () => {
                 var stockQoute = await helpers.getStockQoute(symbol)
-                console.log(stockQoute.data)
+                //console.log(stockQoute.data)
                 this.setState({ qouteData: stockQoute.data['Global Quote'] })
               })
+              .then(async () => {
+                await this.getBarData(symbol, this.state.start, this.state.timeframe)
+              })
+
+
           })
 
 
@@ -125,13 +211,9 @@ class App extends React.Component {
 
   async getBarData(symbol, start, timeframe) {
     try {
-
       var barData = await helpers.getBarData(symbol, start, timeframe)
       //console.log(barData)
-
       this.setState({ barData: barData })
-
-
     }
     catch (err) {
       console.log(err)
@@ -139,78 +221,115 @@ class App extends React.Component {
     }
   }
 
-
   getLiveData(symbol) {
-    const socket = new WebSocket(`wss://stream.data.alpaca.markets/v2/${SOURCE}`);
+    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
 
+    console.info('1. New websocket created.');
+
+    // Connection opened -> Subscribe
+    socket.onopen = (event) => {
+      socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': `${symbol}` }))
+
+      console.info('2. Subscribing to symbols...');
+
+    };
+
+    // Listen for messages from the websocket stream...
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data)
-      const message = data[0]['msg']
-      console.log('Message from server ', data);
 
-      if (message === 'connected') {
-        socket.send(JSON.stringify({ "action": "auth", "key": `${API_KEY}`, "secret": `${API_SECRET}` }))
+      // console.clear();
+      // console.info('1. New websocket created.');
+      // console.info('2. Subscribing to symbols...');
+      // console.info('3. Websocket streaming.');
+
+      // stream response...
+      let response = JSON.parse(event.data);
+
+      if (response.type === 'ping') {
+        console.warn('Occasional server', response.type + '.');
+        let pong = { "type": "pong" }
+        socket.send(JSON.stringify(pong))
+      } else {
+        var data = response.data || null
+        console.log(data)
+        this.setState({ liveData: data })
       }
-      if (message === 'authenticated') {
-        socket.send(JSON.stringify({ "action": "subscribe", "bars": [symbol] }))
-      }
-      // if (event.data === '{"type":"ping"}') {
-      //   this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-      //   unsubscribe(symbol)
-      //   socket.close()
-      // } else {
-      //   this.setState({ liveData: data })
-      // }
 
-    }
+    };
 
-    socket.onerror = (event) => {
-      unsubscribe(symbol)
-      this.setState({ errorMsg: 'Sorry, live data unavailable.' })
-      socket.close()
-    }
-
-    // Unsubscribe function to be called
+    // Unsubscribe
     var unsubscribe = function (symbol) {
       socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
     }
   }
 
+updateUser = (user) => {
+  this.setState({ user: user });
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    localStorage.removeItem("user");
+  }
+};
+
+  checkLoginState = () => {
+    axios.get('/status')
+    .then((response) => {
+      const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+      this.setState({
+        isReady: true,
+        user: savedUser || response.data,
+      });
+      console.log('/status', response);
+    })
+    .catch((err) => {
+      console.log('logout error', err);
+    });
+  }
+
   render() {
-    return (
-      <>
+    if (!this.state.isReady) {
+      <div></div>
+    }
+
+    if (!this.state.user) {
+      return (
+        <Login updateUser={this.updateUser} user={this.state.user} />
+      )
+    } else {
+      return (
+        <>
           <ThemeProvider theme={theme}>
-            <TransactionList data={mockData}/>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/icon?family=Material+Icons"
-        />
-      <Header/>
-      <SearchBar
-          getStockData={this.getStockData.bind(this)} />
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,700&display=swap"
+            />
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            />
+            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
+            <Routes>
+              <Route exact path="/" element={<Portfolio />} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
+              <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path="/transferForm" element={<TransferForm />} />
+              <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+              <Route path="/searchContent" element={<StockCryptoPage
+                liveData={this.state.liveData}
+                stockObj={this.state.stockObj}
+                errorMsg={this.state.errorMsg}
+                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                barData={this.state.barData}
+                qouteData={this.state.qouteData}
+                handleOrderClick={this.handleOrderClick.bind(this)} />} />
 
-          <Routes>
-          <Route path="/" element={<Dashboard/>}/>
-          <Route path="/accountInfo" element={<AccountInfo/>} />
-          </Routes>
-    </ThemeProvider>
-
-        <StockCryptoPage
-          liveData={this.state.liveData}
-          stockObj={this.state.stockObj}
-          errorMsg={this.state.errorMsg}
-          handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-          barData={this.state.barData}
-          qouteData={this.state.qouteData} />
-        {/* <TransactionList data={mockData}/> */}
-      <Portfolio />
-        <LeaderBoard/>
-      </>
-    )
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </ThemeProvider>
+        </>
+      )
+    }
   }
 }
 

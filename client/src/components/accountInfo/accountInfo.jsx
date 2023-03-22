@@ -59,12 +59,21 @@ function AccountInfo(props) {
 
    const handleSubmit = async (event) => {
       event.preventDefault();
-  
-   
+    
+      // Create a new FormData object
+      const formData = new FormData();
+    
+      // Append the user information and image file to the FormData object
+      formData.append('userInfo', JSON.stringify(userInfo));
+      formData.append('profilePic', userInfo.profilePic);
+    
       try {
-         console.log(userInfo);
-        // Send an axios post request with the updated information
-        const response = await axios.post('/api/updateUserInfo', userInfo);
+        // Send an axios post request with the FormData object
+        const response = await axios.post('/api/updateUserInfo', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
         console.log('User info updated:', response);
         props.updateUserInfo();
       } catch (error) {
@@ -239,8 +248,3 @@ function AccountInfo(props) {
 }
 
 export default AccountInfo;
-
-
-
-
-

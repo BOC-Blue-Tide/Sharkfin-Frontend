@@ -123,6 +123,7 @@ class App extends React.Component {
       user: "",
       orderObj: null,
       userInfo: {
+        userId: 0,
         firstName: '',
         lastName: '',
         userName: '',
@@ -131,14 +132,25 @@ class App extends React.Component {
         accountNumber: 0,
         profilePic: ''
       },
-      transactionData: []
+      transactionData: [],
+      logged_email: ''
     }
     this.getTransactionData = this.getTransactionData.bind(this);
   }
 
   //Axios get request in componentdidmountto get this information
   async updateUserInfo() {
-  //add axios get request and set state for userInfo
+    var id = localStorage.getItem("id")
+    var request = {
+      headers: {
+        "user_id": id
+      }
+    }
+
+    //add axios get request using userid (stored in local storage) and set state for userInfo
+    axios.get('/user', request);
+    // const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+
     let updatedUserInfo = {
       firstName: "Fred",
       lastName: "Flinstone",
@@ -148,8 +160,9 @@ class App extends React.Component {
       accountNumber: "1234",
       profilePic: "../../../dist/mockProfile.png"
    }
-   this.setState({userInfo: updatedUserInfo})
-   console.log(this.state.userInfo);
+    this.setState({userInfo: updatedUserInfo})
+    console.log(this.state.userInfo);
+
   }
 
   // componentDidMount() { // for development purpose only
@@ -280,6 +293,7 @@ class App extends React.Component {
     }
   }
 
+
 updateUser = (user) => {
   this.setState({ user: user });
   if (user) {
@@ -287,7 +301,13 @@ updateUser = (user) => {
   } else {
     localStorage.removeItem("user");
   }
-};
+}
+
+updateEmail = (user) => {
+    this.setState(
+      {logged_email: user}
+    )
+}
 
   checkLoginState = () => {
     axios.get('/status')
@@ -296,6 +316,7 @@ updateUser = (user) => {
       this.setState({
         isReady: true,
         user: savedUser || response.data,
+        logged_email: response.data
       });
       console.log('/status', response);
     })
@@ -309,9 +330,9 @@ updateUser = (user) => {
       <div></div>
     }
 
-    if (!this.state.user) {
+    if (!this.state.logged_email) {
       return (
-        <Login updateUser={this.updateUser} user={this.state.user} />
+        <Login updateEmail = {this.updateEmail} user = {this.state.logged_email}/>
       )
     } else {
       return (
@@ -325,7 +346,18 @@ updateUser = (user) => {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
+            <Header getStockData={this.getStockData.bind(this)} updateEmail = {this.updateEmail} />
+
+          {/* test only, will delete later */}
+          {/* <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
+          <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
+          <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
+          <div>email: {JSON.parse(localStorage.getItem("googleInfo")).email}</div>
+          <div>
+            image:
+            <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
+          </div> */}
+
             <Routes>
               <Route exact path="/" element={<Portfolio />} />
               <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />

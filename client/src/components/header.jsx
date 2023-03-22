@@ -61,7 +61,8 @@ const Header = (props) => {
   const handleLogout = () => {
     axios.post('/logout')
       .then((response) => {
-        props.updateUser('');
+        props.updateEmail('');
+        localStorage.removeItem("googleInfo");
         console.log('logout success', response);
       })
       .catch((err) => {

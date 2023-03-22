@@ -19,12 +19,13 @@ module.exports = {
       })
   },
   getPAllocationAndPosition : async (req, res) => {
-    var user_id = req.query.user_id;
+    var user_id = req.query.userID;
     var paramsC = {
       'user_id' : user_id
     };
     await axios.get(`http://localhost:4000/pallocation`, {params: paramsC})
       .then((result) => {
+        console.log(result.data);
         res.status(200).send(result.data);
       })
       .catch((err) => {

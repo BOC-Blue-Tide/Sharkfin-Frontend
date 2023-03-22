@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import Logo from '../img/logo.png';
 import { Link, useLocation } from 'react-router-dom';
-import SearchBar from './searchBar.jsx'
+import SearchBar from './search/searchBar.jsx'
 const axios = require('axios').default;
 
 const styles = {
@@ -71,7 +71,7 @@ const Header = (props) => {
 
   return (
 
-    (location.pathname === '/transferForm' || location.pathname === '/logout'? '' :
+    (location.pathname === '/transferForm' || location.pathname === '/logout' ? '' :
       <AppBar
         position="static"
         sx={styles.main}

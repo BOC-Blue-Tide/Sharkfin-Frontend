@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -20,6 +20,14 @@ const reviewOrder = (props) => {
 
   const stockObj = props.stockObj
   const [open, setOpen] = useState(true);
+  const [orderType, setOrderType] = useState('')
+  useEffect(() => {
+    if (props.value === 0) {
+      setOrderType('buy')
+    } else if (props.value === 1) {
+      setOrderType('sell')
+    }
+  }, [props.value])
 
 
   const handleClose = () => {
@@ -29,10 +37,11 @@ const reviewOrder = (props) => {
 
   const handleSubmit = () => {
     const orderObj = props.orderInput
+    orderObj.orderType = orderType
     orderObj.account = '12345678'
     orderObj.symbol = stockObj.Symbol
     orderObj.company = stockObj.Name
-    orderObj.buyType = props.orderInput.buyType
+    orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount
     orderObj.price = props.barData[props.barData.length - 1].c
     orderObj.cost = Number(props.orderInput.amount) * props.barData[props.barData.length - 1].c
@@ -67,12 +76,12 @@ const reviewOrder = (props) => {
           </Stack>
           <Stack direction="row" spacing={1}>
             {props.value === 0 ? <span>Buy In:  </span> : <span>Sell In:  </span>}
-            <span>{props.orderInput.buyType}</span>
+            <span>{props.orderInput.orderIn}</span>
           </Stack>
 
           <Stack direction="row" spacing={1}>
             <span>Quantity:  </span>
-            <span>{`${props.orderInput.amount} ${props.orderInput.buyType}`}</span>
+            <span>{`${props.orderInput.amount} ${props.orderInput.orderIn}`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
             <span>Market Price:  </span>

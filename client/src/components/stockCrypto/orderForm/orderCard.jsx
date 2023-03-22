@@ -14,7 +14,7 @@ import ReviewModal from './reviewOrder.jsx'
 const orderCard = (props) => {
 
   const [orderInput, setOrderInput] = useState({})
-  const [buyType, setBuyType] = useState('shares')
+  const [orderIn, setOrderIn] = useState('shares')
   const [amount, setAmount] = useState()
   const [open, setOpen] = useState(false);
   const [errMsg, setErrMsg] = useState("")
@@ -28,7 +28,7 @@ const orderCard = (props) => {
         setErrMsg('Invalid number')
       } else {
         let orderInputObj = {
-          buyType: buyType,
+          orderIn: orderIn,
           amount: amount
         }
         setOrderInput(orderInputObj)
@@ -39,8 +39,8 @@ const orderCard = (props) => {
 
   }
 
-  const handleBuyType = (e) => {
-    setBuyType(e.target.value)
+  const handleOrderIn = (e) => {
+    setOrderIn(e.target.value)
   }
 
   const handleAmount = (e) => {
@@ -65,14 +65,14 @@ const orderCard = (props) => {
               {`Buy in `}
             </Grid>
             <Grid item xs={6}>
-              <Dropdown handleBuyType={handleBuyType} />
+              <Dropdown handleOrderIn={handleOrderIn} />
             </Grid>
           </Grid> : <Grid container spacing={1}>
             <Grid item xs={6}>
               {`Sell in `}
             </Grid>
             <Grid item xs={6}>
-              <Dropdown handleBuyType={handleBuyType} />
+              <Dropdown handleOrderIn={handleOrderIn} />
             </Grid>
           </Grid>}
         </Typography>

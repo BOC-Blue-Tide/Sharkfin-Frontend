@@ -73,8 +73,13 @@ main {
   font-weight: bold;
 }
 
-.searchInput {
+/* #searchInput {
   font-size: small;
+} */
+
+.suggestion-list-container {
+  z-index: 1;
+  background-color: blue
 }
 
 /*seach bar*/

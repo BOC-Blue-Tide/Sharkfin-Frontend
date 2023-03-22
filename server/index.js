@@ -12,25 +12,27 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(sessions({
   secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
-  saveUninitialized:true,
-  cookie: { maxAge: 1000 * 60 * 60 * 24},
+  saveUninitialized: true,
+  cookie: { maxAge: 1000 * 60 * 60 * 24 },
   resave: false
 }));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   console.log('path', req.path);
-if (req.session.userid == null && req.path !== '/signin' && req.path !== '/status') {
-  console.log('no session');
-  //res.redirect('http://localhost:3000/');
-  next();
-} else {
-  console.log('logged in');
-  next();
-}
+  if (req.session.userid == null && req.path !== '/signin' && req.path !== '/status') {
+    console.log('no session');
+    //res.redirect('http://localhost:3000/');
+    next();
+  } else {
+    console.log('logged in');
+    next();
+    app.use(routes);
+
+  }
 });
 app.use(express.static(path.join(__dirname, '/../client/dist')));
-
-
 app.use(routes);
+// app.use(express.static(path.join(__dirname, '/../client/dist/index.html')));
+
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/../client/dist/index.html'));
@@ -39,3 +41,5 @@ app.get('*', (req, res) => {
 app.listen(port, () => {
   console.log(`Front End App listening on http://localhost:${port}`)
 });
+
+//&& req.path !== '/symbolLookup', req.path !== '/getStockQoute'

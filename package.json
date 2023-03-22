@@ -56,6 +56,7 @@
   },
   "dependencies": {
     "@alpacahq/alpaca-trade-api": "^2.16.1",
+    "@coinpaprika/api-nodejs-client": "^1.2.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@material-ui/core": "^4.12.4",

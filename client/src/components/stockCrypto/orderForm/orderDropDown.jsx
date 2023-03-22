@@ -10,15 +10,15 @@ const dropDown = (props) => {
 
   const handleChange = (event) => {
     setType(event.target.value);
-    props.handleBuyType(event)
+    props.handleOrderIn(event)
   };
 
   return (
     <FormControl variant="standard" sx={{ m: 0 }}>
       {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
       <Select
-        labelId="buyType"
-        id="buyType"
+        labelId="orderIn"
+        id="orderIn"
         value={type}
         onChange={handleChange}
         label="type"

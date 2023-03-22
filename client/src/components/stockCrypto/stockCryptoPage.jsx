@@ -50,7 +50,7 @@ const stockCryptoPage = (props) => {
 
   return (
     <>
-      {props.stockObj && props.barData && props.qouteData ?
+      {props.stockObj && props.barData && props.qouteData ? (
         <div className="page-content">
           <Grid container spacing={2}>
             <Grid item xs={8}>
@@ -73,7 +73,10 @@ const stockCryptoPage = (props) => {
               <Order handleOrderClick={props.handleOrderClick} stockObj={stockObj} barData={props.barData} />
             </Grid>
           </Grid>
-        </div> : errMsg}
+        </div>) : (<div>{!errMsg ? null : <p className='errorTxt'>
+          <span>{errMsg}...&#128517;</span></p>}</div>
+      )}
+
     </>
 
 

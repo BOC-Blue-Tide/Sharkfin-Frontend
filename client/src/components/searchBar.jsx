@@ -123,20 +123,20 @@ const searchBar = (props) => {
             <MenuItem data-scope={'crypto'} onClick={handleClose}>Crypto</MenuItem>
           </Menu>
         </Stack>
-      </form>      
+      </form>
       <Card className="searchHistory">
-      {showSearchHistory && searchInput.length === 0? <Typography variant="body2" fontWeight="500" component="div">
-        Recent Searches:
-      </Typography> : ''}
+        {showSearchHistory && searchInput.length === 0 ? <Typography variant="body2" fontWeight="500" component="div">
+          Recent Searches:
+        </Typography> : ''}
         {showSearchHistory && searchInput.length === 0 && searchHistory.map((item, index) => (
-           <Typography key={index} variant="body2" component="div">
+          <Typography key={index} variant="body2" component="div">
             {item.searchInput} ({item.searchScope})
-            </Typography>        
-            ))}
+          </Typography>
+        ))}
       </Card>
       <Card className="searchResults">
-       
         {searchInput &&
+          searchResults &&
           searchResults.map((result) => (
             <Typography key={result['1. symbol']} variant="body2" component="div">
               {result['1. symbol']} - {result['2. name']} ({result['3. type']})

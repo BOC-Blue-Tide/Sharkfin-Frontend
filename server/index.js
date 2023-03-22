@@ -8,23 +8,6 @@ const port = process.env.PORT || 3000;
 const routes = require('./routes');
 const controller = require('./controllers/');
 
-app.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res) => {
-  const userInfo = JSON.parse(req.body.userInfo);
-  const profilePic = req.file;
-
-  // Save the user information and image file to your storage service or database
-
-  res.send({ status: 'success' });
-});
-
-app.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res) => {
-  const userInfo = JSON.parse(req.body.userInfo);
-  const profilePic = req.file;
-
-  // Save the user information and image file to your storage service or database
-
-  res.send({ status: 'success' });
-});
 app.use(express.json());
 app.use(cookieParser());
 app.use(sessions({

@@ -12,6 +12,7 @@ const LeaderBoard = () => {
 
     useEffect(() => {
       var day = daysUntilNextQuarter()
+      // console.log(JSON.parse(localStorage.getItem("googleInfo")) )
       setdayLeft(day)
     }, [])
 

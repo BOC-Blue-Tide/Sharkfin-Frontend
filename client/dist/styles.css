@@ -513,6 +513,7 @@ input[type="number"] {
   /* color: #edc400;
   padding: 0px 15px;
   border-radius: 15px; */
+  font-weight: bold;
   color: #edc400;
 }
 
@@ -520,6 +521,7 @@ input[type="number"] {
   /* background-color: #c9c9c9;
   padding: 0px 15px;
   border-radius: 15px; */
+  font-weight: bold;
   color: #c9c9c9;
 }
 
@@ -527,6 +529,7 @@ input[type="number"] {
   /* background-color: #cd7f32;
   padding: 0px 15px;
   border-radius: 15px; */
+  font-weight: bold;
   color: #cd7f32;
 }
 

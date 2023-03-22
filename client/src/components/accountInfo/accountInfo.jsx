@@ -1,20 +1,27 @@
-import React, { useState } from 'react';
-import { Button, TextField, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Button, TextField, Typography, Tooltip } from '@mui/material';
 import { Grid, Box } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import ProfilePic from '../../../dist/mockProfile.png';
+import axios from 'axios';
 
-function AccountInfo() {
+function AccountInfo(props) {
 
-   let mockDatabaseAccountNumber = 1234;
+   const [edit, setEdit] = useState(false);
 
-   let userInfo = {
-      firstName: "Daniel",
-      lastName: "Halper",
-      userName: "Dhalper",
-      email: "Dhalper@test.org",
-   }
+   let remainingFunds = 400;
+
+   const [userInfo, setUserInfo] = useState({
+      firstName: props.userInfo.firstName,
+      lastName: props.userInfo.lastName,
+      email: props.userInfo.email,
+      userName: props.userInfo.userName,
+      profilePic: props.userInfo.profilePic,
+      bank: props.userInfo.bank,
+      accountNumber: props.userInfo.accountNumber
+    });
+  
 
    const style = {
       gridCard: {
@@ -50,18 +57,71 @@ function AccountInfo() {
       },
    };
 
+   const handleSubmit = async (event) => {
+      event.preventDefault();
+    
+      // Create a new FormData object
+      const formData = new FormData();
+    
+      // Append the user information and image file to the FormData object
+      formData.append('userInfo', JSON.stringify(userInfo));
+      formData.append('profilePic', userInfo.profilePic);
+    
+      try {
+        // Send an axios post request with the FormData object
+        const response = await axios.post('/api/updateUserInfo', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log('User info updated:', response);
+        props.updateUserInfo();
+      } catch (error) {
+        console.error('Error updating user info:', error);
+      }
+    };
+
+    const handleInputChange = (event) => {
+      const { name, value } = event.target;
+      U({ ...userInfo, [name]: value });
+    };
+
+   //  handle the file input change event
+   const handleFileInputChange = (e) => {
+      U({...userInfo, profilePic: e.target.files[0]});
+   };
+
+   //  handle the click event on the Avatar
+   const handleAvatarClick = () => {
+      document.getElementById("profile-picture-input").click();
+   };
+
    return (
+      <form onSubmit={handleSubmit}>
+
       <Box sx={style.parentGrid}>
          <Box>
             <h1>Account Information</h1>
 
-            {mockDatabaseAccountNumber ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
-               <Link state={{page: 2}} to="/transferForm">
+            {userInfo.accountNumber ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
+               <Typography sx={style.headerText} variant="body1">You have ${remainingFunds} available funds for trading.</Typography>
+
+               <Link state={{ page: -1 }} to="/transferForm">
                   <Button variant="contained" color="primary">
-                     Transfer money to Sharkfin
+                     Demo
                   </Button>
-               </Link> 
-               </> :
+               </Link>
+               <Link state={{ page: 2 }} to="/transferForm">
+                  <Button variant="contained" color="primary">
+                     Transfer to Sharkfin
+                  </Button>
+               </Link>
+               {/* <Tooltip label="Withdraw disabled until ">
+               <Button disabled variant="outlined" color="primary">
+                  Withdraw Remaining Funds
+               </Button>
+               </Tooltip> */}
+            </> :
                <>
                   <Typography sx={style.headerText} variant="h4">You have no funds! Connect your bank account to get started...</Typography>
                   <Link to="/">
@@ -73,8 +133,10 @@ function AccountInfo() {
             }
          </Box>
          <Box display="flex" flexDirection="column" sx={style.gridCard}>
+         <Box display="flex" flexDirection="row"  alignItems="center" justifyContent="space-between" >
             <Typography variant="h4" sx={style.headerText}> User Information </Typography>
-
+            <Button variant={!edit? "outlined" : "contained"} onClick={edit? () => setEdit(false) : () => setEdit(true)}  type={edit? "submit": ''} color="primary">{edit? "Save": "Edit"}</Button>
+            </Box>
             <Box
                sx={{
                   display: 'grid',
@@ -86,31 +148,45 @@ function AccountInfo() {
                }}
             >
                <Box gridColumn="1 / 3" gridRow="1 / 3">
-                  <div sx={style.profilePicContainer}>
-                     <Avatar sx={style.profilePic} alt="Profile picture" src={ProfilePic} />
-                  </div>
+                  {/* Add Tooltip component */}
+                  <Tooltip title={edit? "Change your profile picture": "Visible to other users"} arrow>
+                     {/* Add onClick event to the Avatar */}
+                     <div sx={style.profilePicContainer} onClick={edit? handleAvatarClick: null}>
+                        <Avatar sx={style.profilePic} alt="Profile picture" src={ProfilePic} />
+                     </div>
+                  </Tooltip>
+                  {/* Add hidden input for file selection */}
+                  <input
+                     type="file"
+                     id="profile-picture-input"
+                     onChange={handleFileInputChange}
+                     accept="image/*"
+                     hidden
+                  />
                </Box>
                <Box wrap='nowrap' gridColumn="3 / 8" gridRow="1">
                   <TextField
                      wrap='nowrap'
                      id="first-name-input-1"
                      label="First Name"
-                     placeholder={userInfo.firstName}
+                     defaultValue={userInfo.firstName}
+                     onChange={handleInputChange}
                      variant="standard"
-                     disabled
+                     disabled = {!edit}
                      InputLabelProps={{ shrink: true }}
                      sx={{
                         width: '40%',
-                        marginRight: "4%"// Adjust the width as desired
+                        marginRight: "4%"
                      }}
                   />
                   <TextField
                      wrap='nowrap'
                      id="last-name-input-2"
                      label="Last Name"
-                     placeholder={userInfo.lastName}
+                     defaultValue={userInfo.lastName}
+                     onChange={handleInputChange}
                      variant="standard"
-                     disabled
+                     disabled = {!edit}
                      InputLabelProps={{ shrink: true }}
                      sx={{
                         width: '40%'
@@ -123,23 +199,24 @@ function AccountInfo() {
                   <TextField
                      id="email-input"
                      label="Email"
-                     placeholder={userInfo.email}
+                     defaultValue={userInfo.email}
                      variant="standard"
                      wrap='nowrap'
                      disabled
                      InputLabelProps={{ shrink: true }}
                      sx={{
                         width: '40%',
-                        marginRight: "4%"// Adjust the width as desired
+                        marginRight: "4%"
                      }}
                   />
                   <TextField
                      id="username-input-4"
                      label="Username"
-                     placeholder={userInfo.userName}
+                     defaultValue={userInfo.userName}
+                     onChange={handleInputChange}
                      variant="standard"
                      wrap='nowrap'
-                     disabled
+                     disabled = {!edit}
                      InputLabelProps={{ shrink: true }}
                      sx={{
                         width: '40%'
@@ -148,9 +225,9 @@ function AccountInfo() {
                </Box>
             </Box>
             <Typography variant="h4" sx={style.headerText}> Billing Information </Typography>
-            {(mockDatabaseAccountNumber ?
+            {(userInfo.accountNumber ?
                <>
-                  <Typography variant="p1" sx={{ marginBottom: "20px" }}> We have Bank information ending in <Box sx={{ fontWeight: "bold", display: "inline" }}>{mockDatabaseAccountNumber}</Box>
+                  <Typography variant="p1" sx={{ marginBottom: "20px" }}> Your Sharkfin account is currently linked to a <Box sx={{ fontWeight: "bold", display: "inline" }}>{userInfo.bank}</Box> account ending in <Box sx={{ fontWeight: "bold", display: "inline" }}>{userInfo.accountNumber}</Box>
                   </Typography>
                   <Link to="/transferForm" >
                      <Button variant="contained" color="primary">Connect to a new Bank account</Button>
@@ -166,12 +243,8 @@ function AccountInfo() {
             )}
          </Box>
       </Box>
+      </form>
    );
 }
 
 export default AccountInfo;
-
-
-
-
-

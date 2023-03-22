@@ -1,5 +1,6 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 const axios = require('axios').default;
+
 // import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
@@ -10,7 +11,7 @@ const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
-import TransactionList from './TransactionList.jsx';
+import TransactionList from './transactions/TransactionList.jsx';
 import mockData from '../../../mockData.js';
 //Howard
 import Portfolio from './portfolio/portfolio.jsx';
@@ -63,7 +64,7 @@ const theme = createTheme({
 
     },
     body1: {
-      fontSize: '1.08rem',
+      fontSize: '1.03rem',
       fontWeight: 500
     },
     body2: {
@@ -71,9 +72,39 @@ const theme = createTheme({
     },
     button: {
       fontStyle: 'bold',
+      fontSize: "14px"
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          padding: "9px 28px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+        outlined: {
+          padding: "7px 26px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+      },
+    },
+  }
 });
+
 
 class App extends React.Component {
   constructor(props) {
@@ -90,8 +121,46 @@ class App extends React.Component {
       timeframe: '5Min',
       isReady: false,
       user: "",
-      orderObj: null
+      orderObj: null,
+      userInfo: {
+        userId: 0,
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        bank: '',
+        accountNumber: 0,
+        profilePic: ''
+      },
+      logged_email: ''
     }
+  }
+
+  //Axios get request in componentdidmountto get this information
+  async updateUserInfo() {
+    var id = localStorage.getItem("id")
+    var request = {
+      headers: {
+        "user_id": id
+      }
+    }
+
+    //add axios get request using userid (stored in local storage) and set state for userInfo
+    axios.get('/user', request);
+    // const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+
+    let updatedUserInfo = {
+      firstName: "Fred",
+      lastName: "Flinstone",
+      userName: "Dhalper",
+      email: "Fred@test.org",
+      bank: "CITI Bank",
+      accountNumber: "1234",
+      profilePic: "../../../dist/mockProfile.png"
+   }
+    this.setState({userInfo: updatedUserInfo})
+    console.log(this.state.userInfo);
+    
   }
 
   // componentDidMount() { // for development purpose only
@@ -101,10 +170,16 @@ class App extends React.Component {
 
   componentDidMount() {
     this.checkLoginState();
+    this.updateUserInfo();
   }
 
   handleOrderClick(orderObj) {
-    this.setState({ orderObj: orderObj })
+    this.setState({ orderObj: orderObj });
+    axios({
+      method: 'post',
+      url: 'http://localhost:8080/transactions',
+      data: orderObj,
+    });
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -164,7 +239,6 @@ class App extends React.Component {
     }
   }
 
-
   getLiveData(symbol) {
     const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
 
@@ -207,6 +281,7 @@ class App extends React.Component {
     }
   }
 
+
 updateUser = (user) => {
   this.setState({ user: user });
   if (user) {
@@ -214,7 +289,13 @@ updateUser = (user) => {
   } else {
     localStorage.removeItem("user");
   }
-};
+}
+
+updateEmail = (user) => {
+    this.setState(
+      {logged_email: user}
+    )
+}
 
   checkLoginState = () => {
     axios.get('/status')
@@ -223,6 +304,7 @@ updateUser = (user) => {
       this.setState({
         isReady: true,
         user: savedUser || response.data,
+        logged_email: response.data
       });
       console.log('/status', response);
     })
@@ -236,9 +318,9 @@ updateUser = (user) => {
       <div></div>
     }
 
-    if (!this.state.user) {
+    if (!this.state.logged_email) {
       return (
-        <Login updateUser={this.updateUser} user={this.state.user} />
+        <Login updateEmail = {this.updateEmail} user = {this.state.logged_email}/>
       )
     } else {
       return (
@@ -252,10 +334,21 @@ updateUser = (user) => {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
+            <Header getStockData={this.getStockData.bind(this)} updateEmail = {this.updateEmail} />
+
+          {/* test only, will delete later */}
+          {/* <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
+          <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
+          <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
+          <div>email: {JSON.parse(localStorage.getItem("googleInfo")).email}</div>
+          <div>
+            image:
+            <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
+          </div> */}
+
             <Routes>
               <Route exact path="/" element={<Portfolio />} />
-              <Route path="/accountInfo" element={<AccountInfo />} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
@@ -278,4 +371,3 @@ updateUser = (user) => {
 }
 
 export default App;
-

@@ -17,9 +17,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Graphic from '../../../dist/sharkfin-graphic.png';
 import Logo from '../../../dist/logo-dark.png';
-
-
-
+import BankSearch from './bankSearch.jsx'
 
 let userInfo = {
     firstName: 'Daniel',
@@ -58,6 +56,7 @@ function TransferForm() {
     const [accountNumber, setAccountNumber] = useState(0);
     const [routingNumber, setRoutingNumber] = useState(0);
     const [swiftCode, setSwiftCode] = useState("");
+    const [bank, setBank] = useState("");
     const [transferAmount, setTransferAmount] = useState(1000);
     const [errors, setErrors] = useState({
         accountNumber: false,
@@ -74,19 +73,28 @@ function TransferForm() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        if (page === 1) {
+        if (page === 1 || !accountNumber) {
             navigate('/AccountInfo');
         } else {
             setPage(page - 1);
         }
     };
 
-    const handleSubmit = () => { };
+    const handleBankSubmit = () => { 
+        //Post request here to user's table
+        console.log("Bank:", bank, "Account Number", accountNumber);
+        setPage(page + 1)
+    };
 
+    const handleTransferSubmit = () => { 
+        //Post request here to user's table
+        console.log( 'Transfer Amount', transferAmount);
+        setPage(page + 1)
+    };
 
     useEffect(() => {
         setIsButtonDisabled(
-            routingNumber === 0 || // add any other conditions for invalid input fields
+            routingNumber === 0 || 
             accountNumber === 0 ||
             swiftCode === "" ||
             errors.routingNumber ||
@@ -145,18 +153,9 @@ function TransferForm() {
         }
     };
 
-    const inputsAllFilled = () => {
-        if (
-            routingNumber &&
-            accountNumber &&
-            swiftCode &&
-            !errors.routingNumber &&
-            !errors.accountNumber &&
-            !errors.swiftCode
-        ) {
-            setPage(page + 1);
-        }
-    };
+    const handleBankInput = (input) => {
+        setBank(input);
+    }
 
     let mockDatabaseAccountNumber = 1234;
 
@@ -168,8 +167,67 @@ function TransferForm() {
         }
     }
 
+const OnboardingSlide = () => {
+  const [displayStep, setDisplayStep] = useState(0);
 
+  useEffect(() => {
+    const timer1 = setTimeout(() => setDisplayStep(1), 1000);
+    const timer2 = setTimeout(() => setDisplayStep(2), 2000);
+    const timer3 = setTimeout(() => setDisplayStep(3), 3000);
 
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, []);
+
+  const stepStyle = {
+    // background: 'linear-gradient(to right, #FFE879 0%, #FFD300 100%)',
+    borderRadius: '5px',
+    padding: '5px',
+    marginBottom: '8px',
+    fontWeight: 'light',
+    // boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
+  };
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'start',
+        justifyContent: 'center',
+        height: '100%',
+        textAlign: 'left',
+        padding: 2,
+      }}
+    >
+      <Typography variant="h2" component="h2" gutterBottom>
+        You're in!
+      </Typography>
+      <Typography variant="h4" component="p" gutterBottom>
+        Now, let's go over some ground rules...
+      </Typography>
+      {displayStep >= 1 && (
+        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+          1. Invest up to $1,000 of real cash into the stock market!
+        </Typography>
+      )}
+      {displayStep >= 2 && (
+        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+          2. Compete for the highest quarterly returns against other players.
+        </Typography>
+      )}
+      {displayStep >= 3 && (
+        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+          3. Cash out your gains at the end of the competition.
+        </Typography>
+      )}
+      <Button variant="contained" onClick={() => setPage(1)}>Get started</Button>
+    </Box>
+  );
+};
     const firstPage = () => {
         return (
             <Box key="firstPage" display="flex" flexDirection="column" sx={style.gridCard}>
@@ -193,6 +251,7 @@ function TransferForm() {
                         />
                     </Grid>
                 </Grid>
+                <BankSearch handleBankInput={handleBankInput}/>
                 <TextField
                     key="bank-account"
                     id="bank-account"
@@ -237,8 +296,7 @@ function TransferForm() {
                         <FormControlLabel value="Other" control={<Radio />} label="Other" />
                     </RadioGroup>
                 </FormControl>
-
-                <Button disabled={isButtonDisabled} onClick={() => setPage(page + 1)} variant="contained" color="primary">
+                <Button disabled={isButtonDisabled} onClick={handleBankSubmit} variant="contained" color="primary">
                     Connect to Bank Account
                 </Button>
             </Box>
@@ -283,15 +341,17 @@ function TransferForm() {
             <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
             <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer()}</Box>. Are you sure you want to proceed?</Typography>
             <Box display="flex" flexDirection="row">
-                <Button onClick={handleSubmit} variant="outlined" color="primary">Cancel</Button>
-                <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Confirm</Button></Link>
+            <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
+                <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} variant="outlined" color="primary">Confirm</Button></Link>
             </Box>
         </Box>
     )
 
     let currentPage = (
         <>
-            {page === 1 ? (
+            { page === -1 ? (
+                <OnboardingSlide/> 
+            ) : page === 1 ? (
                 firstPage()
             ) : page === 2 ? (
                 <SecondPage />

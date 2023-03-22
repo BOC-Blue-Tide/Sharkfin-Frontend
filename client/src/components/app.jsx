@@ -1,5 +1,6 @@
-import React from 'react';
+import React,  { useState, useEffect } from 'react';
 const axios = require('axios').default;
+
 // import SearchBar from './searchBar.jsx'
 import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
 import helpers from './helperFunctions/requestHelpers.js'
@@ -46,14 +47,64 @@ const theme = createTheme({
     subtitle1: {
       fontSize: 12,
     },
+    h1: {
+      fontSize: '4.25rem',
+    },
+    h2: {
+      fontSize: '3.1rem',
+      // fontWeight: '500'
+
+    },
+    h3: {
+      fontSize: '2rem',
+    },
+    h4: {
+      fontSize: '1.5rem',
+      fontWeight: '500'
+
+    },
     body1: {
-      fontWeight: 500,
+      fontSize: '1.03rem',
+      fontWeight: 500
+    },
+    body2: {
+      fontSize: '0.875rem',
     },
     button: {
       fontStyle: 'bold',
+      fontSize: "14px"
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          padding: "9px 28px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+        outlined: {
+          padding: "7px 26px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+      },
+    },
+  }
 });
+
 
 class App extends React.Component {
   constructor(props) {
@@ -70,14 +121,44 @@ class App extends React.Component {
       timeframe: '5Min',
       isReady: false,
       user: "",
-      orderObj: null
+      orderObj: null,
+      userInfo: {
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        bank: '',
+        accountNumber: 0,
+        profilePic: ''
+      }
     }
   }
 
+  //Axios get request in componentdidmountto get this information
+  async updateUserInfo() {
+  //add axios get request and set state for userInfo
+    let updatedUserInfo = {
+      firstName: "Fred",
+      lastName: "Flinstone",
+      userName: "Dhalper",
+      email: "Fred@test.org",
+      bank: "CITI Bank",
+      accountNumber: "1234",
+      profilePic: "../../../dist/mockProfile.png"
+   }
+   this.setState({userInfo: updatedUserInfo})
+   console.log(this.state.userInfo);
+  }
+  
   // componentDidMount() { // for development purpose only
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
   // }
+
+  componentDidMount() {
+    this.checkLoginState();
+    this.updateUserInfo();
+  }
 
   handleOrderClick(orderObj) {
     this.setState({ orderObj: orderObj })
@@ -140,7 +221,6 @@ class App extends React.Component {
     }
   }
 
-
   getLiveData(symbol) {
     const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
 
@@ -183,24 +263,28 @@ class App extends React.Component {
     }
   }
 
-  updateUser = (user) => {
-    this.setState(
-      { user: user }
-    )
+updateUser = (user) => {
+  this.setState({ user: user });
+  if (user) {
+    localStorage.setItem("user", JSON.stringify(user));
+  } else {
+    localStorage.removeItem("user");
   }
+};
 
   checkLoginState = () => {
     axios.get('/status')
-      .then((response) => {
-        this.setState({
-          isReady: true,
-          user: response.data,
-        })
-        console.log('/status', response);
-      })
-      .catch((err) => {
-        console.log('logout error', err);
-      })
+    .then((response) => {
+      const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+      this.setState({
+        isReady: true,
+        user: savedUser || response.data,
+      });
+      console.log('/status', response);
+    })
+    .catch((err) => {
+      console.log('logout error', err);
+    });
   }
 
   render() {
@@ -226,8 +310,8 @@ class App extends React.Component {
             />
             <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
-              <Route path="/" element={<Portfolio />} />
-              <Route path="/accountInfo" element={<AccountInfo />} />
+              <Route exact path="/" element={<Portfolio />} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
@@ -250,4 +334,3 @@ class App extends React.Component {
 }
 
 export default App;
-

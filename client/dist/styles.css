@@ -17,7 +17,8 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -53,6 +54,18 @@ a {
   color: rgb(92, 92, 92);
 }
 
+.color-lightblue {
+  color: #2ad6a2;
+}
+
+.color-lightred {
+  color: #ff3d3d;
+}
+
+.color-gold {
+  color: #ffa400;
+}
+
 main {
   padding: 5px 7% 5px 7%;
   margin: auto;
@@ -73,6 +86,10 @@ main {
   font-weight: bold;
 }
 
+.searchInput {
+  font-size: small;
+}
+
 /*seach bar*/
 /*Stock & Crypto page*/
 .description-title {
@@ -80,7 +97,6 @@ main {
 }
 
 /*Stock & Crypto page*/
-
 
 .transaction {
   display: flex;
@@ -96,15 +112,50 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
 /*Stock & Crypto page*/
 
-
-
 /*LeaderBoard page*/
+
+.profilePic-greeting-container {
+  display: flex;
+  text-align: center;
+}
+
+.profilePic {
+  padding: 0 35px 0 0;
+}
+
+.greeting {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.greeting h2,
+.greeting h3 {
+  margin-bottom: 10px;
+}
+
+.profile-box {
+  width: 20vw;
+  height: 20vw;
+  min-width: 150px;
+  min-height: 150px;
+  max-width: 200px;
+  max-height: 200px;
+  margin-bottom: 20px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.profile-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 .sidebar-container {
   margin-top: 20px;
@@ -119,10 +170,6 @@ input[type=number] {
   width: 100%;
   display: flex;
   justify-content: space-between;
-}
-
-.leaderboard-title {
-  display: flex;
 }
 
 .info-container {
@@ -149,19 +196,20 @@ input[type=number] {
 .position-chart-leaderboard {
   padding-top: 20px;
   padding: 20px;
-  background-color: #FFD300;
+  background-color: #ffd300;
 }
 
 .pie-chart {
   padding-top: 20px;
   padding: 20px;
-  background-color: #8AEADF;
+  background-color: #8aeadf;
 }
 
 .fg-container {
   display: flex;
   text-align: center;
   margin-bottom: 25px;
+  justify-content: space-evenly;
 }
 
 .fg-container button {
@@ -176,29 +224,48 @@ input[type=number] {
 }
 
 .fg-container button:hover {
-  color: #278D9B;
-  border-bottom: 1px #278D9B solid;
+  color: #278d9b;
+  border-bottom: 1px #278d9b solid;
 }
 
 .fg-container button.active {
-  color: #278D9B;
-  border-bottom: 1px #278D9B solid;
+  color: #278d9b;
+  border-bottom: 1px #278d9b solid;
 }
 
 .mainpage-tf {
-  display: flex;
+  border-radius: 10px;
+  margin-top: 30px;
+  padding-left: 35px;
+  margin-bottom: 20px;
+  height: 100%;
   justify-content: space-between;
+  display: flex;
+  width: 85%;
 }
 
 .tf-box {
   margin-left: 1px;
   margin-right: 1px;
-  width: 50px;
   text-align: center;
+  width: 25%;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
 }
 
+.tf-box span {
+  margin-right: 5px;
+}
 
+.tf-box .arrow-raise {
+  display: inline-block;
+}
 
+.greeting-title {
+  padding-left: 25px;
+  margin-bottom: 30px;
+}
 
 .fg-table {
   width: 100%;
@@ -232,7 +299,7 @@ input[type=number] {
 
 .self-tr th:nth-child(1),
 .self-tr th:nth-child(2) {
-  color: #278D9B;
+  color: #278d9b;
 }
 
 .selective-bar {
@@ -244,7 +311,7 @@ input[type=number] {
   width: 20px;
   height: 20px;
   border-radius: 100%;
-  background: #FF1313;
+  background: #ff1313;
   color: #fff;
   position: relative;
   margin-left: 15px;
@@ -256,16 +323,19 @@ input[type=number] {
   padding: 30px;
   transform: translate(-50%, -50%);
   left: 50%;
-  top: 50%
+  top: 50%;
 }
 
 .friend-btns {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .main-wrapper {
   text-align: center;
   width: 100%;
+  position: sticky;
+  top: 25px;
 }
 
 .left-wrapper {
@@ -282,28 +352,24 @@ input[type=number] {
   margin-top: 30px;
 }
 
-.top-five-board {
-  border-radius: 10px;
-  margin: 20px;
-  height: 100%;
-  outline: 1px solid rgba(102, 0, 204, 0.3);
+.mainpage-leaderboard h3 {
+  text-align: left;
 }
 
 /***leaderboard in portfolio ***/
 .greeting-net-worth-chart {
-  margin-top: 20px;
+  margin-top: 30px;
   display: flex;
-  width:100%;
+  width: 100%;
 }
 
 .greeting-leaderboard {
-  margin-top: 30px;
-  width:40%
+  padding-right: 30px;
+  width: 50%;
 }
 
 .portfolio-my-net-worth-chart {
-  margin-top: 30px;
-  width: 60%
+  width: 50%;
 }
 
 .mainpage-greeting-leaderboard {
@@ -315,7 +381,7 @@ input[type=number] {
   text-align: center;
   transform: translate(-50%, -50%);
   left: 50%;
-  top: 50%
+  top: 50%;
 }
 
 .popup-content {
@@ -323,6 +389,105 @@ input[type=number] {
   width: 700px;
   background-color: white;
   padding: 40px;
+}
+
+.top-five-board {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leaderboard-profile {
+  display: flex;
+}
+
+.leaderboard-details {
+  text-align: left;
+  margin-left: 10px;
+}
+
+.leaderboard-name {
+  font-weight: 900;
+}
+
+.leaderboard-relative-box {
+  position: relative;
+}
+
+.leaderboard-relative-box span {
+  position: absolute;
+  right: -20px;
+  top: -10px;
+  background-color: #edc400;
+  padding: 0px 15px;
+  border-radius: 15px;
+  z-index: 1;
+  color: #fff;
+}
+
+.leaderboard-profile-box {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 100%;
+  box-sizing: content-box;
+}
+
+.leaderboard-profile-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mainpage-tf .tf-box:nth-child(1) .leaderboard-relative-box span {
+  background-color: #edc400;
+}
+
+.mainpage-tf .tf-box:nth-child(2) .leaderboard-relative-box span {
+  background-color: #c9c9c9;
+}
+
+.mainpage-tf .tf-box:nth-child(3) .leaderboard-relative-box span {
+  background-color: #cd7f32;
+}
+
+.mainpage-tf .tf-box:nth-child(1) .leaderboard-profile-box {
+  border: 5px solid #edc400;
+}
+
+.mainpage-tf .tf-box:nth-child(2) .leaderboard-profile-box {
+  border: 5px solid #c9c9c9;
+}
+
+.mainpage-tf .tf-box:nth-child(3) .leaderboard-profile-box {
+  border: 5px solid #cd7f32;
+}
+
+.mainpage-tf .tf-box:nth-child(1) .leaderboard-relative-box span:after {
+  content: "st";
+}
+
+.mainpage-tf .tf-box:nth-child(2) .leaderboard-relative-box span:after {
+  content: "nd";
+}
+
+.mainpage-tf .tf-box:nth-child(3) .leaderboard-relative-box span:after {
+  content: "rd";
+}
+
+@media screen and (max-width: 720px) {
+  .greeting-net-worth-chart {
+    display: block;
+  }
+
+  .greeting-leaderboard {
+    width: 100%;
+  }
+
+  .portfolio-my-net-worth-chart {
+    width: 100%;
+  }
 }
 
 /*LeaderBoard page*/

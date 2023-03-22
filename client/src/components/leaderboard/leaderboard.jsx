@@ -21,8 +21,8 @@ const LeaderBoard = () => {
         <div>
           <h2 style={{color:"#FFD300"}}>LEADER BOARD</h2>
         </div>
-        <div className ="leaderboard-title">
-          <h3 style={{color:"#EF6F6C"}}>{dayLeft} more days</h3> <h3> in the quarter</h3>
+        <div>
+          <h3><span style={{color:"#EF6F6C"}}>{dayLeft} more days </span> in the quarter</h3>
         </div>
       </div>
       <div className="leaderboard-main-container">

@@ -102,4 +102,4 @@ typings/
 .DS_Store
 BOCFrontEnd.pem
 SharkFin.pem
-
+package-lock.json

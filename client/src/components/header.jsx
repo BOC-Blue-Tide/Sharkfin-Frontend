@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import Logo from '../img/logo.png';
+import Logo from '../../dist/logo.png';
 import { Link, useLocation } from 'react-router-dom';
 import SearchBar from './searchBar.jsx'
 const axios = require('axios').default;
@@ -71,7 +71,7 @@ const Header = (props) => {
 
   return (
 
-    (location.pathname === '/transferForm' ? '' :
+    (location.pathname === '/transferForm' || location.pathname === '/logout'? '' :
       <AppBar
         position="static"
         sx={styles.main}
@@ -81,7 +81,7 @@ const Header = (props) => {
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">
-              <img src={Logo} alt="Your Logo" height="50" />
+              <img src={Logo} alt="SharkFin Trading" height="50" />
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

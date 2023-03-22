@@ -132,8 +132,10 @@ class App extends React.Component {
         accountNumber: 0,
         profilePic: ''
       },
+      transactionData: [],
       logged_email: ''
     }
+    this.getTransactionData = this.getTransactionData.bind(this);
   }
 
   //Axios get request in componentdidmountto get this information
@@ -160,7 +162,7 @@ class App extends React.Component {
    }
     this.setState({userInfo: updatedUserInfo})
     console.log(this.state.userInfo);
-    
+
   }
 
   // componentDidMount() { // for development purpose only
@@ -171,6 +173,7 @@ class App extends React.Component {
   componentDidMount() {
     this.checkLoginState();
     this.updateUserInfo();
+    this.getTransactionData();
   }
 
   handleOrderClick(orderObj) {
@@ -180,6 +183,15 @@ class App extends React.Component {
       url: 'http://localhost:8080/transactions',
       data: orderObj,
     });
+  }
+
+  async getTransactionData() {
+    try {
+      const response = await axios.get('http://localhost:8080/transactions');
+      this.setState({transactionData: response.data});
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -351,7 +363,7 @@ updateEmail = (user) => {
               <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
-              <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+              <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/searchContent" element={<StockCryptoPage
                 liveData={this.state.liveData}
                 stockObj={this.state.stockObj}

@@ -24,7 +24,7 @@ const handleFilter = (e) => {
     setTransArray(props.data);
   } else {
     setFilter(e.target.value);
-    setTransArray(props.data.filter(element => element.transactionType === e.target.value));
+    setTransArray(props.data.filter(element => element.transactiontype === e.target.value));
   }
 };
 
@@ -36,6 +36,7 @@ if (shownArray.length === transArray.length) {
 let transactionMap = shownArray.map((element, index) => {
   return <Transactions key={index} data={element} />
 });
+
 
 return <>
 <h1>Recent Transaction History</h1>

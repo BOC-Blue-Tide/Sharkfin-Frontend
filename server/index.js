@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const sessions = require('express-session');
 const path = require('path');
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 const routes = require('./routes');
 const controller = require('./controllers/');
 

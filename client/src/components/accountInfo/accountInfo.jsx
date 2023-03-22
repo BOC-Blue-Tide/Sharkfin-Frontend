@@ -107,9 +107,11 @@ function AccountInfo(props) {
                      Transfer to Sharkfin
                   </Button>
                </Link>
-               <Button variant="outlined" color="primary">
+               {/* <Tooltip label="Withdraw disabled until ">
+               <Button disabled variant="outlined" color="primary">
                   Withdraw Remaining Funds
                </Button>
+               </Tooltip> */}
             </> :
                <>
                   <Typography sx={style.headerText} variant="h4">You have no funds! Connect your bank account to get started...</Typography>

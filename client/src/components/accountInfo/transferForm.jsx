@@ -73,7 +73,7 @@ function TransferForm() {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        if (page === 1) {
+        if (page === 1 || !accountNumber) {
             navigate('/AccountInfo');
         } else {
             setPage(page - 1);

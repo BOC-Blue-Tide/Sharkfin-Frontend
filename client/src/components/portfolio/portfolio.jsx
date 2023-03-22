@@ -1,11 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PositionTable from './positionTable.jsx';
 import PortfolioChart from './portfolioChart.jsx';
 import AllocationChart from './allocationChart.jsx';
+import TimeRangeP from './timeRangeP.jsx';
 //Lenord
 import Placement from '../leaderboard/placement.jsx'
+import Axios from 'axios';
+
 
 const Portfolio = (props) => {
+  const [userID, setUserID] = useState(props.userID);
+  const [timeWindow, setTimeWindow] = useState('1W');
+  const [chartData, setChartData] = useState({});
+  const [alloPosData, setAlloPosData] = useState({});
+  useEffect(() => {
+    var paramsC = {
+      userID : userID,
+      timeSelect: timeWindow
+    };
+    var fetchChartData = async () => {
+      var result = await Axios.get('/pchart', {params: paramsC});
+      setChartData(result.data);
+    };
+    fetchChartData();
+  }, [timeWindow])
+
+  useEffect(() => {
+    var paramsC = {
+      userID : userID,
+      timeSelect: timeWindow
+    };
+    const fetchData = async () => {
+      var result = await Axios.get('/pallopos', {params: paramsC});
+      setAlloPosData(result.data);
+    };
+    fetchData();
+  }, [])
+
+  const handleTimeWindowClick = (timewindow) => {
+    setTimeWindow(timewindow);
+  };
 
   return (
     <div className='portfolio-container'>
@@ -21,16 +55,17 @@ const Portfolio = (props) => {
         </div>
         <div className='portfolio-my-net-worth-chart'>
           <h2>My Net Worth</h2>
-          <PortfolioChart/>
+          <PortfolioChart data={chartData}/>
+          <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
         </div>
       </div>
       <div className='portfolio-my-asset-allocation'>
         <h2>My Asset Allocation</h2>
-        <AllocationChart/>
+        <AllocationChart data={alloPosData}/>
       </div>
       <div className='portolio-my-position'>
       <h2>My Positions</h2>
-        <PositionTable/>
+        <PositionTable data={alloPosData}/>
       </div>
       <div className='portfolio-disclaimer'>
 

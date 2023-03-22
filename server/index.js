@@ -17,13 +17,13 @@ app.use(sessions({
   resave: false
 }));
 app.use(function(req, res, next) {
-  console.log('path', req.path);
+  // console.log('path', req.path);
 if (req.session.userid == null && req.path !== '/signin' && req.path !== '/status') {
-  console.log('no session');
+  // console.log('no session');
   //res.redirect('http://localhost:3000/');
   next();
 } else {
-  console.log('logged in');
+  // console.log('logged in');
   next();
 }
 });

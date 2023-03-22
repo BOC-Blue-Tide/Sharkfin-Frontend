@@ -9,7 +9,7 @@ router.get('/globalBoard', controllers.leaderBoard.getGlobalBoard)
 router.get('/order', controllers.orderData.postOrderData)
 
 router.get('/status', (req, res) => {
-  console.log('in status');
+  // console.log('in status');
   res.send(req.session.userid);
 })
 router.post('/logout', (req, res) => {
@@ -20,7 +20,7 @@ router.post('/login', (req, res) => {
   console.log(req.body);
   controllers.login.verify(req.body.credential)
   .then((resp)=>{
-    console.log('verify success', resp);
+    // console.log('verify success', resp);
   })
   .catch((err)=> {
     console.log('verify failed', err);
@@ -28,10 +28,12 @@ router.post('/login', (req, res) => {
   .then(()=>{
     session=req.session;
     session.userid=req.body.email;
-    console.log(req.session);
     res.redirect('/');
   })
 })
+
+router.get('/pchart', controllers.portfolio.getPChart)
+router.get('/pallopos', controllers.portfolio.getPAllocationAndPosition)
 
 
 

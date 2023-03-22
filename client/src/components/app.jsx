@@ -130,7 +130,8 @@ class App extends React.Component {
         bank: '',
         accountNumber: 0,
         profilePic: ''
-      }
+      },
+      userID: 1
     }
   }
 
@@ -149,7 +150,7 @@ class App extends React.Component {
    this.setState({userInfo: updatedUserInfo})
    console.log(this.state.userInfo);
   }
-  
+
   // componentDidMount() { // for development purpose only
   //   this.getStockData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
@@ -310,7 +311,7 @@ updateUser = (user) => {
             />
             <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
             <Routes>
-              <Route exact path="/" element={<Portfolio />} />
+              <Route exact path="/" element={<Portfolio userID={this.state.userID}/>} />
               <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />

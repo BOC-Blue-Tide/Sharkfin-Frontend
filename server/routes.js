@@ -9,7 +9,7 @@ router.get('/globalBoard', controllers.leaderBoard.getGlobalBoard)
 router.get('/order', controllers.orderData.postOrderData)
 
 router.get('/status', (req, res) => {
-  console.log('in status');
+  // console.log('in status');
   res.send(req.session.userid);
 })
 router.post('/logout', (req, res) => {

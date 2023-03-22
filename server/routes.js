@@ -27,7 +27,7 @@ router.post('/login', (req, res) => {
   console.log(req.body);
   controllers.login.verify(req.body.credential)
   .then((resp)=>{
-    console.log('verify success', resp);
+    // console.log('verify success', resp);
   })
   .catch((err)=> {
     console.log('verify failed', err);
@@ -35,10 +35,12 @@ router.post('/login', (req, res) => {
   .then(()=>{
     session=req.session;
     session.userid=req.body.email;
-    console.log(req.session);
     res.redirect('/');
   })
 })
+
+router.get('/pchart', controllers.portfolio.getPChart)
+router.get('/pallopos', controllers.portfolio.getPAllocationAndPosition)
 
 //IMAGE UPLOAD:
 
@@ -63,6 +65,7 @@ router.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res)
   await saveUserData(userInfo);
 
   res.send({ status: 'success' });});
+
 
 
 

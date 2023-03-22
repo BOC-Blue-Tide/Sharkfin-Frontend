@@ -4,51 +4,53 @@ import mockDataP from '../../../../mockDataP.js';
 import portfolioHelper from '../helper/portfolioHelper.js';
 import { Line } from "react-chartjs-2";
 
-var myPortfolio = mockDataP.mockPortfolioData;
-var stockHistory = mockDataP.mockHistory;
+const NetWorthChart = (props) => {
+  var timeData = props.data.time;
+  var netData = props.data.net;
+  const data = {
+    labels: timeData,
+    datasets: [
+      {
+        data: netData,
+        tension: 0.2,
+        backgroundColor: "black",
+        borderColor: "#5AC53B",
+        borderWidth: 2,
+        pointBorderColor: 'rgba(0, 0, 0, 0)',
+        pointBackgroundColor: 'rgba(0, 0, 0, 0)',
+        pointHoverBackgroundColor: '#5AC53B',
+        pointHoverBorderColor: '#000000',
+        pointHoverBorderWidth: 4,
+        pointHoverRadius: 6
+      }
+    ]
+  };
 
-var netWorth = portfolioHelper.GainAndLoss('GOOGL', '03/08/2023', myPortfolio, stockHistory);
-var xData = netWorth.timestamp;
-var yData = netWorth.gainlossArr;
-
-
-const data = {
-  labels: xData,
-  datasets: [
-    {
-      data: yData,
-      tension: 0.2,
-      backgroundColor: "black",
-      borderColor: "#5AC53B",
-      borderWidth: 2,
-      pointBorderColor: 'rgba(0, 0, 0, 0)',
-      pointBackgroundColor: 'rgba(0, 0, 0, 0)',
-      pointHoverBackgroundColor: '#5AC53B',
-      pointHoverBorderColor: '#000000',
-      pointHoverBorderWidth: 4,
-      pointHoverRadius: 6
-    }
-  ]
-};
-
-const chartOptions = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: false,
-    },
-  },
-
-  // Modify the axis by adding scales
-  scales: {
-    // to remove the labels
-    x: {
-      ticks: {
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
         display: false,
       },
-      grid: {
-        drawBorder: false,
-        display: false,
+      tooltips: {
+        mode: 'index',
+        intersect: false
+      }
+    },
+    interaction: {
+      intersect: false,
+    },
+      // Modify the axis by adding scales
+    scales: {
+        // to remove the labels
+      x: {
+        ticks: {
+          display: false,
+        },
+        grid: {
+          drawBorder: false,
+          display: false,
+        }
       }
     },
     y: {
@@ -62,10 +64,8 @@ const chartOptions = {
         display: false
       }
     }
-  }
-}
+  };
 
-const NetWorthChart = (props) => {
   return (
     <div>
       <Line

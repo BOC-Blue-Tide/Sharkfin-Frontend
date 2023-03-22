@@ -23,7 +23,7 @@ if (req.session.userid == null && req.path !== '/signin' && req.path !== '/statu
   //res.redirect('http://localhost:3000/');
   next();
 } else {
-  console.log('logged in');
+  // console.log('logged in');
   next();
 }
 });

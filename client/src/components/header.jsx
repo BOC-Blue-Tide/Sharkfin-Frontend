@@ -63,7 +63,7 @@ const Header = (props) => {
       .then((response) => {
         props.updateEmail('');
         localStorage.removeItem("googleInfo");
-        console.log('logout success', response);
+        // console.log('logout success', response);
       })
       .catch((err) => {
         console.log('logout error', err);

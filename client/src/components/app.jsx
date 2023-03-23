@@ -319,7 +319,7 @@ updateEmail = (user) => {
         user: savedUser || response.data,
         logged_email: response.data
       });
-      console.log('/status', response);
+      // console.log('/status', response);
     })
     .catch((err) => {
       console.log('logout error', err);
@@ -350,7 +350,8 @@ updateEmail = (user) => {
             <Header getStockData={this.getStockData.bind(this)} updateEmail = {this.updateEmail} />
 
           {/* test only, will delete later */}
-          {/* <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
+          {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
+          <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
           <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
           <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
           <div>email: {JSON.parse(localStorage.getItem("googleInfo")).email}</div>

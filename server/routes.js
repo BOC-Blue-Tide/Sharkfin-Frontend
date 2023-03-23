@@ -39,38 +39,39 @@ router.post('/login', (req, res) => {
     session=req.session;
     session.userid=req.body.email;
     console.log(req.session);
+    res.json(0);
     // res.redirect('/');
   })
-  .then(() => {
-    axios.get('http://localhost:8080/getUserByEmail', {params: {email: req.body.email}})
-    .then((response) => {
-      var userInfo = response.data.rows;
-      console.log('getUserByEmail response', userInfo);
-      if (userInfo.length) {
-        res.json(userInfo[0].id);
-      } else {
-        var decoded = jwt_decode(req.body.credential);
-        var newUser = {
-          "username": decoded.name,
-          "firstname": decoded.given_name,
-          "lastname": decoded.family_name,
-          "email": decoded.email,
-          "picture": decoded.picture
-        }
-        axios.post('http://localhost:8080/addUser', {data: newUser})
-        .then((response1) => {
-          console.log('login, addUser resp', response1.data.rows[0].id)
-          //res.send(response1.data.rows[0].id);
-          let data = response1.data.rows[0].id;
-          res.json(data);
-        })
-        .catch((err) => console.log('post new user error', err))
-      }
-    })
-    .catch((err) => {
-      console.log('getUserByEmail error', err);
-    });
-  })
+  // .then(() => {
+  //   axios.get('http://localhost:8080/getUserByEmail', {params: {email: req.body.email}})
+  //   .then((response) => {
+  //     var userInfo = response.data.rows;
+  //     console.log('getUserByEmail response', userInfo);
+  //     if (userInfo.length) {
+  //       res.json(userInfo[0].id);
+  //     } else {
+  //       var decoded = jwt_decode(req.body.credential);
+  //       var newUser = {
+  //         "username": decoded.name,
+  //         "firstname": decoded.given_name,
+  //         "lastname": decoded.family_name,
+  //         "email": decoded.email,
+  //         "picture": decoded.picture
+  //       }
+  //       axios.post('http://localhost:8080/addUser', {data: newUser})
+  //       .then((response1) => {
+  //         console.log('login, addUser resp', response1.data.rows[0].id)
+  //         //res.send(response1.data.rows[0].id);
+  //         let data = response1.data.rows[0].id;
+  //         res.json(data);
+  //       })
+  //       .catch((err) => console.log('post new user error', err))
+  //     }
+  //   })
+  //   .catch((err) => {
+  //     console.log('getUserByEmail error', err);
+  //   });
+  // })
 })
 
 router.get('/pchart', controllers.portfolio.getPChart)

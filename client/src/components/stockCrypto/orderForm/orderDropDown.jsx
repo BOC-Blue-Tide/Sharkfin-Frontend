@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -6,7 +6,20 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const dropDown = (props) => {
 
-  const [type, setType] = useState('share');
+  const [type, setType] = useState('dollars');
+  const [renderFor, setRenderFor] = useState('')
+
+  useEffect(() => {
+    if (props.pageType === "stock") {
+      setType('share')
+      setRenderFor(props.pageType)
+
+    } else if (props.pageType === "crypto") {
+      setType('dollars')
+      setRenderFor(props.pageType)
+    }
+
+  }, [props.pageType])
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -23,8 +36,15 @@ const dropDown = (props) => {
         onChange={handleChange}
         label="type"
       >
-        <MenuItem value={'share'}>Shares</MenuItem>
-        <MenuItem value={'dollars'}>Dollars</MenuItem>
+        {renderFor === "stock" ?
+          <>
+            <MenuItem value={'share'}>Shares</MenuItem>
+            <MenuItem value={'dollars'}>Dollars</MenuItem>
+          </>
+          :
+          <MenuItem value={'dollars'}>Dollars</MenuItem>
+        }
+
 
       </Select>
     </FormControl>

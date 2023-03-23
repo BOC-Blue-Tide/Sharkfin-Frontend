@@ -64,13 +64,13 @@ const cryptoState = (props) => {
             <ListItem>
               <ListItemText
                 primary="Trading Volume"
-                secondary={`$${parseFloat(coinPrevious[0].v).toFixed(2)}`}
+                secondary={`${parseFloat(coinPrevious[0].v).toFixed(2)}`}
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="Number of Transactions"
-                secondary={`$${parseFloat(coinPrevious[0].n).toFixed(2)}`}
+                secondary={`${parseFloat(coinPrevious[0].n).toFixed(2)}`}
               />
             </ListItem>
             <ListItem>

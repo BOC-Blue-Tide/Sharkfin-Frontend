@@ -76,12 +76,14 @@ class App extends React.Component {
       coinBarData: null, // incoming data from api
       coinLiveData: null, // incoming data from api
       searchScope: null,
-      selectRange: '1d'
+      selectRange: '1d',
+      coinToday: null,
+      coinPrevious: null
     }
   }
 
   // componentDidMount() { // for development purpose only
-  //   this.getStockData('msft', 'stock', 'search')
+  //   this.getData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
   // }
 
@@ -107,12 +109,12 @@ class App extends React.Component {
 
   }
 
-  async getStockData(input, selectedScope) {
+  async getData(input, selectedScope) {
     var symbol = input.toUpperCase()
     var scope = selectedScope.toLowerCase()
-    this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
-      if (scope === 'stock') {
-        try {
+    try {
+      this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
+        if (scope === 'stock') {
           var symbolData = await Axios.get('/symbolLookup', { params: { symbol: symbol } })
             .then(async (symbolData) => {
               this.setState({ stockObj: symbolData.data }, () => {
@@ -136,23 +138,35 @@ class App extends React.Component {
 
             })
         }
-        catch (err) {
-          console.log(err)
-          this.setState({ errorMsg: 'Something went wrong.' })
+        else if (scope === 'crypto') {
+
+          let coinMeta = await Axios.get('/getCoinMeta', { params: { symbol: symbol } })
+            .then(async (coinMetaData) => {
+              var coinMetaArr = coinMetaData.data
+              this.setState({ coinMeta: coinMetaArr[symbol] })
+            })
+            .then(async () => {
+              await this.getCoinBarData(symbol)
+            })
+            .then(async () => {
+              let coinToday = await Axios.get('/getCoinToday', { params: { symbol: symbol } })
+              //console.log(coinToday.data)
+              this.setState({ coinToday: coinToday.data })
+            })
+            .then(async () => {
+              let coinPrevious = await Axios.get('/getCoinPrevious', { params: { symbol: symbol } })
+              console.log(coinPrevious.data.results)
+              this.setState({ coinPrevious: coinPrevious.data.results })
+            })
         }
-      } else if (scope === 'crypto') {
-        // let input = 'BTC'
-        let coinMeta = await Axios.get('/getCoinMeta', { params: { symbol: symbol } })
-          .then(async (coinMetaData) => {
-            var coinMetaArr = coinMetaData.data
-            this.setState({ coinMeta: coinMetaArr[symbol] })
-          })
-          .then(async () => {
-            await this.getCoinBarData(symbol)
-          })
-      }
-    })
+      })
+    } catch (err) {
+      console.log(err)
+      this.setState({ errorMsg: 'Something went wrong.' })
+    }
   }
+
+
 
   async getCoinBarData(symbol) {
     try {
@@ -298,7 +312,7 @@ class App extends React.Component {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getStockData={this.getStockData.bind(this)} updateUser={this.updateUser} />
+            <Header getData={this.getData.bind(this)} updateUser={this.updateUser} />
             <Routes>
               <Route exact path="/" element={<Portfolio />} />
               <Route path="/accountInfo" element={<AccountInfo />} />
@@ -317,6 +331,8 @@ class App extends React.Component {
                 coinMeta={this.state.coinMeta}
                 coinBarData={this.state.coinBarData}
                 coinLiveData={this.state.coinLiveData}
+                coinToday={this.state.coinToday}
+                coinPrevious={this.state.coinPrevious}
                 errorMsg={this.state.errorMsg}
                 handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                 handleOrderClick={this.handleOrderClick.bind(this)}

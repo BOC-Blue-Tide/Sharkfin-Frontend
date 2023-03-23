@@ -84,10 +84,33 @@ module.exports = {
       var fromDate = req.query.fromDate
       var toDate = req.query.toDate
       var url = `https://api.polygon.io/v2/aggs/ticker/X:${symbol}USD/range/${multiplier}/${timespan}/${fromDate}/${toDate}?adjusted=true&sort=asc&limit=${limit}&apiKey=${polygon}`
-      console.log(url)
 
       let coinBar = await Axios.get(url)
       res.send(coinBar.data)
+    }
+    catch (err) {
+      res.status(500)
+    }
+  },
+  getCoinToday: async (req, res) => {
+
+    try {
+      var todayDate = new Date().toISOString().slice(0, 10)
+      var symbol = req.query.symbol
+      var url = `https://api.polygon.io/v1/open-close/crypto/${symbol}/USD/${todayDate}?adjusted=true&apiKey=${polygon}`
+      let coinToday = await Axios.get(url)
+      res.send(coinToday.data)
+    }
+    catch (err) {
+      res.status(500)
+    }
+  },
+  getCoinPrevious: async (req, res) => {
+    try {
+      var symbol = req.query.symbol
+      var url = `https://api.polygon.io/v2/aggs/ticker/X:${symbol}USD/prev?adjusted=true&apiKey=${polygon}`
+      let coinPrevious = await Axios.get(url)
+      res.send(coinPrevious.data)
     }
     catch (err) {
       res.status(500)

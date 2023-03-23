@@ -85,7 +85,7 @@ const Header = (props) => {
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <SearchBar getStockData={props.getStockData} />
+            <SearchBar getData={props.getData} />
           </Typography>
           <Typography sx={styles.link(location.pathname === '/leaderboard')}>
             <Link component="button" to="/leaderboard">

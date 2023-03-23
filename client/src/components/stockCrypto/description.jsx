@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Chip from '@mui/material/Chip';
 
 const description = (props) => {
-  const textLengthLimit = 30
+  const textLengthLimit = 50
 
   const [title, setTitle] = useState('')
 

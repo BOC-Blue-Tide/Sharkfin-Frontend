@@ -5,13 +5,15 @@ import Grid from '@mui/material/Grid';
 import Graph from './graph.jsx'
 import TimeRange from './timeRange.jsx'
 import Description from './description.jsx'
-import Stats from './stats.jsx'
+import CryptoState from './cryptoStats.jsx'
 import Order from './orderForm/orderTab.jsx'
 
 const cryptoPage = (props) => {
 
   var coinMeta = props.coinMeta
   var coinBarData = props.coinBarData
+  var coinToday = props.coinToday
+  var coinPrevious = props.coinPrevious
   const pageType = 'crypto'
 
   const [errMsg, setErrMsg] = useState(null)
@@ -45,7 +47,7 @@ const cryptoPage = (props) => {
               <Graph coinBarData={props.coinBarData} />
               <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
               <Description coinMeta={coinMeta} />
-              {/* <Stats /> */}
+              <CryptoState coinToday={coinToday} coinPrevious={coinPrevious} />
 
 
             </Grid>

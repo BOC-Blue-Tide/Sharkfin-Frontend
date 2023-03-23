@@ -12,6 +12,8 @@ router.get('/getBarData', controllers.getAPIData.getBarData)
 router.get('/getStockQoute', controllers.getAPIData.getStockQoute)
 router.get('/getCoinMeta', controllers.getAPIData.getCoinMeta)
 router.get('/getCoinBar', controllers.getAPIData.getCoinBar)
+router.get('/getCoinToday', controllers.getAPIData.getCoinToday)
+router.get('/getCoinPrevious', controllers.getAPIData.getCoinPrevious)
 
 // post order data
 router.post('/order', controllers.orderData.postOrderData)

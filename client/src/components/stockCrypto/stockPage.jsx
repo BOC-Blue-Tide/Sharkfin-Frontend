@@ -9,10 +9,10 @@ import Stats from './stats.jsx'
 import Order from './orderForm/orderTab.jsx'
 
 
-const stockCryptoPage = (props) => {
-  const fallback = 'Data unavailable'
+const stockPage = (props) => {
   var stockObj = props.stockObj
   var qouteData = props.qouteData
+  const pageType = 'stock'
 
   const [errMsg, setErrMsg] = useState(null)
   const [livePrice, setLivePrice] = useState('')
@@ -70,7 +70,7 @@ const stockCryptoPage = (props) => {
 
             </Grid>
             <Grid item xs={4}>
-              <Order handleOrderClick={props.handleOrderClick} stockObj={stockObj} barData={props.barData} />
+              <Order pageType={pageType} handleOrderClick={props.handleOrderClick} stockObj={stockObj} barData={props.barData} />
             </Grid>
           </Grid>
         </div>) : (<div>{!errMsg ? null : <p className='errorTxt'>
@@ -83,5 +83,5 @@ const stockCryptoPage = (props) => {
   )
 
 }
-export default stockCryptoPage
+export default stockPage
 

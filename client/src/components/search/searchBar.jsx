@@ -73,11 +73,15 @@ const searchBar = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    if (searchInput.length > 0) {
+    if (searchInput.length > 0 && searchScope === 'Stock') {
       //console.log(searchInput)
       props.getStockData(searchInput, searchScope)
       e.target.reset()
-      navigate(`/searchContent`);
+      navigate(`/stockContent`);
+    } else if (searchInput.length > 0 && searchScope === 'Crypto') {
+      props.getStockData(searchInput, searchScope)
+      e.target.reset()
+      navigate(`/cryptoContent`);
     }
 
   }

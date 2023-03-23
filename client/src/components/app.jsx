@@ -1,7 +1,8 @@
 import React from 'react';
 import Axios from 'axios'
 const axios = require('axios').default;
-import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
+import StockPage from './stockCrypto/stockPage.jsx'
+import CryptoPage from './stockCrypto/cryptoPage.jsx'
 import helpers from './stockCrypto/helperFunctions/requestHelpers.js'
 import moment from 'moment-timezone'
 const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
@@ -70,9 +71,10 @@ class App extends React.Component {
       timeframe: '5Min',
       isReady: false,
       user: "",
-      orderObj: null,
-      coinMeta: null,
-      coinBarData: null,
+      orderObj: null, // user order input from requestReview.jsx
+      coinMeta: null, // incoming data from api
+      coinBarData: null, // incoming data from api
+      coinLiveData: null, // incoming data from api
       searchScope: null,
       selectRange: '1d'
     }
@@ -92,9 +94,17 @@ class App extends React.Component {
   }
 
   handleTimeRangeClick(start, timeframe, selectRange) {
-    this.setState({ start: start, timeframe: timeframe, selectRange: selectRange }, async () => {
-      this.getBarData(this.state.currentSymbol, this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
-    })
+    if (this.state.searchScope === 'Stock') {
+      this.setState({ start: start, timeframe: timeframe, selectRange: selectRange }, async () => {
+        this.getBarData(this.state.currentSymbol, this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
+      })
+    } else if (this.state.searchScope === 'Crypto') {
+      this.setState({ selectRange: selectRange }, async () => {
+        this.getCoinBarData(this.state.currentSymbol)
+      })
+
+    }
+
   }
 
   async getStockData(input, selectedScope) {
@@ -138,33 +148,33 @@ class App extends React.Component {
             this.setState({ coinMeta: coinMetaArr[symbol] })
           })
           .then(async () => {
-            await this.getCoinBarData(symbol, this.state.start, this.state.timeframe)
+            await this.getCoinBarData(symbol)
           })
       }
     })
   }
 
-  async getCoinBarData(symbol, start, timeframe) {
+  async getCoinBarData(symbol) {
     try {
       var requestOptions = {
         params: {
           symbol: symbol,
-          range: null,
-          interval: timeframe
+          timespan: null,
+          multiplier: null,
+          fromDate: null,
+          toDate: null
         }
       }
-      // make sure start day is a business day
-      var checkDate = await helpers.checkDate(start)
-        .then((startDate) => {
-          requestOptions.params.startDate = startDate
+      var timeRange = await helpers.getTimeRange(this.state.selectRange)
+        .then((timeRange) => {
+          requestOptions.params.timespan = timeRange.timespan
+          requestOptions.params.multiplier = timeRange.multiplier
+          requestOptions.params.fromDate = timeRange.fromDate
+          requestOptions.params.toDate = timeRange.toDate
         })
         .then(async () => {
-          var timeRange = await helpers.getTimeRange(this.state.selectRange)
-        })
-        .then(async () => {
-          var coinBarData = await Axios.get('/getCoinBar', requestOptions)
-          console.log(coinBarData.data)
-          this.setState({ coinBarData: coinBarData.data })
+          var coinBar = await Axios.get('/getCoinBar', requestOptions)
+          this.setState({ coinBarData: coinBar.data.results })
         })
 
 
@@ -295,7 +305,7 @@ class App extends React.Component {
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
-              <Route path="/searchContent" element={<StockCryptoPage
+              <Route path="/stockContent" element={<StockPage
                 liveData={this.state.liveData}
                 stockObj={this.state.stockObj}
                 errorMsg={this.state.errorMsg}
@@ -303,10 +313,18 @@ class App extends React.Component {
                 barData={this.state.barData}
                 qouteData={this.state.qouteData}
                 handleOrderClick={this.handleOrderClick.bind(this)} />} />
-
+              <Route path="/cryptoContent" element={<CryptoPage
+                coinMeta={this.state.coinMeta}
+                coinBarData={this.state.coinBarData}
+                coinLiveData={this.state.coinLiveData}
+                errorMsg={this.state.errorMsg}
+                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                handleOrderClick={this.handleOrderClick.bind(this)}
+              />
+              } />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-          </ThemeProvider>
+          </ThemeProvider >
         </>
       )
     }

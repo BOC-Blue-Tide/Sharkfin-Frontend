@@ -22,23 +22,20 @@ const helpers = {
   },
   getTimeRange: async (selectRange) => {
     var map = {
-      '1d': ['5', 'minute', 1],
-      '1w': ['10', 'minute', 7],
+      '1d': ['5', 'minute'],
+      '1w': ['10', 'minute'],
       '1m': ['1', 'hour'],
       '3m': ['1', 'hour'],
       '1y': ['1', 'day'],
       '5y': ['1', 'week']
     }
     let formattedDate = await helpers.formatDate(selectRange)
-
-
     var result = {
       multiplier: map[selectRange][0],
       timespan: map[selectRange][1],
-      from: formattedDate.fromDate,
-      to: formattedDate.toDate
+      fromDate: formattedDate.fromDate,
+      toDate: formattedDate.toDate
     }
-
     return result
 
 

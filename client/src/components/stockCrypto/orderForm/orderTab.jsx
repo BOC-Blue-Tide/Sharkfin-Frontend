@@ -59,10 +59,10 @@ const Order = (props) => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0} >
-        <OrderCard handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
+        <OrderCard pageType={props.pageType} handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <OrderCard handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
+        <OrderCard pageType={props.pageType} handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
       </TabPanel>
     </Box>
   );

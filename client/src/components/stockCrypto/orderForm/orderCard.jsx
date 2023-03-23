@@ -65,14 +65,14 @@ const orderCard = (props) => {
               {`Buy in `}
             </Grid>
             <Grid item xs={6}>
-              <Dropdown handleOrderIn={handleOrderIn} />
+              <Dropdown handleOrderIn={handleOrderIn} pageType={props.pageType} />
             </Grid>
           </Grid> : <Grid container spacing={1}>
             <Grid item xs={6}>
               {`Sell in `}
             </Grid>
             <Grid item xs={6}>
-              <Dropdown handleOrderIn={handleOrderIn} />
+              <Dropdown handleOrderIn={handleOrderIn} pageType={props.pageType} />
             </Grid>
           </Grid>}
         </Typography>

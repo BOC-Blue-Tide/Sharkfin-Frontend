@@ -103,3 +103,4 @@ typings/
 BOCFrontEnd.pem
 SharkFin.pem
 package-lock.json
+.yml

@@ -132,8 +132,11 @@ class App extends React.Component {
         accountNumber: 0,
         profilePic: ''
       },
+      userID: 1,
+      transactionData: [],
       logged_email: ''
     }
+    this.getTransactionData = this.getTransactionData.bind(this);
   }
 
   //Axios get request in componentdidmountto get this information
@@ -160,7 +163,7 @@ class App extends React.Component {
    }
     this.setState({userInfo: updatedUserInfo})
     console.log(this.state.userInfo);
-    
+
   }
 
   // componentDidMount() { // for development purpose only
@@ -171,6 +174,7 @@ class App extends React.Component {
   componentDidMount() {
     this.checkLoginState();
     this.updateUserInfo();
+    this.getTransactionData();
   }
 
   handleOrderClick(orderObj) {
@@ -180,6 +184,15 @@ class App extends React.Component {
       url: 'http://localhost:8080/transactions',
       data: orderObj,
     });
+  }
+
+  async getTransactionData() {
+    try {
+      const response = await axios.get('http://localhost:8080/transactions');
+      this.setState({transactionData: response.data});
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   handleTimeRangeClick(start, timeframe) {
@@ -306,7 +319,7 @@ updateEmail = (user) => {
         user: savedUser || response.data,
         logged_email: response.data
       });
-      console.log('/status', response);
+      // console.log('/status', response);
     })
     .catch((err) => {
       console.log('logout error', err);
@@ -337,7 +350,8 @@ updateEmail = (user) => {
             <Header getStockData={this.getStockData.bind(this)} updateEmail = {this.updateEmail} />
 
           {/* test only, will delete later */}
-          {/* <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
+          {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
+          <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
           <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
           <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
           <div>email: {JSON.parse(localStorage.getItem("googleInfo")).email}</div>
@@ -347,11 +361,11 @@ updateEmail = (user) => {
           </div> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio />} />
+              <Route exact path="/" element={<Portfolio userID={this.state.userID}/>} />
               <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
-              <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+              <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/searchContent" element={<StockCryptoPage
                 liveData={this.state.liveData}
                 stockObj={this.state.stockObj}

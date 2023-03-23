@@ -18,10 +18,10 @@ class Login extends React.Component {
       email: decoded.email,
       credential: response.credential,
     })
-    .then((response) =>{
-      console.log('success', decoded);
+    .then((res) =>{
+      // console.log('res.data',res, res.data);
       var googleInfo = {
-        id: 12345,  // placeholder for user_id
+        id: res.data,
         email: decoded.email,
         username: decoded.name,
         firstname: decoded.given_name,
@@ -45,7 +45,7 @@ logout = () => {
   .then((response) => {
     this.props.updateEmail('');
     localStorage.removeItem("googleInfo");
-    console.log('logout success', response);
+    // console.log('logout success', response);
   })
   .catch((err) => {
     console.log('logout error', err);

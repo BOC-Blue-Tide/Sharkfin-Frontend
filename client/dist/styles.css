@@ -122,6 +122,14 @@ main {
   border-radius: 15px;
 }
 
+.chatfriendtile {
+  display: flex;
+  align-items: center;
+}
+
+.chatfriendpic {
+  padding: 10px;
+}
 
 /*diable order textfield arrow*/
 /* Chrome, Safari, Edge, Opera */

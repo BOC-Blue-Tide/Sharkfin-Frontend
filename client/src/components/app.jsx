@@ -4,6 +4,7 @@ const axios = require('axios').default;
 import StockPage from './stockCrypto/stockPage.jsx'
 import CryptoPage from './stockCrypto/cryptoPage.jsx'
 import helpers from './stockCrypto/helperFunctions/requestHelpers.js'
+import Order from './stockCrypto/orderForm/orderTab.jsx'
 import moment from 'moment-timezone'
 const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
 const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
@@ -117,11 +118,13 @@ class App extends React.Component {
         if (scope === 'stock') {
           var symbolData = await Axios.get('/symbolLookup', { params: { symbol: symbol } })
             .then(async (symbolData) => {
-              this.setState({ stockObj: symbolData.data }, () => {
-                if (Object.keys(this.state.stockObj).length > 0) {
-                  this.getLiveData(symbol)
-                }
-              })
+              this.setState({ stockObj: symbolData.data }
+                // , () => {
+                // if (Object.keys(this.state.stockObj).length > 0) {
+                //   this.getLiveData(symbol)
+                // }
+                //}
+              )
             })
             .then(async () => {
               var stockQoute = await Axios.get('/getStockQoute', { params: { symbol: symbol } })
@@ -225,48 +228,6 @@ class App extends React.Component {
   }
 
 
-  getLiveData(symbol) {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
-
-    console.info('1. New websocket created.');
-
-    // Connection opened -> Subscribe
-    socket.onopen = (event) => {
-      socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': `${symbol}` }))
-
-      console.info('2. Subscribing to symbols...');
-
-    };
-
-    // Listen for messages from the websocket stream...
-    socket.onmessage = (event) => {
-
-      // console.clear();
-      // console.info('1. New websocket created.');
-      // console.info('2. Subscribing to symbols...');
-      // console.info('3. Websocket streaming.');
-
-      // stream response...
-      let response = JSON.parse(event.data);
-
-      if (response.type === 'ping') {
-        console.warn('Occasional server', response.type + '.');
-        let pong = { "type": "pong" }
-        socket.send(JSON.stringify(pong))
-      } else {
-        var data = response.data || null
-        console.log(data)
-        this.setState({ liveData: data })
-      }
-
-    };
-
-    // Unsubscribe
-    var unsubscribe = function (symbol) {
-      socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
-    }
-  }
-
   updateUser = (user) => {
     this.setState({ user: user });
     if (user) {
@@ -319,24 +280,55 @@ class App extends React.Component {
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
-              <Route path="/stockContent" element={<StockPage
-                liveData={this.state.liveData}
-                stockObj={this.state.stockObj}
-                errorMsg={this.state.errorMsg}
-                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                barData={this.state.barData}
-                qouteData={this.state.qouteData}
-                handleOrderClick={this.handleOrderClick.bind(this)} />} />
-              <Route path="/cryptoContent" element={<CryptoPage
-                coinMeta={this.state.coinMeta}
-                coinBarData={this.state.coinBarData}
-                coinLiveData={this.state.coinLiveData}
-                coinToday={this.state.coinToday}
-                coinPrevious={this.state.coinPrevious}
-                errorMsg={this.state.errorMsg}
-                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                handleOrderClick={this.handleOrderClick.bind(this)}
-              />
+              <Route path="/stockContent" element={
+                <div className="page-content">
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <StockPage
+                        liveData={this.state.liveData}
+                        stockObj={this.state.stockObj}
+                        errorMsg={this.state.errorMsg}
+                        handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                        barData={this.state.barData}
+                        qouteData={this.state.qouteData}
+                        symbol={this.state.currentSymbol}
+                        handleOrderClick={this.handleOrderClick.bind(this)} />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Order pageType={'stock'}
+                        handleOrderClick={this.handleOrderClick.bind(this)}
+                        stockObj={this.state.stockObj}
+                        barData={this.state.barData} />
+                    </Grid>
+                  </Grid>
+                </div>
+
+              } />
+              <Route path="/cryptoContent" element={
+                <div className="page-content">
+                  <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                      <CryptoPage
+                        coinMeta={this.state.coinMeta}
+                        coinBarData={this.state.coinBarData}
+                        coinLiveData={this.state.coinLiveData}
+                        coinToday={this.state.coinToday}
+                        coinPrevious={this.state.coinPrevious}
+                        errorMsg={this.state.errorMsg}
+                        handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                        handleOrderClick={this.handleOrderClick.bind(this)}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Order pageType={'crypto'}
+                        handleOrderClick={this.handleOrderClick.bind(this)}
+                        coinMeta={this.state.coinMeta}
+                        coinBarData={this.state.coinBarData}
+                        coinToday={this.state.coinToday}
+                        coinPrevious={this.state.coinPrevious} />
+                    </Grid>
+                  </Grid>
+                </div>
               } />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

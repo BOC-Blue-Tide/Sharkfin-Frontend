@@ -11,7 +11,7 @@ const cryptoState = (props) => {
   const fallback = 'Data unavailable'
 
   return (
-    <>
+    <div className="cryptoStats-continer">
       <div className="stats-title">Today's Open/ Close</div>
       {props.coinToday ?
         <Stack direction="row" spacing={1}>
@@ -81,7 +81,7 @@ const cryptoState = (props) => {
             </ListItem>
           </List>
         </Stack> : fallback}
-    </>
+    </div>
   )
 }
 

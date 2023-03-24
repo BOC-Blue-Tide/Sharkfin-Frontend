@@ -6,20 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const dropDown = (props) => {
 
-  const [type, setType] = useState('dollars');
-  const [renderFor, setRenderFor] = useState('')
-
-  useEffect(() => {
-    if (props.pageType === "stock") {
-      setType('share')
-      setRenderFor(props.pageType)
-
-    } else if (props.pageType === "crypto") {
-      setType('dollars')
-      setRenderFor(props.pageType)
-    }
-
-  }, [props.pageType])
+  const [type, setType] = useState('');
 
   const handleChange = (event) => {
     setType(event.target.value);
@@ -36,15 +23,9 @@ const dropDown = (props) => {
         onChange={handleChange}
         label="type"
       >
-        {renderFor === "stock" ?
-          <>
-            <MenuItem value={'share'}>Shares</MenuItem>
-            <MenuItem value={'dollars'}>Dollars</MenuItem>
-          </>
-          :
-          <MenuItem value={'dollars'}>Dollars</MenuItem>
-        }
 
+        <MenuItem value={'shares'}>Shares</MenuItem>
+        <MenuItem value={'dollars'}>Dollars</MenuItem>
 
       </Select>
     </FormControl>

@@ -109,6 +109,10 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+.description-title {
+  margin-bottom: 2em;
+}
+
 /*Stock & Crypto page*/
 
 

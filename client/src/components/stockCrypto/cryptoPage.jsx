@@ -37,26 +37,34 @@ const cryptoPage = (props) => {
   return (
     <>
       {props.coinMeta && props.coinBarData ? (
-        <div className="page-content">
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <div className="stock-name">{coinMeta[0].name}</div>
-              <div className="live-price">live price</div>
-              <div className="today-change">{change} ($_.__%) Today</div>
+        // <div className="page-content">
+        //   <Grid container spacing={2}>
+        //     <Grid item xs={8}>
+        <>
+          <div className="stock-name">{coinMeta[0].name}</div>
+          <div className="live-price">live price</div>
+          <div className="today-change">{change} ($_.__%) Today</div>
 
-              <Graph coinBarData={props.coinBarData} />
-              <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
-              <Description coinMeta={coinMeta} />
-              <CryptoState coinToday={coinToday} coinPrevious={coinPrevious} />
+          <Graph coinBarData={props.coinBarData} />
+          <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
+          <Description coinMeta={coinMeta} />
+          <CryptoState coinToday={coinToday} coinPrevious={coinPrevious} />
 
-
-            </Grid>
-            <Grid item xs={4}>
-              <Order handleOrderClick={props.handleOrderClick} pageType={pageType} />
-            </Grid>
-          </Grid>
-        </div>) : (<div>{!errMsg ? null : <p className='errorTxt'>
-          <span>{errMsg}...&#128517;</span></p>}</div>)}
+        </>
+        //     {/* </Grid>
+        //     <Grid item xs={4}>
+        //       <Order
+        //         handleOrderClick={props.handleOrderClick}
+        //         pageType={pageType}
+        //         coinMeta={coinMeta}
+        //         coinBarData={coinBarData}
+        //         coinToday={coinToday}
+        //         coinPrevious={coinPrevious} />
+        //     </Grid>
+        //   </Grid>
+        // </div> */}
+      ) : (<div>{!errMsg ? null : <p className='errorTxt'>
+        <span>{errMsg}...&#128517;</span></p>}</div>)}
     </>
   )
 

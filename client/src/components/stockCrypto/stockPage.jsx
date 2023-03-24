@@ -7,27 +7,25 @@ import TimeRange from './timeRange.jsx'
 import Description from './description.jsx'
 import Stats from './stats.jsx'
 import Order from './orderForm/orderTab.jsx'
+import LivePriceDisplay from './livePriceDisplay.jsx'
 
 
 const stockPage = (props) => {
   var stockObj = props.stockObj
   var qouteData = props.qouteData
-  const pageType = 'stock'
-
   const [errMsg, setErrMsg] = useState(null)
-  const [livePrice, setLivePrice] = useState('')
   const [change, setChange] = useState('')
-
-
+  const [liveData, setLiveData] = useState(null)
 
   useEffect(() => {
-    let liveData = props.liveData
-    if (liveData) {
-      if (liveData.length > 0) {
-        setLivePrice(`$${parseFloat(liveData[0].p).toFixed(2)}`)
+    if (props.symbol !== null && props.stockObj) {
+      if (Object.keys(stockObj).length > 0) {
+        getLiveData(props.symbol)
       }
     }
-  }, [props.liveData])
+
+  }, [props.stockObj])
+
 
   useEffect(() => {
     let qouteData = props.qouteData
@@ -48,33 +46,78 @@ const stockPage = (props) => {
     setErrMsg(props.errorMsg)
   }, [props.errorMsg])
 
+
+  const getLiveData = (symbol) => {
+    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
+
+    console.info('1. New websocket created.');
+
+    // Connection opened -> Subscribe
+    socket.onopen = (event) => {
+      socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': `${symbol}` }))
+
+      console.info('2. Subscribing to symbols...');
+
+    };
+
+    // Listen for messages from the websocket stream...
+    socket.onmessage = (event) => {
+
+      // console.clear();
+      // console.info('1. New websocket created.');
+      // console.info('2. Subscribing to symbols...');
+      // console.info('3. Websocket streaming.');
+
+      // stream response...
+      let response = JSON.parse(event.data);
+
+      if (response.type === 'ping') {
+        console.warn('Occasional server', response.type + '.');
+        let pong = { "type": "pong" }
+        socket.send(JSON.stringify(pong))
+      } else {
+        var data = response.data || null
+        console.log(data)
+        setLiveData(data)
+      }
+
+    };
+
+    // Unsubscribe
+    var unsubscribe = function (symbol) {
+      socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
+    }
+  }
+
   return (
     <>
       {props.stockObj && props.barData && props.qouteData ? (
-        <div className="page-content">
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
-              <Stack direction="row" spacing={1}>
-                <Chip label={`${stockObj.Sector}`} variant="outlined" />
-                <Chip label={`${stockObj.Industry}`} variant="outlined" />
-              </Stack>
-              <div className="stock-name">{stockObj.Name}</div>
-              <div className="live-price">{livePrice}</div>
-              <div className="today-change">{change} (${parseFloat(qouteData['10. change percent']).toFixed(2)}%) Today</div>
+        // <div className="page-content">
+        //   <Grid container spacing={2}>
+        // <Grid item xs={8}>
+        <>
+          <Stack direction="row" spacing={1}>
+            <Chip label={`${stockObj.Sector}`} variant="outlined" />
+            <Chip label={`${stockObj.Industry}`} variant="outlined" />
+          </Stack>
+          <div className="stock-name">{stockObj.Name}</div>
+          <LivePriceDisplay liveData={liveData} />
+          <div className="today-change">{change} (${parseFloat(qouteData['10. change percent']).toFixed(2)}%) Today</div>
 
-              <Graph barData={props.barData} liveData={props.liveData} />
-              <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
-              <Description stockObj={stockObj} />
-              <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />
+          <Graph barData={props.barData} liveData={liveData} />
+          <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
+          <Description stockObj={stockObj} />
+          <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />
+        </>
 
-
-            </Grid>
-            <Grid item xs={4}>
-              <Order pageType={pageType} handleOrderClick={props.handleOrderClick} stockObj={stockObj} barData={props.barData} />
-            </Grid>
-          </Grid>
-        </div>) : (<div>{!errMsg ? null : <p className='errorTxt'>
-          <span>{errMsg}...&#128517;</span></p>}</div>
+        // </Grid>
+        // <Grid item xs={4}>
+        //   <Order pageType={pageType} handleOrderClick={props.handleOrderClick} stockObj={stockObj} barData={props.barData} />
+        // </Grid>
+        //   </Grid>
+        // </div>
+      ) : (<div>{!errMsg ? null : <p className='errorTxt'>
+        <span>{errMsg}...&#128517;</span></p>}</div>
       )}
 
     </>

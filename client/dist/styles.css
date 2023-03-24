@@ -103,6 +103,26 @@ main {
   justify-content: space-between;
 }
 
+.outgoingchatbubble {
+  background-color: dodgerblue;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+  display: table;
+  margin-left: auto;
+  border-radius: 15px;
+}
+
+.incomingchatbubble {
+  background-color: lightgrey;
+  color: black;
+  padding: 10px;
+  margin: 10px;
+  display: table;
+  border-radius: 15px;
+}
+
+
 /*diable order textfield arrow*/
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,

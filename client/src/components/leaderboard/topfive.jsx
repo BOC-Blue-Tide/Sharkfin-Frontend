@@ -1,5 +1,5 @@
-import React, { useRef, useState, useEffect } from 'react';
 import Axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
 
 const Topfive = (props) => {
   const [friendBoard, setFriendBoard] = useState([])
@@ -12,7 +12,7 @@ const Topfive = (props) => {
     await Axios.get('/friendBoard')
     .then((response) => {
       var data = response.data
-        setFriendBoard(data.slice(0, 5))
+        setFriendBoard(data.slice(0, 3))
     })
   }
 
@@ -25,13 +25,26 @@ const Topfive = (props) => {
     var arrow = null
     var gain = null
     if (number > 0) {
-      arrow = `<img src="arrow-up.png" alt="arrow up" width="20">`
-      gain = `<p style="color:green;">${friendBoard[x].gain}%</p>`
+      arrow = `<img class="arrow-raise" src="arrow-up.png" alt="arrow up" width="20">`
+      gain = `<span style="color:green;">${friendBoard[x].gain}%</span>`
     } else {
-      arrow = `<img src="arrow-down.png" alt="arrow down" width="20">`
-      gain = `<p style="color:red;">${friendBoard[x].gain}%</p>`
+      arrow = `<img class="arrow-raise" src="arrow-down.png" alt="arrow down" width="20">`
+      gain = `<span style="color:red;">${friendBoard[x].gain}%</span>`
     }
-    box += `<div>${place}. ${name}</div><div>${gain} ${arrow}</div></div>`
+    box += `
+      <div class="leaderboard-profile">
+        <div class="leaderboard-relative-box">
+          <span>${place}</span>
+        </div>
+        <div class="leaderboard-profile-box">
+          <img src="pic2.png"></img>
+        </div>
+      </div>
+      <div class="leaderboard-details">
+        <div class="leaderboard-name">${name}</div>
+        <div>${gain} ${arrow}</div>
+      </div>
+    </div>`
     tfDiv += box
   }
 

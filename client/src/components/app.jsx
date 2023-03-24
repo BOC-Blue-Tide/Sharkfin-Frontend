@@ -12,7 +12,7 @@ const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
-import TransactionList from './TransactionList.jsx';
+import TransactionList from './transactions/TransactionList.jsx';
 import mockData from '../../../mockData.js';
 //Howard
 import Portfolio from './portfolio/portfolio.jsx';
@@ -48,14 +48,64 @@ const theme = createTheme({
     subtitle1: {
       fontSize: 12,
     },
+    h1: {
+      fontSize: '4.25rem',
+    },
+    h2: {
+      fontSize: '3.1rem',
+      // fontWeight: '500'
+
+    },
+    h3: {
+      fontSize: '2rem',
+    },
+    h4: {
+      fontSize: '1.5rem',
+      fontWeight: '500'
+
+    },
     body1: {
-      fontWeight: 500,
+      fontSize: '1.03rem',
+      fontWeight: 500
+    },
+    body2: {
+      fontSize: '0.875rem',
     },
     button: {
       fontStyle: 'bold',
+      fontSize: "14px"
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        contained: {
+          padding: "9px 28px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+        outlined: {
+          padding: "7px 26px",
+          borderWidth: "3px",
+          borderRadius: "4px",
+          borderColor: "#278D9B",
+          "&:hover": {
+            borderWidth: "3px",
+            borderRadius: "4px",
+            borderColor: "#278D9B",
+          },
+        },
+      },
+    },
+  }
 });
+
 
 class App extends React.Component {
   constructor(props) {
@@ -79,8 +129,50 @@ class App extends React.Component {
       searchScope: null,
       selectRange: '1d',
       coinToday: null,
-      coinPrevious: null
+      coinPrevious: null,
+      orderObj: null,
+      userInfo: {
+        userId: 0,
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        bank: '',
+        accountNumber: 0,
+        profilePic: ''
+      },
+      userID: 1,
+      transactionData: [],
+      logged_email: ''
     }
+    this.getTransactionData = this.getTransactionData.bind(this);
+  }
+
+  //Axios get request in componentdidmountto get this information
+  async updateUserInfo() {
+    var id = localStorage.getItem("id")
+    var request = {
+      headers: {
+        "user_id": id
+      }
+    }
+
+    //add axios get request using userid (stored in local storage) and set state for userInfo
+    axios.get('/user', request);
+    // const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+
+    let updatedUserInfo = {
+      firstName: "Fred",
+      lastName: "Flinstone",
+      userName: "Dhalper",
+      email: "Fred@test.org",
+      bank: "CITI Bank",
+      accountNumber: "1234",
+      profilePic: "../../../dist/mockProfile.png"
+    }
+    this.setState({ userInfo: updatedUserInfo })
+    console.log(this.state.userInfo);
+
   }
 
   // componentDidMount() { // for development purpose only
@@ -90,10 +182,26 @@ class App extends React.Component {
 
   componentDidMount() {
     this.checkLoginState();
+    this.updateUserInfo();
+    this.getTransactionData();
   }
 
   handleOrderClick(orderObj) {
-    this.setState({ orderObj: orderObj })
+    this.setState({ orderObj: orderObj });
+    axios({
+      method: 'post',
+      url: 'http://localhost:8080/transactions',
+      data: orderObj,
+    });
+  }
+
+  async getTransactionData() {
+    try {
+      const response = await axios.get('http://localhost:8080/transactions');
+      this.setState({ transactionData: response.data });
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   handleTimeRangeClick(start, timeframe, selectRange) {
@@ -105,9 +213,7 @@ class App extends React.Component {
       this.setState({ selectRange: selectRange }, async () => {
         this.getCoinBarData(this.state.currentSymbol)
       })
-
     }
-
   }
 
   async getData(input, selectedScope) {
@@ -118,13 +224,7 @@ class App extends React.Component {
         if (scope === 'stock') {
           var symbolData = await Axios.get('/symbolLookup', { params: { symbol: symbol } })
             .then(async (symbolData) => {
-              this.setState({ stockObj: symbolData.data }
-                // , () => {
-                // if (Object.keys(this.state.stockObj).length > 0) {
-                //   this.getLiveData(symbol)
-                // }
-                //}
-              )
+              this.setState({ stockObj: symbolData.data })
             })
             .then(async () => {
               var stockQoute = await Axios.get('/getStockQoute', { params: { symbol: symbol } })
@@ -235,7 +335,13 @@ class App extends React.Component {
     } else {
       localStorage.removeItem("user");
     }
-  };
+  }
+
+  updateEmail = (user) => {
+    this.setState(
+      { logged_email: user }
+    )
+  }
 
   checkLoginState = () => {
     axios.get('/status')
@@ -244,8 +350,9 @@ class App extends React.Component {
         this.setState({
           isReady: true,
           user: savedUser || response.data,
+          logged_email: response.data
         });
-        console.log('/status', response);
+        // console.log('/status', response);
       })
       .catch((err) => {
         console.log('logout error', err);
@@ -257,9 +364,9 @@ class App extends React.Component {
       <div></div>
     }
 
-    if (!this.state.user) {
+    if (!this.state.logged_email) {
       return (
-        <Login updateUser={this.updateUser} user={this.state.user} />
+        <Login updateEmail={this.updateEmail} user={this.state.logged_email} />
       )
     } else {
       return (
@@ -273,13 +380,25 @@ class App extends React.Component {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getData={this.getData.bind(this)} updateUser={this.updateUser} />
+            <Header getData={this.getData.bind(this)} updateEmail={this.updateEmail} />
+
+            {/* test only, will delete later */}
+            {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
+          <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
+          <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
+          <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
+          <div>email: {JSON.parse(localStorage.getItem("googleInfo")).email}</div>
+          <div>
+            image:
+            <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
+          </div> */}
+
             <Routes>
-              <Route exact path="/" element={<Portfolio />} />
-              <Route path="/accountInfo" element={<AccountInfo />} />
+              <Route exact path="/" element={<Portfolio userID={this.state.userID} />} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo} />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
-              <Route path="/transactionList" element={<TransactionList data={mockData} />} />
+              <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>
                   {this.state.stockObj && this.state.barData && this.state.qouteData ?
@@ -346,4 +465,3 @@ class App extends React.Component {
 }
 
 export default App;
-

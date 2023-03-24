@@ -1,26 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Chart from 'chart.js/auto';
-import mockDataP from '../../../../mockDataP.js';
-import portfolioHelper from '../helper/portfolioHelper.js';
 import { Pie } from "react-chartjs-2";
+import { Colors } from 'chart.js';
+Chart.register(Colors);
 
-var myPortfolio = mockDataP.mockPortfolioData;
-
-var allocation = portfolioHelper.allocationRatio(myPortfolio);
-var xData = allocation.symbols;
-var yData = allocation.ratios;
-
-
-const data = {
-  labels: xData,
-  datasets: [
-    {
-      data: yData,
-    }
-  ]
-};
-
-const chartOptions = {
+var chartOptions = {
   responsive: true,
   plugins: {
     legend: {
@@ -28,11 +12,25 @@ const chartOptions = {
       position: 'chartArea',
       align: 'center'
     },
+    colors: {
+      forceOverride: true
+    }
   },
   maintainAspectRatio: false,
-}
+};
 
 const AllocationChart = (props) => {
+  var ratioData = props.data.allocation.ratios;
+  var symbolData = props.data.allocation.symbols;
+  const data = {
+    labels: symbolData,
+    datasets: [
+      {
+        data: ratioData,
+      }
+    ]
+  };
+
   return (
     <div>
       <Pie

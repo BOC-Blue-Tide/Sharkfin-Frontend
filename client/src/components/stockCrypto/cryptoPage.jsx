@@ -17,18 +17,18 @@ const cryptoPage = (props) => {
   const pageType = 'crypto'
 
   const [errMsg, setErrMsg] = useState(null)
-  const [livePrice, setLivePrice] = useState('')
+  const [liveData, setLiveData] = useState('')
   const [change, setChange] = useState('')
 
-  useEffect(() => {
-    let coinLiveData = props.coinLiveData
-    if (coinLiveData) {
-      if (coinLiveData.length > 0) {
-        console.log('set live price later')
-        //setLivePrice(`$${parseFloat(coinLiveData[0].p).toFixed(2)}`)
-      }
-    }
-  }, [props.coinLiveData])
+  // useEffect(() => {
+  //   let coinLiveData = props.coinLiveData
+  //   if (coinLiveData) {
+  //     if (coinLiveData.length > 0) {
+  //       console.log('set live price later')
+  //       //setLivePrice(`$${parseFloat(coinLiveData[0].p).toFixed(2)}`)
+  //     }
+  //   }
+  // }, [props.coinLiveData])
 
   useEffect(() => {
     setErrMsg(props.errorMsg)
@@ -37,9 +37,7 @@ const cryptoPage = (props) => {
   return (
     <>
       {props.coinMeta && props.coinBarData ? (
-        // <div className="page-content">
-        //   <Grid container spacing={2}>
-        //     <Grid item xs={8}>
+
         <>
           <div className="stock-name">{coinMeta[0].name}</div>
           <div className="live-price">live price</div>
@@ -51,18 +49,6 @@ const cryptoPage = (props) => {
           <CryptoState coinToday={coinToday} coinPrevious={coinPrevious} />
 
         </>
-        //     {/* </Grid>
-        //     <Grid item xs={4}>
-        //       <Order
-        //         handleOrderClick={props.handleOrderClick}
-        //         pageType={pageType}
-        //         coinMeta={coinMeta}
-        //         coinBarData={coinBarData}
-        //         coinToday={coinToday}
-        //         coinPrevious={coinPrevious} />
-        //     </Grid>
-        //   </Grid>
-        // </div> */}
       ) : (<div>{!errMsg ? null : <p className='errorTxt'>
         <span>{errMsg}...&#128517;</span></p>}</div>)}
     </>

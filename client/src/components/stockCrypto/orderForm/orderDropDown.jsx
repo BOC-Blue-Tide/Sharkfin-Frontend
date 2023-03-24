@@ -14,22 +14,40 @@ const dropDown = (props) => {
   };
 
   return (
-    <FormControl variant="standard" sx={{ m: 0 }}>
-      {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
-      <Select
-        labelId="orderIn"
-        id="orderIn"
-        value={type}
-        onChange={handleChange}
-        label="type"
-      >
+    <>
+      {props.pageType === 'stock' ?
+        <FormControl variant="standard" sx={{ m: 0 }}>
+          {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
+          <Select
+            labelId="orderIn"
+            id="orderIn"
+            value={type}
+            onChange={handleChange}
+            label="type"
+          >
 
-        <MenuItem value={'shares'}>Shares</MenuItem>
-        <MenuItem value={'dollars'}>Dollars</MenuItem>
+            <MenuItem value={'shares'}>Shares</MenuItem>
+            <MenuItem value={'dollars'}>Dollars</MenuItem>
 
-      </Select>
-    </FormControl>
+          </Select>
+        </FormControl>
+        :
+        <FormControl variant="standard" sx={{ m: 0 }}>
+          {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
+          <Select
+            labelId="orderIn"
+            id="orderIn"
+            value={type}
+            onChange={handleChange}
+            label="type"
+          >
 
+            <MenuItem value={'coins'}>Coins</MenuItem>
+            <MenuItem value={'dollars'}>Dollars</MenuItem>
+
+          </Select>
+        </FormControl>}
+    </>
   )
 
 }

@@ -281,54 +281,60 @@ class App extends React.Component {
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={mockData} />} />
               <Route path="/stockContent" element={
-                <div className="page-content">
-                  <Grid container spacing={2}>
-                    <Grid item xs={8}>
-                      <StockPage
-                        liveData={this.state.liveData}
-                        stockObj={this.state.stockObj}
-                        errorMsg={this.state.errorMsg}
-                        handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                        barData={this.state.barData}
-                        qouteData={this.state.qouteData}
-                        symbol={this.state.currentSymbol}
-                        handleOrderClick={this.handleOrderClick.bind(this)} />
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Order pageType={'stock'}
-                        handleOrderClick={this.handleOrderClick.bind(this)}
-                        stockObj={this.state.stockObj}
-                        barData={this.state.barData} />
-                    </Grid>
-                  </Grid>
-                </div>
-
+                <>
+                  {this.state.stockObj && this.state.barData && this.state.qouteData ?
+                    <div className="page-content">
+                      <Grid container spacing={2}>
+                        <Grid item xs={8}>
+                          <StockPage
+                            liveData={this.state.liveData}
+                            stockObj={this.state.stockObj}
+                            errorMsg={this.state.errorMsg}
+                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                            barData={this.state.barData}
+                            qouteData={this.state.qouteData}
+                            symbol={this.state.currentSymbol}
+                            handleOrderClick={this.handleOrderClick.bind(this)} />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Order pageType={'stock'}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+                            stockObj={this.state.stockObj}
+                            barData={this.state.barData} />
+                        </Grid>
+                      </Grid>
+                    </div> : null}
+                </>
               } />
               <Route path="/cryptoContent" element={
-                <div className="page-content">
-                  <Grid container spacing={2}>
-                    <Grid item xs={8}>
-                      <CryptoPage
-                        coinMeta={this.state.coinMeta}
-                        coinBarData={this.state.coinBarData}
-                        coinLiveData={this.state.coinLiveData}
-                        coinToday={this.state.coinToday}
-                        coinPrevious={this.state.coinPrevious}
-                        errorMsg={this.state.errorMsg}
-                        handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                        handleOrderClick={this.handleOrderClick.bind(this)}
-                      />
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Order pageType={'crypto'}
-                        handleOrderClick={this.handleOrderClick.bind(this)}
-                        coinMeta={this.state.coinMeta}
-                        coinBarData={this.state.coinBarData}
-                        coinToday={this.state.coinToday}
-                        coinPrevious={this.state.coinPrevious} />
-                    </Grid>
-                  </Grid>
-                </div>
+                <>
+                  {this.state.coinMeta && this.state.coinBarData ?
+                    <div className="page-content">
+                      <Grid container spacing={2}>
+                        <Grid item xs={8}>
+                          <CryptoPage
+                            coinMeta={this.state.coinMeta}
+                            coinBarData={this.state.coinBarData}
+                            coinLiveData={this.state.coinLiveData}
+                            coinToday={this.state.coinToday}
+                            coinPrevious={this.state.coinPrevious}
+                            errorMsg={this.state.errorMsg}
+                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+                          />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Order pageType={'crypto'}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+                            coinMeta={this.state.coinMeta}
+                            coinBarData={this.state.coinBarData}
+                            coinToday={this.state.coinToday}
+                            coinPrevious={this.state.coinPrevious} />
+                        </Grid>
+                      </Grid>
+                    </div>
+                    : null}
+                </>
               } />
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

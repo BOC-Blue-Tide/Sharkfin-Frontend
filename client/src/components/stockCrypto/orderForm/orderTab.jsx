@@ -58,7 +58,8 @@ const Order = (props) => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0} >
-        <OrderCard pageType={props.pageType}
+        <OrderCard
+          pageType={props.pageType}
           handleOrderClick={props.handleOrderClick}
           value={value}
           stockObj={props.stockObj}
@@ -72,7 +73,8 @@ const Order = (props) => {
         <OrderCard
           pageType={props.pageType}
           handleOrderClick={props.handleOrderClick}
-          value={value} stockObj={props.stockObj}
+          value={value}
+          stockObj={props.stockObj}
           barData={props.barData}
           coinMeta={props.coinMeta}
           coinBarData={props.coinBarData}

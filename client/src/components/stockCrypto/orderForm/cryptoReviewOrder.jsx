@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import helpers from '../helperFunctions/calculateEstimate.js'
 const style = {
   position: 'absolute',
   top: '50%',
@@ -19,8 +20,12 @@ const style = {
 const cryptoReviewOrder = (props) => {
 
   const coinMeta = props.coinMeta
+  const coinBarData = props.coinBarData
   const [open, setOpen] = useState(true);
   const [orderType, setOrderType] = useState('')
+  const [estimate, setEstimate] = useState('')
+  const [equity, setEquity] = useState({})
+
   useEffect(() => {
     if (props.value === 0) {
       setOrderType('buy')
@@ -28,6 +33,41 @@ const cryptoReviewOrder = (props) => {
       setOrderType('sell')
     }
   }, [props.value])
+
+  useEffect(() => {
+    (async () => {
+      const obj = {}
+      let estimate = await helpers.calculateEstimate(props.orderIn, props.value, props.orderInput.amount, props.coinBarData[props.coinBarData.length - 1].c)
+      if (props.value === 0 && props.orderIn === 'dollars') {
+        // a reduction to user buying power
+        // an addition to user's equity
+        obj.buyingPower = Number(props.orderInput.amount) * -1
+        obj.holding = estimate
+        setEquity(obj)
+      } else if (props.value === 1 && props.orderIn === 'dollars') {
+        //sell
+        obj.buyingPower = Number(props.orderInput.amount)
+        obj.holding = estimate * -1
+        setEquity(obj)
+      }
+      else if (props.value === 0 && props.orderIn === 'coins') {
+        //buy
+        obj.buyingPower = estimate * -1
+        obj.holding = Number(props.orderInput.amount)
+        setEquity(obj)
+      }
+      else if (props.value === 1 && props.orderIn === 'coins') {
+        //sell
+        obj.buyingPower = estimate
+        obj.holding = Number(props.orderInput.amount) * -1
+        setEquity(obj)
+      }
+      setEstimate(estimate)
+
+    })()
+
+  }, [props.orderIn])
+
 
   const handleClose = () => {
     setOpen(false)
@@ -38,12 +78,12 @@ const cryptoReviewOrder = (props) => {
     const orderObj = props.orderInput
     orderObj.orderType = orderType
     orderObj.account = '12345678'
-    orderObj.symbol = coinMeta.symbol
-    orderObj.company = coinMeta.name
+    orderObj.symbol = coinMeta[0].symbol
+    orderObj.company = coinMeta[0].name
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount
     orderObj.price = props.coinBarData[props.coinBarData.length - 1].c
-    orderObj.cost = Number(props.orderInput.amount) * props.coinBarData[props.coinBarData.length - 1].c
+    orderObj.equity = equity
     props.handleOrderClick(orderObj)
   }
   return (
@@ -85,10 +125,21 @@ const cryptoReviewOrder = (props) => {
             <span>{`$${props.coinBarData[props.coinBarData.length - 1].c}`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
-            {props.value === 0 ? <span>Estimated Cost:  </span> : <span>Estimated Gain:  </span>}
+            {props.orderIn === "coins" ?
+              <>
+                {props.value === 0 ? <span>Estimated Cost:  </span> : <span>Estimated Gain:  </span>}
 
-            <span>{`$${Number(props.orderInput.amount) * props.coinBarData[props.coinBarData.length - 1].c}`}</span>
+                <span>{`$${parseFloat(estimate).toFixed(2)} dollars`}</span>
+              </> : null}
+
+            {props.orderIn === "dollars" ?
+              <>
+                {props.value === 0 ? <span>Estimated amount of coin buying:  </span> : <span>Estimated amount of coin selling:  </span>}
+
+                <span>{`${estimate} coins`}</span>
+              </> : null}
           </Stack>
+
           <Stack direction="row" spacing={1}>
             <span>Remaining Buying Power:  </span>
             <span>$1</span>

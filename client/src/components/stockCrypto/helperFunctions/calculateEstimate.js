@@ -11,6 +11,9 @@ const helpers = {
     } else if (orderIn === 'shares') {
       estimate = Number(amount) * price
     }
+    else if (orderIn === 'coins') {
+      estimate = Number(amount) * price
+    }
     return estimate
 
   }

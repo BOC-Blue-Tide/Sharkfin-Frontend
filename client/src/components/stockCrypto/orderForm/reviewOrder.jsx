@@ -41,24 +41,24 @@ const reviewOrder = (props) => {
         // a reduction to user buying power
         // an addition to user's equity
         obj.buyingPower = Number(props.orderInput.amount) * -1
-        obj.shareHolding = estimate
+        obj.holding = estimate
         setEquity(obj)
       } else if (props.value === 1 && props.orderIn === 'dollars') {
         //sell
         obj.buyingPower = Number(props.orderInput.amount)
-        obj.shareHolding = estimate * -1
+        obj.holding = estimate * -1
         setEquity(obj)
       }
       else if (props.value === 0 && props.orderIn === 'shares') {
         //buy
         obj.buyingPower = estimate * -1
-        obj.shareHolding = Number(props.orderInput.amount)
+        obj.holding = Number(props.orderInput.amount)
         setEquity(obj)
       }
       else if (props.value === 1 && props.orderIn === 'shares') {
         //sell
         obj.buyingPower = estimate
-        obj.shareHolding = Number(props.orderInput.amount) * -1
+        obj.holding = Number(props.orderInput.amount) * -1
         setEquity(obj)
       }
       setEstimate(estimate)
@@ -131,7 +131,7 @@ const reviewOrder = (props) => {
               <>
                 {props.value === 0 ? <span>Estimated Cost:  </span> : <span>Estimated Gain:  </span>}
 
-                <span>{`$${estimate} dollars`}</span>
+                <span>{`$${parseFloat(estimate).toFixed(2)} dollars`}</span>
               </> : null}
 
             {props.orderIn === "dollars" ?

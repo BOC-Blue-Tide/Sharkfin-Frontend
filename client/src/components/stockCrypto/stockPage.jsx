@@ -92,9 +92,6 @@ const stockPage = (props) => {
   return (
     <>
       {props.stockObj && props.barData && props.qouteData ? (
-        // <div className="page-content">
-        //   <Grid container spacing={2}>
-        // <Grid item xs={8}>
         <>
           <Stack direction="row" spacing={1}>
             <Chip label={`${stockObj.Sector}`} variant="outlined" />
@@ -109,13 +106,6 @@ const stockPage = (props) => {
           <Description stockObj={stockObj} />
           <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />
         </>
-
-        // </Grid>
-        // <Grid item xs={4}>
-        //   <Order pageType={pageType} handleOrderClick={props.handleOrderClick} stockObj={stockObj} barData={props.barData} />
-        // </Grid>
-        //   </Grid>
-        // </div>
       ) : (<div>{!errMsg ? null : <p className='errorTxt'>
         <span>{errMsg}...&#128517;</span></p>}</div>
       )}

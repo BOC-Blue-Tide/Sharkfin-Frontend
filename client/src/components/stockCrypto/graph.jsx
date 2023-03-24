@@ -17,9 +17,13 @@ const Graph = (props) => {
         var graphData = await helper.processGraphData(props.barData)
         //console.log(graphData)
         setGraphData(graphData)
+      } else if (props.coinBarData) {
+        var graphData = await helper.processGraphData(props.coinBarData)
+        //console.log(graphData)
+        setGraphData(graphData)
       }
     })()
-  }, [props.barData]);
+  }, [props.barData, props.coinBarData]);
 
   useEffect(() => {
     (async () => {

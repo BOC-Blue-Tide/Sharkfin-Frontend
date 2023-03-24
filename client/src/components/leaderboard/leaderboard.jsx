@@ -30,7 +30,7 @@ const LeaderBoard = () => {
         <div className="sidebar-container">
           <SideBar/>
         </div>
-        <div className="info-container">
+        {/* <div className="info-container">
           <div className="investment-profile-leaderboard">
             <h2>My Net Worth</h2>
             <PortfolioChart/>
@@ -43,7 +43,7 @@ const LeaderBoard = () => {
             <h2>My Asset Allocation</h2>
             <AllocationChart/>
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   )

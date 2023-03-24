@@ -86,8 +86,13 @@ main {
   font-weight: bold;
 }
 
-.searchInput {
+/* #searchInput {
   font-size: small;
+} */
+
+.suggestion-list-container {
+  z-index: 1;
+  background-color: blue
 }
 
 /*seach bar*/
@@ -114,6 +119,10 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.description-title {
+  margin-bottom: 2em;
 }
 
 /*Stock & Crypto page*/

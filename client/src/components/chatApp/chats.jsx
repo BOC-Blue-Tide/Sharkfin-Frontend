@@ -1,16 +1,22 @@
 import React, {useState} from 'react';
+import ChatBubble from './chatBubble.jsx';
+import ChatForm from './chatForm.jsx';
 
-const ChatBubble = function(props) {
+
+const ChatList = function(props) {
+  if (props.messages.length === 0) {
+    return <div>Click on a chat to begin</div>
+  }
   let messageList = props.messages.map((element) => {
-    if (element.type === 'outgoing') {
-      return <div className='outgoingchatbubble'>{element.message}</div>
-    }
-    if (element.type === 'incoming') {
-      return <div className='incomingchatbubble'>{element.message}</div>
-    }
+    return <ChatBubble message={element} />
   });
 
-  return messageList;
+  return (
+    <>
+    {messageList}
+    <ChatForm handleFormSubmit={props.handleFormSubmit}/>
+    </>
+  )
 }
 
-export default ChatBubble;
+export default ChatList;

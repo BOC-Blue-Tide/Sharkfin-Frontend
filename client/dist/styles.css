@@ -104,13 +104,23 @@ main {
 }
 
 .outgoingchatbubble {
-  background-color: dodgerblue;
+  background-color: #278D9B;
   color: white;
   padding: 10px;
   margin: 10px;
   display: table;
   margin-left: auto;
   border-radius: 15px;
+}
+
+.outgoingchatdate {
+  display: table;
+  margin-left: auto;
+}
+
+.incomingchatdate {
+  display: table;
+  margin-right: 10px;
 }
 
 .incomingchatbubble {
@@ -129,6 +139,12 @@ main {
 
 .chatfriendpic {
   padding: 10px;
+}
+
+input.chatform {
+  width: 90%;
+  text-align: right;
+  border: 1px solid grey;
 }
 
 /*diable order textfield arrow*/

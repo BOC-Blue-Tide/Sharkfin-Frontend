@@ -5,11 +5,11 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
 import TransactionList from '../transactions/TransactionList.jsx';
 import mockData from '../../../../mockData.js';
-import ChatBubble from './chats.jsx';
+import ChatList from './chats.jsx';
 import FriendListChat from './friendlist.jsx';
-import pic1 from '/Users/jacinthechong/Hack Reactor/SEI2207/BOC-BlueTide/Sharkfin-Frontend/client/dist/pic1.png';
-import pic2 from '/Users/jacinthechong/Hack Reactor/SEI2207/BOC-BlueTide/Sharkfin-Frontend/client/dist/pic2.png';
-import pic3 from '/Users/jacinthechong/Hack Reactor/SEI2207/BOC-BlueTide/Sharkfin-Frontend/client/dist/pic3.png';
+import pic1 from '../../../../client/dist/pic1.png';
+import pic2 from '../../../../client/dist/pic2.png';
+import pic3 from '../../../../client/dist/pic3.png';
 
 let friends = [
   { name: 'Bob Salinger',
@@ -31,43 +31,56 @@ const Item = styled(Paper)(({ theme }) => ({
 let messages = [
   { user: 'Bob Salinger',
     type: 'outgoing',
-    message: 'Hello'
+    message: 'Hello',
+    date: 'Mar 24, 11:13 AM'
   },
   { user: 'Bob Salinger',
     type: 'outgoing',
-    message: 'how are you?'
+    message: 'how are you?',
+    date: 'Mar 24, 11:14 AM'
   },
   { user: 'Bob Salinger',
     type: 'incoming',
-    message: 'Im doing great! How are you?'
+    message: 'Im doing great! How are you?',
+    date: 'Mar 24, 11:14 AM'
   },
   { user: 'Bob Salinger',
     type: 'outgoing',
-    message: 'I just bought more shares of TSLA!'
+    message: 'I just bought more shares of TSLA!',
+    date: 'Mar 24, 11:14 AM'
   },
   { user: 'Wendy Chan',
     type: 'outgoing',
-    message: 'Hi Wendy!'
+    message: 'Hi Wendy!',
+    date: 'Mar 24, 11:14 AM'
   },
   { user: 'Wendy Chan',
     type: 'incoming',
-    message: 'Heyyyyy, how are you?'
+    message: 'Heyyyyy, how are you?',
+    date: 'Mar 24, 11:14 AM'
   },
   { user: 'Karl Mulroney',
     type: 'incoming',
-    message: 'Yo I just bought some TSLA!!'
+    message: 'Yo I just bought some TSLA!!',
+    date: 'Mar 24, 11:14 AM'
   },
   { user: 'Karl Mulroney',
     type: 'outgoing',
-    message: 'Same!!!'}
+    message: 'Same!!!',
+    date: 'Mar 24, 11:14 AM'
+  }
 ];
 
 const chatApp = function() {
-  const [currentChat, setCurrentFriend] = useState(messages);
+  const [currentChat, setCurrentFriend] = useState([]);
 
   const handleClick = function(input) {
     var array = messages.filter(element => element.user === input);
     setCurrentFriend(array);
+  }
+
+  const handleFormSubmit = function(data) {
+    console.log(data);
   }
 
   return (
@@ -80,7 +93,7 @@ const chatApp = function() {
       </Grid>
       <Grid xs={8}>
         <Item>
-          <ChatBubble messages={currentChat}/>
+          <ChatList messages={currentChat} handleFormSubmit={handleFormSubmit}/>
         </Item>
       </Grid>
     </Grid>

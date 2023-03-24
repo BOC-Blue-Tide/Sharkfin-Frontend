@@ -40,8 +40,6 @@ router.post('/login', (req, res) => {
   })
 })
 
-//IMAGE UPLOAD:
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads/');
@@ -53,18 +51,21 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res) => {
+router.post('/updateUserInfo', upload.single('profilePic'), async (req, res) => {
+  console.log(req.body)
   const userInfo = JSON.parse(req.body.userInfo);
   const profilePic = req.file;
   const imagePath = './uploads/' + profilePic.filename;
   userInfo.profilePic = imagePath;
 
   // Save the user information and image file to your storage service or database
-  await saveUserData(userInfo);
-
-  res.send({ status: 'success' });});
-
-
+  try {
+    await updateUser(userInfo);
+    res.send({ status: 'success' });
+  } catch (error) {
+    res.status(500).send({ status: 'error', message: 'Error updating user data' });
+  }
+});
 
 
 module.exports = router;

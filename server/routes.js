@@ -3,18 +3,14 @@ const router = require("express").Router();
 const multer = require('multer');
 
 const controllers = require('./controllers')
-<<<<<<< HEAD
-=======
 const axios = require('axios').default;
 const jwt_decode = require("jwt-decode");
->>>>>>> main
 
 //leaderBoard
 router.get('/friendBoard', controllers.leaderBoard.getFriendBoard)
 router.get('/globalBoard', controllers.leaderBoard.getGlobalBoard)
 
 // get market data
-<<<<<<< HEAD
 router.get('/symbolLookup', controllers.getAPIData.symbolLookup)
 router.get('/getBarData', controllers.getAPIData.getBarData)
 router.get('/getStockQoute', controllers.getAPIData.getStockQoute)
@@ -26,9 +22,6 @@ router.get('/getCoinPrevious', controllers.getAPIData.getCoinPrevious)
 // post order data
 router.post('/order', controllers.orderData.postOrderData)
 
-=======
-router.get('/order', controllers.orderData.postOrderData)
->>>>>>> main
 router.get('/status', (req, res) => {
   // console.log('in status');
   res.send(req.session.userid);
@@ -46,9 +39,8 @@ router.get('/user', (req, res) => {
 router.post('/login', (req, res) => {
   // console.log(req.body);
   controllers.login.verify(req.body.credential)
-<<<<<<< HEAD
     .then((resp) => {
-      console.log('verify success', resp);
+      // console.log('verify success', resp);
     })
     .catch((err) => {
       console.log('verify failed', err);
@@ -57,22 +49,9 @@ router.post('/login', (req, res) => {
       session = req.session;
       session.userid = req.body.email;
       console.log(req.session);
-      res.redirect('/');
+      res.json(0);
+      // res.redirect('/');
     })
-=======
-  .then((resp)=>{
-    // console.log('verify success', resp);
-  })
-  .catch((err)=> {
-    console.log('verify failed', err);
-  })
-  .then(()=>{
-    session=req.session;
-    session.userid=req.body.email;
-    console.log(req.session);
-    res.json(0);
-    // res.redirect('/');
-  })
   // .then(() => {
   //   axios.get('http://localhost:8080/getUserByEmail', {params: {email: req.body.email}})
   //   .then((response) => {
@@ -103,7 +82,6 @@ router.post('/login', (req, res) => {
   //     console.log('getUserByEmail error', err);
   //   });
   // })
->>>>>>> main
 })
 
 router.get('/pchart', controllers.portfolio.getPChart)
@@ -131,7 +109,8 @@ router.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res)
   // Save the user information and image file to your storage service or database
   await saveUserData(userInfo);
 
-  res.send({ status: 'success' });});
+  res.send({ status: 'success' });
+});
 
 
 

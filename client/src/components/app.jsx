@@ -13,7 +13,8 @@ const POLYGON = process.env.REACT_APP_POLYGON;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
 import TransactionList from './transactions/TransactionList.jsx';
-import mockData from '../../../mockData.js';
+// import mockData from '../../../mockData.js';
+import ChatPage from './chatApp/chatApp.jsx';
 //Howard
 import Portfolio from './portfolio/portfolio.jsx';
 //Lenord
@@ -455,6 +456,8 @@ class App extends React.Component {
                     : null}
                 </>
               } />
+              <Route path="/chat" element={<ChatPage />} />
+
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
           </ThemeProvider >

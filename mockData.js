@@ -1,7 +1,7 @@
 let mockData = [
   {
     stock: 'AAPL',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Mar 2, 2023 1:30 PM',
     quantity: 10,
     price: '150.59 USD',
@@ -9,23 +9,23 @@ let mockData = [
   },
   {
     stock: 'NVO',
-    transactionType: 'sell',
+    transactiontype: 'sell',
     datetime: 'Feb 22, 2023 1:30 PM',
     quantity: 20,
     price: '142.35 USD',
     status: 'complete'
   },
   {
-    stock: 'TSLA',
-    transactionType: 'buy',
+    stock: 'tSLA',
+    transactiontype: 'buy',
     datetime: 'Feb 21, 2023 1:30 PM',
     quantity: 10,
     price: '172.19 USD',
     status: 'complete'
   },
   {
-    stock: 'ABT',
-    transactionType: 'sell',
+    stock: 'ABt',
+    transactiontype: 'sell',
     datetime: 'Feb 21, 2023 12:45 PM',
     quantity: 30,
     price: '97.75 USD',
@@ -33,7 +33,7 @@ let mockData = [
   },
   {
     stock: 'GOOG',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Mar 2, 2023 1:30 PM',
     quantity: 10,
     price: '150.59 USD',
@@ -41,7 +41,7 @@ let mockData = [
   },
   {
     stock: 'AMZN',
-    transactionType: 'sell',
+    transactiontype: 'sell',
     datetime: 'Feb 22, 2023 1:30 PM',
     quantity: 20,
     price: '142.35 USD',
@@ -49,15 +49,15 @@ let mockData = [
   },
   {
     stock: 'SHOP',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Feb 21, 2023 1:30 PM',
     quantity: 10,
     price: '172.19 USD',
     status: 'complete'
   },
   {
-    stock: 'MSFT',
-    transactionType: 'sell',
+    stock: 'MSFt',
+    transactiontype: 'sell',
     datetime: 'Feb 21, 2023 12:45 PM',
     quantity: 30,
     price: '97.75 USD',
@@ -65,7 +65,7 @@ let mockData = [
   },
   {
     stock: 'AAPL',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Mar 2, 2023 1:30 PM',
     quantity: 10,
     price: '150.59 USD',
@@ -73,23 +73,23 @@ let mockData = [
   },
   {
     stock: 'NVO',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Feb 22, 2023 1:30 PM',
     quantity: 20,
     price: '142.35 USD',
     status: 'complete'
   },
   {
-    stock: 'TSLA',
-    transactionType: 'buy',
+    stock: 'tSLA',
+    transactiontype: 'buy',
     datetime: 'Feb 21, 2023 1:30 PM',
     quantity: 10,
     price: '172.19 USD',
     status: 'complete'
   },
   {
-    stock: 'ABT',
-    transactionType: 'buy',
+    stock: 'ABt',
+    transactiontype: 'buy',
     datetime: 'Feb 21, 2023 12:45 PM',
     quantity: 30,
     price: '97.75 USD',
@@ -97,7 +97,7 @@ let mockData = [
   },
   {
     stock: 'GOOG',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Mar 2, 2023 1:30 PM',
     quantity: 10,
     price: '150.59 USD',
@@ -105,7 +105,7 @@ let mockData = [
   },
   {
     stock: 'AMZN',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Feb 22, 2023 1:30 PM',
     quantity: 20,
     price: '142.35 USD',
@@ -113,15 +113,15 @@ let mockData = [
   },
   {
     stock: 'SHOP',
-    transactionType: 'buy',
+    transactiontype: 'buy',
     datetime: 'Feb 21, 2023 1:30 PM',
     quantity: 10,
     price: '172.19 USD',
     status: 'complete'
   },
   {
-    stock: 'MSFT',
-    transactionType: 'buy',
+    stock: 'MSFt',
+    transactiontype: 'buy',
     datetime: 'Feb 21, 2023 12:45 PM',
     quantity: 30,
     price: '97.75 USD',

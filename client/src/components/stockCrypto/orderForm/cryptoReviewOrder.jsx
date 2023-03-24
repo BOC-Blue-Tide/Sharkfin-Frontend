@@ -17,9 +17,10 @@ const style = {
   p: 4,
 };
 
-const reviewOrder = (props) => {
+const cryptoReviewOrder = (props) => {
 
-  const stockObj = props.stockObj
+  const coinMeta = props.coinMeta
+  const coinBarData = props.coinBarData
   const [open, setOpen] = useState(true);
   const [orderType, setOrderType] = useState('')
   const [estimate, setEstimate] = useState('')
@@ -36,7 +37,7 @@ const reviewOrder = (props) => {
   useEffect(() => {
     (async () => {
       const obj = {}
-      let estimate = await helpers.calculateEstimate(props.orderIn, props.value, props.orderInput.amount, props.barData[props.barData.length - 1].c)
+      let estimate = await helpers.calculateEstimate(props.orderIn, props.value, props.orderInput.amount, props.coinBarData[props.coinBarData.length - 1].c)
       if (props.value === 0 && props.orderIn === 'dollars') {
         // a reduction to user buying power
         // an addition to user's equity
@@ -49,13 +50,13 @@ const reviewOrder = (props) => {
         obj.holding = estimate * -1
         setEquity(obj)
       }
-      else if (props.value === 0 && props.orderIn === 'shares') {
+      else if (props.value === 0 && props.orderIn === 'coins') {
         //buy
         obj.buyingPower = estimate * -1
         obj.holding = Number(props.orderInput.amount)
         setEquity(obj)
       }
-      else if (props.value === 1 && props.orderIn === 'shares') {
+      else if (props.value === 1 && props.orderIn === 'coins') {
         //sell
         obj.buyingPower = estimate
         obj.holding = Number(props.orderInput.amount) * -1
@@ -77,17 +78,14 @@ const reviewOrder = (props) => {
     const orderObj = props.orderInput
     orderObj.orderType = orderType
     orderObj.account = '12345678'
-    orderObj.symbol = stockObj.Symbol
-    orderObj.company = stockObj.Name
+    orderObj.symbol = coinMeta[0].symbol
+    orderObj.company = coinMeta[0].name
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount
-    orderObj.price = props.barData[props.barData.length - 1].c
+    orderObj.price = props.coinBarData[props.coinBarData.length - 1].c
     orderObj.equity = equity
-    console.log(orderObj)
     props.handleOrderClick(orderObj)
   }
-
-
   return (
     <Modal
       keepMounted
@@ -107,11 +105,11 @@ const reviewOrder = (props) => {
           </Stack>
           <Stack direction="row" spacing={1}>
             <span>Symbol: </span>
-            <span>{stockObj.Symbol}</span>
+            <span>{coinMeta[0].symbol}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
-            <span>Company:  </span>
-            <span>{stockObj.Name}</span>
+            <span>Currency:  </span>
+            <span>{coinMeta[0].name}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
             {props.value === 0 ? <span>Buy In:  </span> : <span>Sell In:  </span>}
@@ -119,15 +117,15 @@ const reviewOrder = (props) => {
           </Stack>
 
           <Stack direction="row" spacing={1}>
-            {props.orderInput.orderIn === 'dollars' ? <span>Amount:  </span> : <span>Quantity:  </span>}
+            <span>Quantity:  </span>
             <span>{`${props.orderInput.amount} ${props.orderInput.orderIn}`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
             <span>Market Price:  </span>
-            <span>{`$${props.barData[props.barData.length - 1].c}`}</span>
+            <span>{`$${props.coinBarData[props.coinBarData.length - 1].c}`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
-            {props.orderIn === "shares" ?
+            {props.orderIn === "coins" ?
               <>
                 {props.value === 0 ? <span>Estimated Cost:  </span> : <span>Estimated Gain:  </span>}
 
@@ -136,12 +134,12 @@ const reviewOrder = (props) => {
 
             {props.orderIn === "dollars" ?
               <>
-                {props.value === 0 ? <span>Estimated number of shares buying:  </span> : <span>Estimated number of shares selling:  </span>}
+                {props.value === 0 ? <span>Estimated amount of coin buying:  </span> : <span>Estimated amount of coin selling:  </span>}
 
-                <span>{`${estimate} shares`}</span>
+                <span>{`${estimate} coins`}</span>
               </> : null}
-
           </Stack>
+
           <Stack direction="row" spacing={1}>
             <span>Remaining Buying Power:  </span>
             <span>$1</span>
@@ -154,7 +152,9 @@ const reviewOrder = (props) => {
         </Stack>
       </Box>
     </Modal>
+
   )
+
 }
 
-export default reviewOrder
+export default cryptoReviewOrder

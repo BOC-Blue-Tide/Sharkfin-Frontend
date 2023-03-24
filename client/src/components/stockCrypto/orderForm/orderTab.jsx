@@ -10,7 +10,6 @@ import OrderCard from './orderCard.jsx'
 
 
 const Order = (props) => {
-
   const TabPanel = (PropTypes) => {
     const { children, value, index, ...other } = PropTypes;
     return (
@@ -59,10 +58,28 @@ const Order = (props) => {
         </Tabs>
       </Box>
       <TabPanel value={value} index={0} >
-        <OrderCard handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
+        <OrderCard
+          pageType={props.pageType}
+          handleOrderClick={props.handleOrderClick}
+          value={value}
+          stockObj={props.stockObj}
+          barData={props.barData}
+          coinMeta={props.coinMeta}
+          coinBarData={props.coinBarData}
+          coinToday={props.coinToday}
+          coinPrevious={props.coinPrevious} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <OrderCard handleOrderClick={props.handleOrderClick} value={value} stockObj={props.stockObj} barData={props.barData} />
+        <OrderCard
+          pageType={props.pageType}
+          handleOrderClick={props.handleOrderClick}
+          value={value}
+          stockObj={props.stockObj}
+          barData={props.barData}
+          coinMeta={props.coinMeta}
+          coinBarData={props.coinBarData}
+          coinToday={props.coinToday}
+          coinPrevious={props.coinPrevious} />
       </TabPanel>
     </Box>
   );

@@ -1,9 +1,10 @@
-import React,  { useState, useEffect } from 'react';
+import React from 'react';
+import Axios from 'axios'
 const axios = require('axios').default;
-
-// import SearchBar from './searchBar.jsx'
-import StockCryptoPage from './stockCrypto/stockCryptoPage.jsx'
-import helpers from './helperFunctions/requestHelpers.js'
+import StockPage from './stockCrypto/stockPage.jsx'
+import CryptoPage from './stockCrypto/cryptoPage.jsx'
+import helpers from './stockCrypto/helperFunctions/requestHelpers.js'
+import Order from './stockCrypto/orderForm/orderTab.jsx'
 import moment from 'moment-timezone'
 const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
 const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
@@ -122,6 +123,14 @@ class App extends React.Component {
       timeframe: '5Min',
       isReady: false,
       user: "",
+      orderObj: null, // user order input from requestReview.jsx
+      coinMeta: null, // incoming data from api
+      coinBarData: null, // incoming data from api
+      coinLiveData: null, // incoming data from api
+      searchScope: null,
+      selectRange: '1d',
+      coinToday: null,
+      coinPrevious: null,
       orderObj: null,
       userInfo: {
         userId: 0,
@@ -161,14 +170,14 @@ class App extends React.Component {
       bank: "CITI Bank",
       accountNumber: "1234",
       profilePic: "../../../dist/mockProfile.png"
-   }
-    this.setState({userInfo: updatedUserInfo})
+    }
+    this.setState({ userInfo: updatedUserInfo })
     console.log(this.state.userInfo);
 
   }
 
   // componentDidMount() { // for development purpose only
-  //   this.getStockData('msft', 'stock', 'search')
+  //   this.getData('msft', 'stock', 'search')
   //   this.getBarData('msft', this.state.start, this.state.timeframe)
   // }
 
@@ -190,62 +199,128 @@ class App extends React.Component {
   async getTransactionData() {
     try {
       const response = await axios.get('http://localhost:8080/transactions');
-      this.setState({transactionData: response.data});
+      this.setState({ transactionData: response.data });
     } catch (err) {
       console.log(err);
     }
   }
 
-  handleTimeRangeClick(start, timeframe) {
-    this.setState({ start: start, timeframe: timeframe }, async () => {
-      this.getBarData(this.state.currentSymbol, this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
-    })
+  handleTimeRangeClick(start, timeframe, selectRange) {
+    if (this.state.searchScope === 'Stock') {
+      this.setState({ start: start, timeframe: timeframe, selectRange: selectRange }, async () => {
+        this.getBarData(this.state.currentSymbol, this.state.start, this.state.timeframe) // replace 'msft' to this.state.currentSymbol
+      })
+    } else if (this.state.searchScope === 'Crypto') {
+      this.setState({ selectRange: selectRange }, async () => {
+        this.getCoinBarData(this.state.currentSymbol)
+      })
+    }
   }
 
-  async getStockData(input, scope, operation) {
-
+  async getData(input, selectedScope) {
     var symbol = input.toUpperCase()
-    if (operation === 'search') {
-      if (scope === 'stock') {
-        try {
-          this.setState({ currentSymbol: symbol }, async () => {
-            var symbolData = await helpers.symbolLookup(symbol)
-              .then(async (symbolData) => {
-
-                //console.log(symbolData.data)
-                this.setState({ stockObj: symbolData.data })
-                this.getLiveData(symbol)
-              })
-              .then(async () => {
-                var stockQoute = await helpers.getStockQoute(symbol)
-                //console.log(stockQoute.data)
+    var scope = selectedScope.toLowerCase()
+    try {
+      this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
+        if (scope === 'stock') {
+          var symbolData = await Axios.get('/symbolLookup', { params: { symbol: symbol } })
+            .then(async (symbolData) => {
+              this.setState({ stockObj: symbolData.data })
+            })
+            .then(async () => {
+              var stockQoute = await Axios.get('/getStockQoute', { params: { symbol: symbol } })
+              // console.log(stockQoute)
+              if (!stockQoute.data.Note) {
                 this.setState({ qouteData: stockQoute.data['Global Quote'] })
-              })
-              .then(async () => {
-                await this.getBarData(symbol, this.state.start, this.state.timeframe)
-              })
+              } else {
+                this.setState({ errorMsg: 'Standard API call frequency is 5 calls per minute and 500 calls per day. Please try again later' })
+              }
 
+            })
+            .then(async () => {
+              await this.getBarData(symbol, this.state.start, this.state.timeframe)
 
-          })
-
-
+            })
         }
-        catch (err) {
-          console.log(err)
-          this.setState({ errorMsg: 'Something went wrong.' })
+        else if (scope === 'crypto') {
+
+          let coinMeta = await Axios.get('/getCoinMeta', { params: { symbol: symbol } })
+            .then(async (coinMetaData) => {
+              var coinMetaArr = coinMetaData.data
+              this.setState({ coinMeta: coinMetaArr[symbol] })
+            })
+            .then(async () => {
+              await this.getCoinBarData(symbol)
+            })
+            .then(async () => {
+              let coinToday = await Axios.get('/getCoinToday', { params: { symbol: symbol } })
+              //console.log(coinToday.data)
+              this.setState({ coinToday: coinToday.data })
+            })
+            .then(async () => {
+              let coinPrevious = await Axios.get('/getCoinPrevious', { params: { symbol: symbol } })
+              console.log(coinPrevious.data.results)
+              this.setState({ coinPrevious: coinPrevious.data.results })
+            })
         }
-      } else if (scope === 'crypto') {
-        console.log('i want btc')
+      })
+    } catch (err) {
+      console.log(err)
+      this.setState({ errorMsg: 'Something went wrong.' })
+    }
+  }
+
+
+
+  async getCoinBarData(symbol) {
+    try {
+      var requestOptions = {
+        params: {
+          symbol: symbol,
+          timespan: null,
+          multiplier: null,
+          fromDate: null,
+          toDate: null
+        }
       }
+      var timeRange = await helpers.getTimeRange(this.state.selectRange)
+        .then((timeRange) => {
+          requestOptions.params.timespan = timeRange.timespan
+          requestOptions.params.multiplier = timeRange.multiplier
+          requestOptions.params.fromDate = timeRange.fromDate
+          requestOptions.params.toDate = timeRange.toDate
+        })
+        .then(async () => {
+          var coinBar = await Axios.get('/getCoinBar', requestOptions)
+          this.setState({ coinBarData: coinBar.data.results })
+        })
+
+
+    }
+    catch (err) {
+      console.log(err)
+      this.setState({ errorMsg: 'Something went wrong.' })
     }
 
   }
 
+
   async getBarData(symbol, start, timeframe) {
     try {
-      var barData = await helpers.getBarData(symbol, start, timeframe)
-      //console.log(barData)
-      this.setState({ barData: barData })
+      // make sure start day is a business day
+      var checkDate = await helpers.checkDate(start)
+        .then(async (startDate) => {
+          var requestOptions = {
+            params: {
+              symbol: symbol,
+              startDate: startDate,
+              timeframe: timeframe
+            }
+          }
+          var barData = await Axios.get('/getBarData', requestOptions)
+          this.setState({ barData: barData.data })
+        })
+
     }
     catch (err) {
       console.log(err)
@@ -253,78 +328,36 @@ class App extends React.Component {
     }
   }
 
-  getLiveData(symbol) {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
 
-    console.info('1. New websocket created.');
-
-    // Connection opened -> Subscribe
-    socket.onopen = (event) => {
-      socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': `${symbol}` }))
-
-      console.info('2. Subscribing to symbols...');
-
-    };
-
-    // Listen for messages from the websocket stream...
-    socket.onmessage = (event) => {
-
-      // console.clear();
-      // console.info('1. New websocket created.');
-      // console.info('2. Subscribing to symbols...');
-      // console.info('3. Websocket streaming.');
-
-      // stream response...
-      let response = JSON.parse(event.data);
-
-      if (response.type === 'ping') {
-        console.warn('Occasional server', response.type + '.');
-        let pong = { "type": "pong" }
-        socket.send(JSON.stringify(pong))
-      } else {
-        var data = response.data || null
-        console.log(data)
-        this.setState({ liveData: data })
-      }
-
-    };
-
-    // Unsubscribe
-    var unsubscribe = function (symbol) {
-      socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
+  updateUser = (user) => {
+    this.setState({ user: user });
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
     }
   }
 
-
-updateUser = (user) => {
-  this.setState({ user: user });
-  if (user) {
-    localStorage.setItem("user", JSON.stringify(user));
-  } else {
-    localStorage.removeItem("user");
-  }
-}
-
-updateEmail = (user) => {
+  updateEmail = (user) => {
     this.setState(
-      {logged_email: user}
+      { logged_email: user }
     )
-}
+  }
 
   checkLoginState = () => {
     axios.get('/status')
-    .then((response) => {
-      const savedUser = JSON.parse(localStorage.getItem("user") || "null");
-      this.setState({
-        isReady: true,
-        user: savedUser || response.data,
-        logged_email: response.data
+      .then((response) => {
+        const savedUser = JSON.parse(localStorage.getItem("user") || "null");
+        this.setState({
+          isReady: true,
+          user: savedUser || response.data,
+          logged_email: response.data
+        });
+        // console.log('/status', response);
+      })
+      .catch((err) => {
+        console.log('logout error', err);
       });
-      // console.log('/status', response);
-    })
-    .catch((err) => {
-      console.log('logout error', err);
-    });
   }
 
   render() {
@@ -334,7 +367,7 @@ updateEmail = (user) => {
 
     if (!this.state.logged_email) {
       return (
-        <Login updateEmail = {this.updateEmail} user = {this.state.logged_email}/>
+        <Login updateEmail={this.updateEmail} user={this.state.logged_email} />
       )
     } else {
       return (
@@ -348,10 +381,10 @@ updateEmail = (user) => {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getStockData={this.getStockData.bind(this)} updateEmail = {this.updateEmail} />
+            <Header getData={this.getData.bind(this)} updateEmail={this.updateEmail} />
 
-          {/* test only, will delete later */}
-          {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
+            {/* test only, will delete later */}
+            {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
           <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
           <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
           <div>lastname: {JSON.parse(localStorage.getItem("googleInfo")).lastname}</div>
@@ -362,24 +395,71 @@ updateEmail = (user) => {
           </div> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio userID={this.state.userID}/>} />
-              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
+              <Route exact path="/" element={<Portfolio userID={this.state.userID} />} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo} />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
-              <Route path="/searchContent" element={<StockCryptoPage
-                liveData={this.state.liveData}
-                stockObj={this.state.stockObj}
-                errorMsg={this.state.errorMsg}
-                handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                barData={this.state.barData}
-                qouteData={this.state.qouteData}
-                handleOrderClick={this.handleOrderClick.bind(this)} />} />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/stockContent" element={
+                <>
+                  {this.state.stockObj && this.state.barData && this.state.qouteData ?
+                    <div className="page-content">
+                      <Grid container spacing={2}>
+                        <Grid item xs={8}>
+                          <StockPage
+                            liveData={this.state.liveData}
+                            stockObj={this.state.stockObj}
+                            errorMsg={this.state.errorMsg}
+                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                            barData={this.state.barData}
+                            qouteData={this.state.qouteData}
+                            symbol={this.state.currentSymbol}
+                            handleOrderClick={this.handleOrderClick.bind(this)} />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Order pageType={'stock'}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+                            stockObj={this.state.stockObj}
+                            barData={this.state.barData} />
+                        </Grid>
+                      </Grid>
+                    </div> : null}
+                </>
+              } />
+              <Route path="/cryptoContent" element={
+                <>
+                  {this.state.coinMeta && this.state.coinBarData ?
+                    <div className="page-content">
+                      <Grid container spacing={2}>
+                        <Grid item xs={8}>
+                          <CryptoPage
+                            coinMeta={this.state.coinMeta}
+                            coinBarData={this.state.coinBarData}
+                            coinLiveData={this.state.coinLiveData}
+                            coinToday={this.state.coinToday}
+                            coinPrevious={this.state.coinPrevious}
+                            errorMsg={this.state.errorMsg}
+                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+                          />
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Order pageType={'crypto'}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+                            coinMeta={this.state.coinMeta}
+                            coinBarData={this.state.coinBarData}
+                            coinToday={this.state.coinToday}
+                            coinPrevious={this.state.coinPrevious} />
+                        </Grid>
+                      </Grid>
+                    </div>
+                    : null}
+                </>
+              } />              <Route path="/chat" element={<ChatPage />} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-          </ThemeProvider>
+          </ThemeProvider >
         </>
       )
     }

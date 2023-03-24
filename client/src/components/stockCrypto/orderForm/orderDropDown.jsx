@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
@@ -6,29 +6,48 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 const dropDown = (props) => {
 
-  const [type, setType] = useState('share');
+  const [type, setType] = useState('');
 
   const handleChange = (event) => {
     setType(event.target.value);
-    props.handleBuyType(event)
+    props.handleOrderIn(event)
   };
 
   return (
-    <FormControl variant="standard" sx={{ m: 0 }}>
-      {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
-      <Select
-        labelId="buyType"
-        id="buyType"
-        value={type}
-        onChange={handleChange}
-        label="type"
-      >
-        <MenuItem value={'share'}>Shares</MenuItem>
-        <MenuItem value={'dollars'}>Dollars</MenuItem>
+    <>
+      {props.pageType === 'stock' ?
+        <FormControl variant="standard" sx={{ m: 0 }}>
+          {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
+          <Select
+            labelId="orderIn"
+            id="orderIn"
+            value={type}
+            onChange={handleChange}
+            label="type"
+          >
 
-      </Select>
-    </FormControl>
+            <MenuItem value={'shares'}>Shares</MenuItem>
+            <MenuItem value={'dollars'}>Dollars</MenuItem>
 
+          </Select>
+        </FormControl>
+        :
+        <FormControl variant="standard" sx={{ m: 0 }}>
+          {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
+          <Select
+            labelId="orderIn"
+            id="orderIn"
+            value={type}
+            onChange={handleChange}
+            label="type"
+          >
+
+            <MenuItem value={'coins'}>Coins</MenuItem>
+            <MenuItem value={'dollars'}>Dollars</MenuItem>
+
+          </Select>
+        </FormControl>}
+    </>
   )
 
 }

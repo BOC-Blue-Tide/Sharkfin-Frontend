@@ -30,7 +30,7 @@ const timeRange = (props) => {
       timeframe = '1Week'
     }
     // console.log(startTime.toISOString())
-    props.handleTimeRangeClick(startTime.toISOString(), timeframe)
+    props.handleTimeRangeClick(startTime.toISOString(), timeframe, time)
   }
 
   return (

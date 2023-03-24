@@ -455,7 +455,8 @@ class App extends React.Component {
                     </div>
                     : null}
                 </>
-              } />              <Route path="/chat" element={<ChatPage />} />
+              } />
+              <Route path="/chat" element={<ChatPage />} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

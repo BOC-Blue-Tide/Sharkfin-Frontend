@@ -30,7 +30,13 @@ const searchBar = (props) => {
   useEffect(() => {
     const storedSearchHistory = localStorage.getItem('searchHistory');
     if (storedSearchHistory) {
-      setSearchHistory(JSON.parse(storedSearchHistory));
+      try {
+        setSearchHistory(JSON.parse(storedSearchHistory));
+
+      }
+      catch (error) {
+        console.log(error)
+      }
     }
   }, []);
 

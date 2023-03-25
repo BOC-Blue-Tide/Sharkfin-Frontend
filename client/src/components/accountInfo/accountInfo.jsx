@@ -13,13 +13,14 @@ function AccountInfo(props) {
    let remainingFunds = 400;
 
    const [userInfo, setUserInfo] = useState({
-      firstName: props.userInfo.firstName,
-      lastName: props.userInfo.lastName,
-      email: props.userInfo.email,
-      userName: props.userInfo.userName,
-      profilePic: props.userInfo.profilePic,
-      bank: props.userInfo.bank,
-      accountNumber: props.userInfo.accountNumber
+      userId: props.userInfo?.userId || 1,
+      firstName: props.userInfo?.firstName || 'FirstName',
+      lastName: props.userInfo?.lastName || 'LastName',
+      email: props.userInfo?.email || 'Email',
+      userName: props.userInfo?.userName || 'Username',
+      profilePic: props.userInfo?.profilePic || ProfilePic,
+      bank: props.userInfo?.bank,
+      account_number: props.userInfo?.accountNumber,
     });
   
 
@@ -62,20 +63,23 @@ function AccountInfo(props) {
     
       // Create a new FormData object
       const formData = new FormData();
-    
+      console.log('userInfo', userInfo)
       // Append the user information and image file to the FormData object
       formData.append('userInfo', JSON.stringify(userInfo));
       formData.append('profilePic', userInfo.profilePic);
-    
+      for (let pair of formData.entries()) {
+         console.log(pair[0] + ', ' + pair[1]);
+      }
+      console.log('data', formData);
       try {
         // Send an axios post request with the FormData object
-        const response = await axios.post('/api/updateUserInfo', formData, {
+        const response = await axios.post('/updateUserInfo', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
         console.log('User info updated:', response);
-        props.updateUserInfo();
+        props.updateUserInfo(response);
       } catch (error) {
         console.error('Error updating user info:', error);
       }
@@ -83,12 +87,12 @@ function AccountInfo(props) {
 
     const handleInputChange = (event) => {
       const { name, value } = event.target;
-      U({ ...userInfo, [name]: value });
+      setUserInfo({ ...userInfo, [name]: value });
     };
 
    //  handle the file input change event
    const handleFileInputChange = (e) => {
-      U({...userInfo, profilePic: e.target.files[0]});
+      setUserInfo({...userInfo, profilePic: e.target.files[0]});
    };
 
    //  handle the click event on the Avatar
@@ -129,6 +133,11 @@ function AccountInfo(props) {
                         Transfer money to Sharkfin
                      </Button>
                   </Link>
+                  <Link state={{ page: -1 }} to="/transferForm">
+                  <Button variant="contained" color="primary">
+                     Demo
+                  </Button>
+               </Link>
                </>
             }
          </Box>
@@ -169,6 +178,7 @@ function AccountInfo(props) {
                      wrap='nowrap'
                      id="first-name-input-1"
                      label="First Name"
+                     name="firstName"
                      defaultValue={userInfo.firstName}
                      onChange={handleInputChange}
                      variant="standard"
@@ -184,6 +194,7 @@ function AccountInfo(props) {
                      id="last-name-input-2"
                      label="Last Name"
                      defaultValue={userInfo.lastName}
+                     name="lastName"
                      onChange={handleInputChange}
                      variant="standard"
                      disabled = {!edit}
@@ -212,6 +223,7 @@ function AccountInfo(props) {
                   <TextField
                      id="username-input-4"
                      label="Username"
+                     name="username"
                      defaultValue={userInfo.userName}
                      onChange={handleInputChange}
                      variant="standard"

@@ -18,13 +18,15 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Graphic from '../../../dist/sharkfin-graphic.png';
 import Logo from '../../../dist/logo-dark.png';
 import BankSearch from './bankSearch.jsx'
+import axios from 'axios';
 
-let userInfo = {
-    firstName: 'Daniel',
-    lastName: 'Halper',
-    userName: 'Dhalper',
-    email: 'Dhalper@test.org',
-};
+
+// let userInfo = {
+//     firstName: 'Daniel',
+//     lastName: 'Halper',
+//     userName: 'Dhalper',
+//     email: 'Dhalper@test.org',
+// };
 
 const style = {
     gridCard: {
@@ -48,7 +50,7 @@ const style = {
 
 
 
-function TransferForm() {
+function TransferForm(props) {
 
     const location = useLocation();
     const propsData = location.state || {};
@@ -70,6 +72,17 @@ function TransferForm() {
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
+    const [userInfo, setUserInfo] = useState({
+        userId: props.userInfo?.userId || 1,
+        firstName: props.userInfo?.firstName,
+        lastName: props.userInfo?.lastName,
+        email: props.userInfo?.email,
+        userName: props.userInfo?.userName,
+        profilePic: props.userInfo?.profilePic,
+        bank: props.userInfo?.bank,
+        account_number: props.userInfo?.accountNumber,
+    });
+
     const navigate = useNavigate();
 
     const handleBack = () => {
@@ -80,21 +93,50 @@ function TransferForm() {
         }
     };
 
-    const handleBankSubmit = () => { 
+    const handleBankSubmit = async (event) => {
         //Post request here to user's table
+        event.preventDefault();
         console.log("Bank:", bank, "Account Number", accountNumber);
         setPage(page + 1)
+        console.log('Transfer Amount', accountNumber);
+        let bankData = {
+            bank: bank,
+            accountNumber: accountNumber
+        }
+
+        try {
+            // Send an axios post request with the FormData object
+            const response = await axios.post('/updateUserInfo', bankData);
+            console.log('User info updated:', response);
+            props.updateUserInfo(response);
+        } catch (error) {
+            console.error('Error updating user info:', error);
+        }
+
     };
 
-    const handleTransferSubmit = () => { 
+    const handleTransferSubmit = async (event) => {
         //Post request here to user's table
-        console.log( 'Transfer Amount', transferAmount);
+        event.preventDefault();
         setPage(page + 1)
+        console.log('Transfer Amount', transferAmount);
+        let transferAmountObj = {
+            transferAmount: transferAmount
+        }
+
+        try {
+            // Send an axios post request with the FormData object
+            const response = await axios.post('/transferFinances', transferAmountObj)
+            console.log('Transfer amount updated:', response);
+        } catch (error) {
+            console.error('Error updating user info:', error);
+        }
+
     };
 
     useEffect(() => {
         setIsButtonDisabled(
-            routingNumber === 0 || 
+            routingNumber === 0 ||
             accountNumber === 0 ||
             swiftCode === "" ||
             errors.routingNumber ||
@@ -167,67 +209,67 @@ function TransferForm() {
         }
     }
 
-const OnboardingSlide = () => {
-  const [displayStep, setDisplayStep] = useState(0);
+    const OnboardingSlide = () => {
+        const [displayStep, setDisplayStep] = useState(0);
 
-  useEffect(() => {
-    const timer1 = setTimeout(() => setDisplayStep(1), 1000);
-    const timer2 = setTimeout(() => setDisplayStep(2), 2000);
-    const timer3 = setTimeout(() => setDisplayStep(3), 3000);
+        useEffect(() => {
+            const timer1 = setTimeout(() => setDisplayStep(1), 1000);
+            const timer2 = setTimeout(() => setDisplayStep(2), 2000);
+            const timer3 = setTimeout(() => setDisplayStep(3), 3000);
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
+            return () => {
+                clearTimeout(timer1);
+                clearTimeout(timer2);
+                clearTimeout(timer3);
+            };
+        }, []);
+
+        const stepStyle = {
+            // background: 'linear-gradient(to right, #FFE879 0%, #FFD300 100%)',
+            borderRadius: '5px',
+            padding: '5px',
+            marginBottom: '8px',
+            fontWeight: 'light',
+            // boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
+        };
+
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    justifyContent: 'center',
+                    height: '100%',
+                    textAlign: 'left',
+                    padding: 2,
+                }}
+            >
+                <Typography variant="h2" component="h2" gutterBottom>
+                    You're in!
+                </Typography>
+                <Typography variant="h4" component="p" gutterBottom>
+                    Now, let's go over some ground rules...
+                </Typography>
+                {displayStep >= 1 && (
+                    <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+                        1. Invest up to $1,000 of real cash into the stock market!
+                    </Typography>
+                )}
+                {displayStep >= 2 && (
+                    <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+                        2. Compete for the highest quarterly returns against other players.
+                    </Typography>
+                )}
+                {displayStep >= 3 && (
+                    <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+                        3. Cash out your gains at the end of the competition.
+                    </Typography>
+                )}
+                <Button variant="contained" onClick={() => setPage(1)}>Get started</Button>
+            </Box>
+        );
     };
-  }, []);
-
-  const stepStyle = {
-    // background: 'linear-gradient(to right, #FFE879 0%, #FFD300 100%)',
-    borderRadius: '5px',
-    padding: '5px',
-    marginBottom: '8px',
-    fontWeight: 'light',
-    // boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
-  };
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'start',
-        justifyContent: 'center',
-        height: '100%',
-        textAlign: 'left',
-        padding: 2,
-      }}
-    >
-      <Typography variant="h2" component="h2" gutterBottom>
-        You're in!
-      </Typography>
-      <Typography variant="h4" component="p" gutterBottom>
-        Now, let's go over some ground rules...
-      </Typography>
-      {displayStep >= 1 && (
-        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          1. Invest up to $1,000 of real cash into the stock market!
-        </Typography>
-      )}
-      {displayStep >= 2 && (
-        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          2. Compete for the highest quarterly returns against other players.
-        </Typography>
-      )}
-      {displayStep >= 3 && (
-        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          3. Cash out your gains at the end of the competition.
-        </Typography>
-      )}
-      <Button variant="contained" onClick={() => setPage(1)}>Get started</Button>
-    </Box>
-  );
-};
     const firstPage = () => {
         return (
             <Box key="firstPage" display="flex" flexDirection="column" sx={style.gridCard}>
@@ -251,7 +293,7 @@ const OnboardingSlide = () => {
                         />
                     </Grid>
                 </Grid>
-                <BankSearch handleBankInput={handleBankInput}/>
+                <BankSearch handleBankInput={handleBankInput} />
                 <TextField
                     key="bank-account"
                     id="bank-account"
@@ -341,7 +383,7 @@ const OnboardingSlide = () => {
             <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
             <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer()}</Box>. Are you sure you want to proceed?</Typography>
             <Box display="flex" flexDirection="row">
-            <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
+                <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
                 <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} variant="outlined" color="primary">Confirm</Button></Link>
             </Box>
         </Box>
@@ -349,8 +391,8 @@ const OnboardingSlide = () => {
 
     let currentPage = (
         <>
-            { page === -1 ? (
-                <OnboardingSlide/> 
+            {page === -1 ? (
+                <OnboardingSlide />
             ) : page === 1 ? (
                 firstPage()
             ) : page === 2 ? (
@@ -376,14 +418,14 @@ const OnboardingSlide = () => {
                 <Grid sx={style.background} item xs={6} sm={6}>
                     <Grid sx={{ float: "right" }} item xs={6} sm={6}>
                         <Link to="/">
-                        <img src={Logo} alt="SharkFin Trading" height="50" />                        </Link>
+                            <img src={Logo} alt="SharkFin Trading" height="50" />                        </Link>
                     </Grid>
                     <Grid item xs={6} sm={6}>
                     </Grid>
-                    <Box sx={{ width:'100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
-</Box>                
-</Grid>
+                    <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
+                    </Box>
+                </Grid>
             </Grid>
         </Box>
     );

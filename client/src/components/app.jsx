@@ -393,6 +393,9 @@ class App extends React.Component {
             <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
           </div> */}
 
+          {/* <AddFriends />
+          <ViewRequests /> */}
+
             <Routes>
               <Route exact path="/" element={<Portfolio accountNum={this.state.userInfo.accountNumber}/>} />
               <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />

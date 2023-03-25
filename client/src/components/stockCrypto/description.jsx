@@ -11,7 +11,7 @@ const description = (props) => {
   const [full, setFull] = useState('')
 
   useEffect(() => {
-    if (props.stockObj) {
+    if (props.stockObj !== undefined && Object.keys(props.stockObj).length > 0) {
       if (props.stockObj.Name.length > 0) {
         setTitle(props.stockObj.Name)
       }
@@ -25,7 +25,7 @@ const description = (props) => {
       if (props.stockObj.Description.length < textLengthLimit) {
         setShowAll(true)
       }
-    } else if (props.coinMeta) {
+    } else if (props.coinMeta !== undefined && Object.keys(props.coinMeta).length > 0) {
       if (props.coinMeta[0].name.length > 0) {
         setTitle(props.coinMeta[0].name)
       }

@@ -10,11 +10,11 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
 import ReviewModal from './reviewOrder.jsx'
+import CryptoReviewModal from './cryptoReviewOrder.jsx'
 
 const orderCard = (props) => {
-
   const [orderInput, setOrderInput] = useState({})
-  const [buyType, setBuyType] = useState('shares')
+  const [orderIn, setOrderIn] = useState('')
   const [amount, setAmount] = useState()
   const [open, setOpen] = useState(false);
   const [errMsg, setErrMsg] = useState("")
@@ -23,12 +23,12 @@ const orderCard = (props) => {
 
   const handleReviewClick = () => {
     if (!openErr) {
-      if (amount === 0 || amount === undefined) {
+      if (amount === 0 || amount === undefined || orderIn.length === 0) {
 
-        setErrMsg('Invalid number')
+        setErrMsg('Invalid input')
       } else {
         let orderInputObj = {
-          buyType: buyType,
+          orderIn: orderIn,
           amount: amount
         }
         setOrderInput(orderInputObj)
@@ -39,8 +39,8 @@ const orderCard = (props) => {
 
   }
 
-  const handleBuyType = (e) => {
-    setBuyType(e.target.value)
+  const handleOrderIn = (e) => {
+    setOrderIn(e.target.value)
   }
 
   const handleAmount = (e) => {
@@ -65,14 +65,14 @@ const orderCard = (props) => {
               {`Buy in `}
             </Grid>
             <Grid item xs={6}>
-              <Dropdown handleBuyType={handleBuyType} />
+              <Dropdown handleOrderIn={handleOrderIn} pageType={props.pageType} />
             </Grid>
           </Grid> : <Grid container spacing={1}>
             <Grid item xs={6}>
               {`Sell in `}
             </Grid>
             <Grid item xs={6}>
-              <Dropdown handleBuyType={handleBuyType} />
+              <Dropdown handleOrderIn={handleOrderIn} pageType={props.pageType} />
             </Grid>
           </Grid>}
         </Typography>
@@ -100,7 +100,28 @@ const orderCard = (props) => {
         <Button size="small" onClick={handleReviewClick}>Review Order</Button>
       </CardActions>
 
-      {open ? <ReviewModal handleReviewClick={handleReviewClick} value={props.value} handleOrderClick={props.handleOrderClick} barData={props.barData} stockObj={props.stockObj} orderInput={orderInput} /> : null}
+      {open && orderIn.length > 0 ? (props.pageType === "stock" ?
+        (<ReviewModal
+          handleReviewClick={handleReviewClick}
+          value={props.value}
+          handleOrderClick={props.handleOrderClick}
+          barData={props.barData}
+          stockObj={props.stockObj}
+          orderInput={orderInput}
+          orderIn={orderIn}
+        />)
+        : (<CryptoReviewModal
+          handleReviewClick={handleReviewClick}
+          handleOrderClick={props.handleOrderClick}
+          value={props.value}
+          orderInput={orderInput}
+          coinMeta={props.coinMeta}
+          coinBarData={props.coinBarData}
+          coinToday={props.coinToday}
+          coinPrevious={props.coinPrevious}
+          orderIn={orderIn}
+        />)
+      ) : (null)}
 
     </>
   )

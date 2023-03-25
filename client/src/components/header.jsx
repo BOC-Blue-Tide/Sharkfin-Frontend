@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, InputBase, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import Logo from '../../dist/logo.png';
 import { Link, useLocation } from 'react-router-dom';
-import SearchBar from './searchBar.jsx'
+import SearchBar from './search/searchBar.jsx'
 const axios = require('axios').default;
 
 const styles = {
@@ -63,7 +63,7 @@ const Header = (props) => {
       .then((response) => {
         props.updateEmail('');
         localStorage.removeItem("googleInfo");
-        console.log('logout success', response);
+        // console.log('logout success', response);
       })
       .catch((err) => {
         console.log('logout error', err);
@@ -72,7 +72,7 @@ const Header = (props) => {
 
   return (
 
-    (location.pathname === '/transferForm' || location.pathname === '/logout'? '' :
+    (location.pathname === '/transferForm' || location.pathname === '/logout' ? '' :
       <AppBar
         position="static"
         sx={styles.main}
@@ -86,7 +86,7 @@ const Header = (props) => {
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <SearchBar getStockData={props.getStockData} />
+            <SearchBar getData={props.getData} />
           </Typography>
           <Typography sx={styles.link(location.pathname === '/leaderboard')}>
             <Link component="button" to="/leaderboard">

@@ -86,8 +86,13 @@ main {
   font-weight: bold;
 }
 
-.searchInput {
+/* #searchInput {
   font-size: small;
+} */
+
+.suggestion-list-container {
+  z-index: 1;
+  background-color: blue
 }
 
 /*seach bar*/
@@ -103,6 +108,50 @@ main {
   justify-content: space-between;
 }
 
+.outgoingchatbubble {
+  background-color: #278D9B;
+  color: white;
+  padding: 10px;
+  margin: 10px;
+  display: table;
+  margin-left: auto;
+  border-radius: 15px;
+}
+
+.outgoingchatdate {
+  display: table;
+  margin-left: auto;
+}
+
+.incomingchatdate {
+  display: table;
+  margin-right: 10px;
+}
+
+.incomingchatbubble {
+  background-color: lightgrey;
+  color: black;
+  padding: 10px;
+  margin: 10px;
+  display: table;
+  border-radius: 15px;
+}
+
+.chatfriendtile {
+  display: flex;
+  align-items: center;
+}
+
+.chatfriendpic {
+  padding: 10px;
+}
+
+input.chatform {
+  width: 90%;
+  text-align: right;
+  border: 1px solid grey;
+}
+
 /*diable order textfield arrow*/
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
@@ -114,6 +163,10 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
+}
+
+.description-title {
+  margin-bottom: 2em;
 }
 
 /*Stock & Crypto page*/

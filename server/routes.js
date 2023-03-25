@@ -19,9 +19,6 @@ router.get('/getCoinBar', controllers.getAPIData.getCoinBar)
 router.get('/getCoinToday', controllers.getAPIData.getCoinToday)
 router.get('/getCoinPrevious', controllers.getAPIData.getCoinPrevious)
 
-// post order data
-router.post('/order', controllers.orderData.postOrderData)
-
 router.get('/status', (req, res) => {
   // console.log('in status');
   res.send(req.session.userid);

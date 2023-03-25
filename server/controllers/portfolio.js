@@ -4,11 +4,11 @@ const backurl = process.env.BACKEND_URL;
 
 module.exports = {
   getPChart : async (req, res) => {
-    var user_id_C = req.query.userID;
-    var timeWindow_C = req.query.timeSelect;
+    var accountNum = req.query.accountNum;
+    var timeWindow = req.query.timeSelect;
     var paramsC = {
-      'user_id' : user_id_C,
-      'timeWindow' : timeWindow_C
+      'accountNum' : accountNum,
+      'timeWindow' : timeWindow
     };
     await axios.get(`http://localhost:4000/pchart`, {params: paramsC})
       .then((result) => {
@@ -19,13 +19,12 @@ module.exports = {
       })
   },
   getPAllocationAndPosition : async (req, res) => {
-    var user_id = req.query.userID;
-    var paramsC = {
-      'user_id' : user_id
+    var accountNum = req.query.accountNum;
+    var paramsAP = {
+      'accountNum' : accountNum
     };
-    await axios.get(`http://localhost:4000/pallocation`, {params: paramsC})
+    await axios.get(`http://localhost:4000/pallocation`, {params: paramsAP})
       .then((result) => {
-        console.log(result.data);
         res.status(200).send(result.data);
       })
       .catch((err) => {

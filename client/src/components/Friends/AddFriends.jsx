@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Button } from '@mui/material';
 import {friends, searchResults} from  '../../../../mockData_friends.js';
 import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 const AddFriends = (props) => {
   const [searchInput, setSearchInput] = useState('');
   const [showList, setShowList] = useState(true);
-  const [showSearchResult, setSearchResult] = useState(false);
+  const [friendsList, setFriendsList] = useState([]);
+
+  useEffect(() => {
+    let userId = JSON.parse(localStorage.getItem("googleInfo")).id;
+    axios.get('http://localhost:8080/getRecommendedFriends', {params: {id: userId}})
+    .then((response) => {
+      console.log('get recommended friends', response);
+      setFriendsList(response.data.rows);
+    })
+    .catch(err => console.log('getRecommendedFriends', err));
+  }, []);
 
   const handleInput = async (e) => {
     // console.log('test', e.target.value);
@@ -18,16 +29,35 @@ const AddFriends = (props) => {
     e.preventDefault();
     if (searchInput.length > 0) {
       console.log('search words:', searchInput);
-      setShowList(false);
-      setSearchResult(true);
+      axios.get('http://localhost:8080/getUserByEmail', {params: {email: searchInput}})
+      .then((response) => {
+        setFriendsList(response.data.rows);
+        setShowList(false);
+      })
+      .catch((err) => {
+        console.log('getUserByEmail', err);
+      });
     } else {
       setShowList(true);
-      setSearchResult(false);
     }
   }
 
   const handleRequest = (e) => {
-    console.log(e, 'Requested!');
+    let friendId = JSON.parse(localStorage.getItem("googleInfo")).id;
+    axios.post('http://localhost:8080/addFriend', {data: {user_id: e.target.id, friend_id: friendId}})
+    .then((response) => {
+      const index = friendsList.findIndex((item) => {
+        return item.id === Number(e.target.id);
+      });
+      if (index === -1) return; // if no match found, do nothing
+      const newFriendsList = [...friendsList]; // create a new copy of the list
+      let oldValue = friendsList[index];
+      oldValue['requested'] = true;
+      newFriendsList[index] = oldValue; // update the value at the specified index
+      setFriendsList(newFriendsList); // set the new list as the state
+    })
+    .catch(err => console.log("addFriend", err));
+
   }
 
   const SearchBar = () => {
@@ -42,39 +72,6 @@ const AddFriends = (props) => {
     )
   };
 
-  const FriendsList = () => {
-    return (
-      <div>
-        People you may like:
-        {friends.map((friend) => {
-          return (
-            <div key={friend.id}>
-            <label>{friend.username}</label>
-            {/* <button>ADD Friend</button> */}
-            <Button color="primary">Add Friend</Button>
-          </div>
-          )
-        })}
-      </div>
-    )
-  }
-
-  const SearchResult = () => {
-    return (
-      <div>
-        Search Results:
-        {searchResults.map((friend) => {
-          return (
-            <div key={friend.id}>
-            <label>{friend.username}</label>
-            {/* <button>ADD Friend</button> */}
-            <Button color="primary" onClick={handleRequest}>Add Friend</Button>
-          </div>
-          )
-        })}
-      </div>
-    )
-  }
 
     return (
       <div className = 'popup-content'>
@@ -90,22 +87,33 @@ const AddFriends = (props) => {
         </div >
 
         {/* <FriendsList /> */}
-        {showList? (
-          <div>
-            People you may like:
-            {friends.map((friend) => {
+        {showList?
+        ( <div>People you may like:</div> ) :
+        ( <div>Search result:</div> )
+        }
+
+            {friendsList.map((friend) => {
               return (
                 <div key={friend.id}>
+                  {/* <label>
+                    <img src={friend.profilepic_url}/>
+                  </label> */}
                   <label>{friend.username}</label>
                   {/* <button>ADD Friend</button> */}
-                  <Button color="primary" id='12345' onClick={handleRequest}>Add Friend</Button>
+                  {friend.requested ? (
+                    // <label>  requested</label>
+                    <Button color="primary" id={friend.id}>requested</Button>
+                  ) : (
+                  <Button color="primary" id={friend.id} onClick={handleRequest}>Add Friend</Button>
+                  )}
+
                 </div>
               )
             })}
-          </div>
-        ) : null}
 
-        {showSearchResult? <SearchResult />: null}
+
+
+        {/* {showSearchResult? <SearchResult />: null} */}
       </div>
     )
 

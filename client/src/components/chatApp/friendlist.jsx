@@ -14,10 +14,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const FriendListChat = function(props) {
 
-
-
-  let map = props.friends.map((element) => {
-    return <Box
+  let map = props.friends.map((element, index) => {
+    return <Box key={index}
     sx={{
       display: 'flex',
       flexWrap: 'wrap',
@@ -29,9 +27,9 @@ const FriendListChat = function(props) {
     }}
   >
   <Item>
-      <div className='chatfriendtile' onClick={() => props.handleClick(element.name)}>
-      <img src={element.picture} height='100px' className='chatfriendpic'/>
-      {element.name}
+      <div className='chatfriendtile' onClick={() => props.handleClick(element.friend_id)}>
+      <img src={element.profilepic_url} height='100px' className='chatfriendpic'/>
+      {`${element.username} ${element.firstname} ${element.lastname}`}
     </div>
       </Item>
   </Box>

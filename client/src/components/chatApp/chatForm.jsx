@@ -9,8 +9,12 @@ const ChatForm = function(props) {
     setFormData(e.target.value);
   }
 
-  return <form onSubmit={(e) => {e.preventDefault(); props.handleFormSubmit(formData)}}>
-  <input className='chatform' type='text' onChange={handleChange}></input>
+  return <form onSubmit={(e) => {
+    e.preventDefault();
+    props.handleFormSubmit(formData);
+    setFormData('');
+    }}>
+  <input className='chatform' type='text' value={formData} onChange={handleChange}></input>
   <Button type='submit' endIcon={<SendIcon />}>Send</Button>
   </form>
 }

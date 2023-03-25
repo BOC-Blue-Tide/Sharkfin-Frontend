@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -7,18 +7,7 @@ import TransactionList from '../transactions/TransactionList.jsx';
 import mockData from '../../../../mockData.js';
 import ChatList from './chats.jsx';
 import FriendListChat from './friendlist.jsx';
-import pic1 from '../../../../client/dist/pic1.png';
-import pic2 from '../../../../client/dist/pic2.png';
-import pic3 from '../../../../client/dist/pic3.png';
-
-let friends = [
-  { name: 'Bob Salinger',
-    picture: pic1},
-  { name: 'Wendy Chan',
-  picture: pic2},
-  { name: 'Karl Mulroney',
-  picture: pic3},
-]
+import axios from 'axios';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -28,72 +17,64 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-let messages = [
-  { user: 'Bob Salinger',
-    type: 'outgoing',
-    message: 'Hello',
-    date: 'Mar 24, 11:13 AM'
-  },
-  { user: 'Bob Salinger',
-    type: 'outgoing',
-    message: 'how are you?',
-    date: 'Mar 24, 11:14 AM'
-  },
-  { user: 'Bob Salinger',
-    type: 'incoming',
-    message: 'Im doing great! How are you?',
-    date: 'Mar 24, 11:14 AM'
-  },
-  { user: 'Bob Salinger',
-    type: 'outgoing',
-    message: 'I just bought more shares of TSLA!',
-    date: 'Mar 24, 11:14 AM'
-  },
-  { user: 'Wendy Chan',
-    type: 'outgoing',
-    message: 'Hi Wendy!',
-    date: 'Mar 24, 11:14 AM'
-  },
-  { user: 'Wendy Chan',
-    type: 'incoming',
-    message: 'Heyyyyy, how are you?',
-    date: 'Mar 24, 11:14 AM'
-  },
-  { user: 'Karl Mulroney',
-    type: 'incoming',
-    message: 'Yo I just bought some TSLA!!',
-    date: 'Mar 24, 11:14 AM'
-  },
-  { user: 'Karl Mulroney',
-    type: 'outgoing',
-    message: 'Same!!!',
-    date: 'Mar 24, 11:14 AM'
-  }
-];
-
 const chatApp = function() {
-  const [currentChat, setCurrentFriend] = useState([]);
+  const [chatData, setChatData] = useState([]);
+  const [friendData, setFriendData] = useState([]);
+  const [currentChat, setCurrentChat] = useState([]);
+  const [currentFriend, setCurrentFriend] = useState(0);
+
+  console.log(chatData);
 
   const handleClick = function(input) {
-    var array = messages.filter(element => element.user === input);
-    setCurrentFriend(array);
+    var array = chatData.filter(element => element.sent_from === input || element.sent_to === input);
+    setCurrentFriend(input);
+    setCurrentChat(array);
   }
 
-  const handleFormSubmit = function(data) {
-    console.log(data);
+  const handleFormSubmit = function(message) {
+    let date = new Date();
+    let data = {
+      sent_to: currentFriend,
+      sent_from: 1,
+      message: message,
+      datetime: date.toUTCString()
+    }
+    axios.post('http://localhost:8080/chat', data)
+    .then((response) => {
+      console.log(response);
+      setChatData([...chatData, data]);
+      setCurrentChat([...currentChat, data]);
+    })
+    .catch(err => {
+      console.log(err);
+    })
   }
+
+  useEffect(() => {
+    let getChatLog = axios.get('http://localhost:8080/chat');
+    let getFriendList = axios.get('http://localhost:8080/chat/friends');
+
+    Promise.all([getChatLog, getFriendList])
+    .then(([response1, response2]) => {
+      setChatData(response1.data);
+      setFriendData(response2.data);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, []);
 
   return (
     <>
     <Grid container spacing={2}>
       <Grid xs={4}>
         <Item>
-          <FriendListChat friends={friends} handleClick={handleClick}/>
+          <FriendListChat friends={friendData} handleClick={handleClick}/>
         </Item>
       </Grid>
       <Grid xs={8}>
         <Item>
-          <ChatList messages={currentChat} handleFormSubmit={handleFormSubmit}/>
+          <ChatList messages={currentChat} handleFormSubmit={handleFormSubmit} currentFriend={currentFriend}/>
         </Item>
       </Grid>
     </Grid>

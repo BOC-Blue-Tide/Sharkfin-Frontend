@@ -23,7 +23,6 @@ const chatApp = function() {
   const [currentChat, setCurrentChat] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(0);
 
-  console.log(chatData);
 
   const handleClick = function(input) {
     var array = chatData.filter(element => element.sent_from === input || element.sent_to === input);

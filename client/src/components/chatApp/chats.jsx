@@ -4,11 +4,11 @@ import ChatForm from './chatForm.jsx';
 
 
 const ChatList = function(props) {
-  if (props.messages.length === 0) {
+  if (props.currentFriend === 0) {
     return <div>Click on a chat to begin</div>
   }
-  let messageList = props.messages.map((element) => {
-    return <ChatBubble message={element} />
+  let messageList = props.messages.map((element, index) => {
+    return <ChatBubble key={index }message={element} currentFriend={props.currentFriend}/>
   });
 
   return (

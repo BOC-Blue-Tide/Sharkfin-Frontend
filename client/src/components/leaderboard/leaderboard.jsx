@@ -7,8 +7,9 @@ import PositionTable from '../portfolio/positionTable.jsx';
 import PortfolioChart from '../portfolio/portfolioChart.jsx';
 import AllocationChart from '../portfolio/allocationChart.jsx';
 
-const LeaderBoard = () => {
+const LeaderBoard = (props) => {
   const [dayLeft, setdayLeft] = useState(0)
+  const [userID, setUserID] = useState(props.userID)
 
     useEffect(() => {
       var day = daysUntilNextQuarter()
@@ -28,7 +29,7 @@ const LeaderBoard = () => {
       </div>
       <div className="leaderboard-main-container">
         <div className="sidebar-container">
-          <SideBar/>
+          <SideBar userID = {userID}/>
         </div>
         {/* <div className="info-container">
           <div className="investment-profile-leaderboard">

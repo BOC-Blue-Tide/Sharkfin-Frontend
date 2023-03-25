@@ -9,6 +9,7 @@ const jwt_decode = require("jwt-decode");
 //leaderBoard
 router.get('/friendBoard', controllers.leaderBoard.getFriendBoard)
 router.get('/globalBoard', controllers.leaderBoard.getGlobalBoard)
+router.post('/profilePhoto', controllers.leaderBoard.getGlobalBoard)
 
 // get market data
 router.get('/symbolLookup', controllers.getAPIData.symbolLookup)

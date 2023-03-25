@@ -7,27 +7,42 @@ import { Link } from 'react-router-dom';
 import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
-const Placement = () => {
+const Placement = (props) => {
   const [topFive, setTopFive] = useState([])
-  const [selfPlace, setSelfPlace] = useState ({name: 'Lenord', placement:'5th', gain: 10})
+  const [selfPlace, setSelfPlace] = useState ({name: '', placement:'', gain: null})
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
   const [profilePic, setProfilePic] = useState("pic1.png")
   const [picSlect, showPicSlect] = useState(false);
-
+  const [userInfo, setUserInfo] = useState(props.userInfo)
+  // userInfo: {
+  //   userId: 0,
+  //   firstName: '',
+  //   lastName: '',
+  //   userName: '',
+  //   email: '',
+  //   bank: '',
+  //   accountNumber: 0,
+  //   profilePic: ''
+  // },
 
 
   useEffect(() => {
     getTopFiveData()
     setQuarterLeft(daysUntilNextQuarter())
-    checkSelfPlace("Ab")
+    console.log(userInfo)
+    console.log(props.userID)
   }, [])
 
-  const checkSelfPlace = (name) => {
+  useEffect(() => {
+    checkSelfPlace(userInfo.userId)
+  }, [topFive])
+
+  const checkSelfPlace = (id) => {
     for (var x = 0; x < topFive.length; x ++) {
-      if (topFive[x].name == name) {
-        setSelfPlace({placement: x + 1, name: name, gain: topFive[x].gain})
+      if (topFive[x].id == id) {
+        setSelfPlace({placement: x + 1, name: topFive[x].first_name, gain: topFive[x].performance_percentage})
       }
     }
   }
@@ -39,15 +54,19 @@ const Placement = () => {
     })
   }
 
-  const checkProfilePic = () => {
+  const checkProfilePic = (id) => {
     //axios get if defined
-    setProfilePic("pic2.png")
-    //if not use google account photo
-  }
-
-  const updateProfilePic = (url) => {
-    setProfilePic(url)
-    //axios post update database profilePic
+    for (var x = 0; x < topFive.length; x ++) {
+      if (topFive[x].id == id) {
+        setProfilePic(topFive[x].profilepic_url)
+      } else {
+        if (props.photoURL !== "") {
+          setProfilePic(props.photoURL)
+        } else {
+          setProfilePic('pic2.png')
+        }
+      }
+    }
   }
 
   const openPicSlect = () => {
@@ -60,7 +79,7 @@ const Placement = () => {
 
   return (
     <div className="mainpage-greeting-leaderboard">
-      <div className="greeting-title"><h1>Good Afternoon, {selfPlace.name}</h1></div>
+      <div className="greeting-title"><h1>Good Afternoon, {userInfo.firstName}</h1></div>
       <div className="profilePic-greeting-container">
         <div className="profilePic">
           {/* BG -> IMG */}

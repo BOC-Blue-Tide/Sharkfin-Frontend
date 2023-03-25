@@ -31,6 +31,7 @@ const Portfolio = (props) => {
         })
     };
     fetchChartData();
+    console.log('portfolio', props.userInfo)
   }, [timeWindow]);
 
   useEffect(() => {
@@ -63,7 +64,7 @@ const Portfolio = (props) => {
       </div> */}
       <div className='greeting-net-worth-chart'>
         <div className="greeting-leaderboard">
-          <Placement/>
+          <Placement userInfo = {props.userInfo} userID = {props.userID}/>
         </div>
         <div className='portfolio-my-net-worth-chart'>
           <h2>My Net Worth</h2>

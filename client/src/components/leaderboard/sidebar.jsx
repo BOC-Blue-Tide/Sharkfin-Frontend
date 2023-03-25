@@ -9,7 +9,7 @@ import { Button } from '@mui/material';
 import AddFriends from '../Friends/AddFriends.jsx'
 import ViewRequests from '../Friends/ViewRequests.jsx'
 
-const SideBar = () => {
+const SideBar = (props) => {
   const [friendBoard, setFriendBoard] = useState([])
   const [globalBoard, setGlobalBoard] = useState([])
   const [friendCurrent, setFriendCurrent] = useState([])
@@ -18,8 +18,8 @@ const SideBar = () => {
   const [global, setGlobal] = useState(false)
   const [friendPage, setFriendPage] = useState(1)
   const [globalPage, setGlobalPage] = useState(1)
-  const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, name: null, gain: null})
-  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
+  const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, photo: null, name: null, gain: null})
+  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, photo: null, name: null, gain: null})
 
   useEffect(() => {
     getFriendBoardData()
@@ -27,17 +27,21 @@ const SideBar = () => {
   }, [])
 
   useEffect(() => {
-    checkFriendPlacement("Lenord")
-    checkGlobalPlacement("Lenord")
+    checkFriendPlacement(props.userID)
+    checkGlobalPlacement(props.userID)
   }, [friendBoard, globalBoard])
 
   const getFriendBoardData = async () => {
     await Axios.get('/friendBoard')
     .then((response) => {
       var data = response.data
-      setFriendBoard(data)
+      function sortObjectsByIdDesc(objects) {
+        return objects.sort((a, b) => b.performance_percentage - a.performance_percentage);
+      }
+      const sortedData = sortObjectsByIdDesc(data);
+      setFriendBoard(sortedData)
       if (data.length <= 10) {
-        setFriendCurrent(data)
+        setFriendCurrent(sortedData)
         setFriendPage(1)
       } else {
         setFriendCurrent(data.slice(0, 10))
@@ -55,7 +59,11 @@ const SideBar = () => {
     await Axios.get('/globalBoard')
     .then((response) => {
       var data = response.data
-      setGlobalBoard(data)
+      function sortObjectsByIdDesc(objects) {
+        return objects.sort((a, b) => b.performance_percentage - a.performance_percentage);
+      }
+      const sortedData = sortObjectsByIdDesc(data);
+      setGlobalBoard(sortedData)
       if (data.length <= 10) {
         setGlobalCurrent(data)
         setGlobalPage(1)
@@ -89,17 +97,17 @@ const SideBar = () => {
    };
 
   //check self placement
-  const checkFriendPlacement = (name) => {
+  const checkFriendPlacement = (id) => {
     for (var x = 0; x < friendBoard.length; x ++) {
-      if (friendBoard[x].name == name) {
-        setSelfFriendPlacement({placement: x + 1, name: name, gain: friendBoard[x].gain})
+      if (friendBoard[x].id == id) {
+        setSelfFriendPlacement({placement: x + 1, photo: friendBoard[x].profilepic_url, name: friendBoard[x].first_name, gain: friendBoard[x].performance_percentage})
       }
     }
   }
-  const checkGlobalPlacement = (name) => {
+  const checkGlobalPlacement = (id) => {
     for (var x = 0; x < globalBoard.length; x ++) {
-      if (globalBoard[x].name == name) {
-        setSelfGlobalPlacement({placement: x + 1, name: name, gain: globalBoard[x].gain})
+      if (globalBoard[x].id == id) {
+        setSelfGlobalPlacement({placement: x + 1, photo: globalBoard[x].profilepic_url, name: globalBoard[x].first_name, gain: globalBoard[x].performance_percentage})
       }
     }
   }

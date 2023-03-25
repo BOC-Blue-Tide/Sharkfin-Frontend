@@ -142,7 +142,6 @@ class App extends React.Component {
         accountNumber: 0,
         profilePic: ''
       },
-      userID: 1,
       transactionData: [],
       logged_email: ''
     }
@@ -168,7 +167,7 @@ class App extends React.Component {
       userName: "Dhalper",
       email: "Fred@test.org",
       bank: "CITI Bank",
-      accountNumber: "1234",
+      accountNumber: "1",//"1234", changed for portfolio testing
       profilePic: "../../../dist/mockProfile.png"
     }
     this.setState({ userInfo: updatedUserInfo })
@@ -394,9 +393,12 @@ class App extends React.Component {
             <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
           </div> */}
 
+          {/* <AddFriends />
+          <ViewRequests /> */}
+
             <Routes>
-              <Route exact path="/" element={<Portfolio userID={this.state.userID} />} />
-              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo} />} />
+              <Route exact path="/" element={<Portfolio accountNum={this.state.userInfo.accountNumber}/>} />
+              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />

@@ -3,7 +3,6 @@ import Chart from 'chart.js/auto';
 import { Line } from "react-chartjs-2";
 
 const NetWorthChart = (props) => {
-  console.log(props);
   var timeData = props.data.time;
   var netData = props.data.net;
   const data = {
@@ -50,17 +49,17 @@ const NetWorthChart = (props) => {
           drawBorder: false,
           display: false,
         }
-      }
-    },
-    y: {
-      ticks: {
-        display: false
       },
-      grid: {
-        display: false
-      },
-      border: {
-        display: false
+      y: {
+        ticks: {
+          display: false
+        },
+        grid: {
+          display: false
+        },
+        border: {
+          display: false
+        }
       }
     }
   };

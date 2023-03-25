@@ -5,21 +5,20 @@ import AllocationChart from './allocationChart.jsx';
 import TimeRangeP from './timeRangeP.jsx';
 //Lenord
 import Placement from '../leaderboard/placement.jsx'
+import PaidIcon from '@mui/icons-material/Paid';
 import Axios from 'axios';
 
 
 const Portfolio = (props) => {
-  const [userID, setUserID] = useState(props.userID);
+  const [accountNum, setAccountNum] = useState(props.accountNum);
   const [timeWindow, setTimeWindow] = useState('1W');
   const [chartData, setChartData] = useState({});
-  const [alloPosData, setAlloPosData] = useState({position: [], allocation : {symbol: [], ratios: []}});
+  const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbol: [], ratios: []}});
+
   useEffect(() => {
     var paramsC = {
-      userID : userID,
+      accountNum : accountNum,
       timeSelect: timeWindow
-    };
-    var paramsAP = {
-      userID : userID
     };
     var fetchChartData = async () => {
       await Axios.get('/pchart', {params: paramsC})
@@ -35,7 +34,7 @@ const Portfolio = (props) => {
 
   useEffect(() => {
     var paramsAP = {
-      userID : userID
+      accountNum : accountNum
     };
     const fetchAlloPosData = async () => {
       await Axios.get('/pallopos', {params: paramsAP})
@@ -55,18 +54,13 @@ const Portfolio = (props) => {
 
   return (
     <div className='portfolio-container'>
-      {/* <div className='portfolio-primary-header'>
-        <h1 className='portfolio-h1'>My Portfolio</h1>
-      </div>
-      <div className='portfolio-secondary-header'>
-        <h3 className='portfolio-h3'>Good afternoon, User</h3>
-      </div> */}
       <div className='greeting-net-worth-chart'>
         <div className="greeting-leaderboard">
           <Placement/>
         </div>
         <div className='portfolio-my-net-worth-chart'>
           <h2>My Net Worth</h2>
+          <h2>${alloPosData.totalNetWorth}</h2>
           <PortfolioChart data={chartData}/>
           <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
         </div>
@@ -78,9 +72,6 @@ const Portfolio = (props) => {
       <div className='portolio-my-position'>
       <h2>My Positions</h2>
         <PositionTable data={alloPosData}/>
-      </div>
-      <div className='portfolio-disclaimer'>
-
       </div>
       <div className='portfolio-signature'>
         Powered By APEX DIGITAL INVESTMENTS

@@ -131,11 +131,37 @@ router.post('/login', (req, res) => {
   // })
 })
 
+
 router.get('/pchart', controllers.portfolio.getPChart)
 router.get('/pallopos', controllers.portfolio.getPAllocationAndPosition)
 
 //IMAGE UPLOAD:
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' + file.originalname);
+  },
+});
 
+const upload = multer({ storage: storage });
+
+router.post('/updateUserInfo', upload.single('profilePic'), async (req, res) => {
+  console.log(req.body)
+  const userInfo = JSON.parse(req.body.userInfo);
+  const profilePic = req.file;
+  const imagePath = './uploads/' + profilePic.filename;
+  userInfo.profilePic = imagePath;
+
+  // Save the user information and image file to your storage service or database
+  try {
+    await updateUser(userInfo);
+    res.send({ status: 'success' });
+  } catch (error) {
+    res.status(500).send({ status: 'error', message: 'Error updating user data' });
+  }
+});
 
 
 

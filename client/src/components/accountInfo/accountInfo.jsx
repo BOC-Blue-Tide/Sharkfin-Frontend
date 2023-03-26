@@ -7,13 +7,12 @@ import ProfilePic from '../../../dist/mockProfile.png';
 import axios from 'axios';
 
 function AccountInfo(props) {
-
-   console.log(props);
    const [edit, setEdit] = useState(false);
 
    let remainingFunds = 400;
 
    const [userInfo, setUserInfo] = useState({
+      user_id: props.userInfo.user_id,
       firstname: props.userInfo.firstname,
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
@@ -61,15 +60,23 @@ function AccountInfo(props) {
    const handleSubmit = async (event) => {
       event.preventDefault();
 
-      // Create a new FormData object
-      const formData = new FormData();
+      // // Create a new FormData object
+      // const formData = new FormData();
 
-      // Append the user information and image file to the FormData object
-      formData.append('userInfo', JSON.stringify(userInfo));
-      formData.append('profilePic', userInfo.profilePic);
+      // // Append the user information and image file to the FormData object
+      // formData.append('userInfo', JSON.stringify(userInfo));
+      // formData.append('profilePic', userInfo.profilepic_url);
 
       if (!edit) {
          console.log(userInfo);
+         axios.post(`http://localhost:8080/users/${userInfo.user_id}/update`, userInfo)
+         .then((result) => {
+            console.log(result);
+            props.getUserInfo();
+         })
+         .catch(err => {
+            console.log(err);
+         })
       }
       // try {
       //   // Send an axios post request with the FormData object

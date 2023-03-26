@@ -11,7 +11,7 @@ import Axios from 'axios';
 
 const Portfolio = (props) => {
   console.log(props);
-  const [accountNum, setAccountNum] = useState(props.accountNum);
+  const [accountNum, setAccountNum] = useState(props.user.user_id);
   const [timeWindow, setTimeWindow] = useState('1W');
   const [chartData, setChartData] = useState({});
   const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbol: [], ratios: []}});

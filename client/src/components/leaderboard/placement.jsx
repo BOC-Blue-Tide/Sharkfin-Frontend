@@ -8,7 +8,6 @@ import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
 const Placement = (props) => {
-  console.log(props);
   const [topFive, setTopFive] = useState([])
   const [selfPlace, setSelfPlace] = useState ({name: 'Lenord', placement:'5th', gain: 10})
   const [QuarterLeft, setQuarterLeft] = useState(0)

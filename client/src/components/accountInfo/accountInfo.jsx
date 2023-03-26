@@ -60,13 +60,6 @@ function AccountInfo(props) {
    const handleSubmit = async (event) => {
       event.preventDefault();
 
-      // // Create a new FormData object
-      // const formData = new FormData();
-
-      // // Append the user information and image file to the FormData object
-      // formData.append('userInfo', JSON.stringify(userInfo));
-      // formData.append('profilePic', userInfo.profilepic_url);
-
       if (!edit) {
          console.log(userInfo);
          axios.post(`http://localhost:8080/users/${userInfo.user_id}/update`, userInfo)
@@ -78,18 +71,6 @@ function AccountInfo(props) {
             console.log(err);
          })
       }
-      // try {
-      //   // Send an axios post request with the FormData object
-      //   const response = await axios.post(`http://localhost:8080/users/${id}/update`, formData, {
-      //     headers: {
-      //       'Content-Type': 'multipart/form-data',
-      //     },
-      //   });
-      //   console.log('User info updated:', response);
-      //   props.updateUserInfo();
-      // } catch (error) {
-      //   console.error('Error updating user info:', error);
-      // }
     };
 
     const handleInputChange = (event) => {
@@ -105,6 +86,10 @@ function AccountInfo(props) {
    //  handle the click event on the Avatar
    const handleAvatarClick = () => {
       document.getElementById("profile-picture-input").click();
+   };
+
+   const accountNumberTrimmer = (number) => {
+          return number.slice(-4);
    };
 
    return (
@@ -239,9 +224,9 @@ function AccountInfo(props) {
                </Box>
             </Box>
             <Typography variant="h4" sx={style.headerText}> Billing Information </Typography>
-            {(userInfo.accountNumber ?
+            {(userInfo.account_number ?
                <>
-                  <Typography variant="p1" sx={{ marginBottom: "20px" }}> Your Sharkfin account is currently linked to a <Box sx={{ fontWeight: "bold", display: "inline" }}>{userInfo.bank}</Box> account ending in <Box sx={{ fontWeight: "bold", display: "inline" }}>{userInfo.accountNumber}</Box>
+                  <Typography variant="p1" sx={{ marginBottom: "20px" }}> Your Sharkfin account is currently linked to a <Box sx={{ fontWeight: "bold", display: "inline" }}>{userInfo.bank}</Box> account ending in <Box sx={{ fontWeight: "bold", display: "inline" }}>{accountNumberTrimmer(userInfo.account_number)}</Box>
                   </Typography>
                   <Link to="/transferForm" >
                      <Button variant="contained" color="primary">Connect to a new Bank account</Button>

@@ -8,19 +8,19 @@ import axios from 'axios';
 
 function AccountInfo(props) {
 
-   // console.log(props);
+   console.log(props);
    const [edit, setEdit] = useState(false);
 
    let remainingFunds = 400;
 
    const [userInfo, setUserInfo] = useState({
-      firstName: props.userInfo.firstName,
-      lastName: props.userInfo.lastName,
+      firstname: props.userInfo.firstname,
+      lastname: props.userInfo.lastname,
       email: props.userInfo.email,
-      userName: props.userInfo.userName,
-      profilePic: props.userInfo.profilePic,
+      username: props.userInfo.username,
+      profilepic_url: props.userInfo.profilepic_url,
       bank: props.userInfo.bank,
-      accountNumber: props.userInfo.accountNumber
+      account_number: props.userInfo.account_number
     });
 
 
@@ -68,28 +68,31 @@ function AccountInfo(props) {
       formData.append('userInfo', JSON.stringify(userInfo));
       formData.append('profilePic', userInfo.profilePic);
 
-      try {
-        // Send an axios post request with the FormData object
-        const response = await axios.post('/api/updateUserInfo', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-        console.log('User info updated:', response);
-        props.updateUserInfo();
-      } catch (error) {
-        console.error('Error updating user info:', error);
+      if (!edit) {
+         console.log(userInfo);
       }
+      // try {
+      //   // Send an axios post request with the FormData object
+      //   const response = await axios.post(`http://localhost:8080/users/${id}/update`, formData, {
+      //     headers: {
+      //       'Content-Type': 'multipart/form-data',
+      //     },
+      //   });
+      //   console.log('User info updated:', response);
+      //   props.updateUserInfo();
+      // } catch (error) {
+      //   console.error('Error updating user info:', error);
+      // }
     };
 
     const handleInputChange = (event) => {
       const { name, value } = event.target;
-      U({ ...userInfo, [name]: value });
+      setUserInfo({ ...userInfo, [name]: value });
     };
 
    //  handle the file input change event
    const handleFileInputChange = (e) => {
-      U({...userInfo, profilePic: e.target.files[0]});
+      setUserInfo({...userInfo, profilePic: e.target.files[0]});
    };
 
    //  handle the click event on the Avatar
@@ -153,7 +156,7 @@ function AccountInfo(props) {
                   <Tooltip title={edit? "Change your profile picture": "Visible to other users"} arrow>
                      {/* Add onClick event to the Avatar */}
                      <div sx={style.profilePicContainer} onClick={edit? handleAvatarClick: null}>
-                        <Avatar sx={style.profilePic} alt="Profile picture" src={ProfilePic} />
+                        <Avatar sx={style.profilePic} alt="Profile picture" src={userInfo.profilepic_url} />
                      </div>
                   </Tooltip>
                   {/* Add hidden input for file selection */}
@@ -170,7 +173,8 @@ function AccountInfo(props) {
                      wrap='nowrap'
                      id="first-name-input-1"
                      label="First Name"
-                     defaultValue={userInfo.firstName}
+                     name='firstname'
+                     defaultValue={userInfo.firstname}
                      onChange={handleInputChange}
                      variant="standard"
                      disabled = {!edit}
@@ -184,7 +188,8 @@ function AccountInfo(props) {
                      wrap='nowrap'
                      id="last-name-input-2"
                      label="Last Name"
-                     defaultValue={userInfo.lastName}
+                     name='lastname'
+                     defaultValue={userInfo.lastname}
                      onChange={handleInputChange}
                      variant="standard"
                      disabled = {!edit}
@@ -213,7 +218,8 @@ function AccountInfo(props) {
                   <TextField
                      id="username-input-4"
                      label="Username"
-                     defaultValue={userInfo.userName}
+                     name='username'
+                     defaultValue={userInfo.username}
                      onChange={handleInputChange}
                      variant="standard"
                      wrap='nowrap'

@@ -8,59 +8,67 @@ import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
 const Placement = () => {
-  const [topFive, setTopFive] = useState([])
-  const [selfPlace, setSelfPlace] = useState ({name: 'Lenord', placement:'5th', gain: 10})
+  const [friendBoard, setFriendBoard] = useState([])
+  const [userId, setUserId] = useState(67)
+  // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
-  const [profilePic, setProfilePic] = useState("pic1.png")
-  const [picSlect, showPicSlect] = useState(false);
+  const [profilePic, setProfilePic] = useState(JSON.parse(localStorage.getItem("googleInfo")).picture)
+  // from app.jsx
+  const [userInfo, setUserInfo] = useState({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
 
 
 
   useEffect(() => {
-    getTopFiveData()
+    getFriendBoardData(userId)
     setQuarterLeft(daysUntilNextQuarter())
-    checkSelfPlace("Ab")
   }, [])
 
-  const checkSelfPlace = (name) => {
-    for (var x = 0; x < topFive.length; x ++) {
-      if (topFive[x].name == name) {
-        setSelfPlace({placement: x + 1, name: name, gain: topFive[x].gain})
+  useEffect(() => {
+    addSelfPlacement(userId)
+    checkProfilePic()
+  }, [friendBoard])
+
+
+
+  const addSelfPlacement = (id) => {
+    console.log(friendBoard)
+    for (var x = 0; x < friendBoard.length; x ++) {
+      if (friendBoard[x].id == id) {
+        if (x == 0) {
+          setSelfPlacement("1st")
+        } else if (x == 1) {
+          setSelfPlacement("2nd")
+        } else if (x == 2) {
+          setSelfPlacement("3rd")
+        } else {
+          setSelfPlacement(`${x + 1}th`)
+        }
       }
     }
   }
-  const getTopFiveData = async () => {
+
+  const getFriendBoardData = async (id) => {
     await Axios.get('/friendBoard')
     .then((response) => {
       var data = response.data
-      setTopFive(data)
+        setFriendBoard(data)
     })
   }
 
   const checkProfilePic = () => {
-    //axios get if defined
-    setProfilePic("pic2.png")
-    //if not use google account photo
+    if (userInfo.profilepic_url !== undefined) {
+      setProfilePic(userInfo.profilepic_url)
+    }
   }
 
-  const updateProfilePic = (url) => {
-    setProfilePic(url)
-    //axios post update database profilePic
-  }
-
-  const openPicSlect = () => {
-    showPicSlect(true);
-  };
-  const closePicSlect = () => {
-    showPicSlect(false);
-  };
 
 
   return (
     <div className="mainpage-greeting-leaderboard">
-      <div className="greeting-title"><h1>Good Afternoon, {selfPlace.name}</h1></div>
+      <div className="greeting-title"><h1>Good Afternoon, {userInfo.first_name}</h1></div>
       <div className="profilePic-greeting-container">
         <div className="profilePic">
           {/* BG -> IMG */}
@@ -69,19 +77,12 @@ const Placement = () => {
             {/* <img src={ profilePic }></img> */}
             <img src={profilePic}></img>
           </div>
-          <div className = "friend-btns">
-            <Button onClick= {openPicSlect} variant="outlined">Chage Photo</Button>
-            <Modal open={picSlect} onClose={closePicSlect}>
-              <div className = "friend-popup">
-                hello
-              </div>
-            </Modal>
-          </div>
+
         </div>
         <div className="greeting">
           <div>
-            <h2><span className="color-lightblue">{selfPlace.gain}% growth </span>this quarter</h2>
-            <h3><span className="color-gold">{selfPlace.placement} place </span>out of {topFive.length} friends</h3>
+            <h2><span className="color-lightblue">{userInfo.performance_percentage}% growth </span>this quarter</h2>
+            <h3><span className="color-gold">{selfPlacement} place </span>out of {friendBoard.length} friends</h3>
             <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
             <h3><span className="color-lightblue">${invested} </span>invested, <span className="color-lightblue">${remaining} </span>remaining funds</h3>
           </div>
@@ -90,12 +91,12 @@ const Placement = () => {
       <div className="mainpage-leaderboard">
         <h3>Leaderboard</h3>
         <div className="top-five-board">
-          <Topfive/>
-          <Link to="/leaderboard">
+          <Topfive friendBoard = {friendBoard} />
+          {/* <Link to="/leaderboard">
           <Button disabled variant="contained" color="primary">
             More
           </Button>
-        </Link>
+        </Link> */}
         </div>
       </div>
     </div>

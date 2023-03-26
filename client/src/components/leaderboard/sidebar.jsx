@@ -10,6 +10,8 @@ import AddFriends from '../Friends/AddFriends.jsx'
 import ViewRequests from '../Friends/ViewRequests.jsx'
 
 const SideBar = () => {
+  const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  const [friendRequestNum, setFriendRequestNum] = useState(0)
   const [friendBoard, setFriendBoard] = useState([])
   const [globalBoard, setGlobalBoard] = useState([])
   const [friendCurrent, setFriendCurrent] = useState([])
@@ -24,12 +26,21 @@ const SideBar = () => {
   useEffect(() => {
     getFriendBoardData()
     getGlobalBoardData()
+    // getFriendRequestNum(userId)
   }, [])
 
   useEffect(() => {
-    checkFriendPlacement("Lenord")
-    checkGlobalPlacement("Lenord")
+    checkFriendPlacement(userId)
+    checkGlobalPlacement(userId)
   }, [friendBoard, globalBoard])
+
+  const getFriendRequestNum = async (id) => {
+    axios.get('http://localhost:8080/getFriendRequestsByID', {params: {user_id: id}})
+    .then((response) => {
+      friendRequestNum(response.data.rows.length);
+    })
+    .catch(err => console.log('getFriendRequestsByID', err));
+  }
 
   const getFriendBoardData = async () => {
     await Axios.get('/friendBoard')
@@ -89,17 +100,25 @@ const SideBar = () => {
    };
 
   //check self placement
-  const checkFriendPlacement = (name) => {
+  const checkFriendPlacement = (id) => {
     for (var x = 0; x < friendBoard.length; x ++) {
-      if (friendBoard[x].name == name) {
-        setSelfFriendPlacement({placement: x + 1, name: name, gain: friendBoard[x].gain})
+      if (friendBoard[x].id == id) {
+        friendBoard[x].placement = x + 1
+        setSelfFriendPlacement(friendBoard[x])
+      } else {
+        //update User info
+        setSelfFriendPlacement({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
       }
     }
   }
-  const checkGlobalPlacement = (name) => {
+  const checkGlobalPlacement = (id) => {
     for (var x = 0; x < globalBoard.length; x ++) {
-      if (globalBoard[x].name == name) {
-        setSelfGlobalPlacement({placement: x + 1, name: name, gain: globalBoard[x].gain})
+      if (globalBoard[x].id == id) {
+        globalBoard[x].placement = x + 1
+        setSelfGlobalPlacement(globalBoard[x])
+      } else {
+         //update User info
+        setSelfGlobalPlacement({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
       }
     }
   }
@@ -144,30 +163,40 @@ const SideBar = () => {
       </div>
       <div>
        {friend &&
-       <div>
-          <div className="board-table">
-            <Person data = {friendCurrent} placement = {currentFriendPage} selfPlacement = {selfFriendPlacement}/>
+          <>{friendBoard.length === 0 ? (
+            <> <div className="empty-sidebar">No data available</div>
+            <div className="selective-bar"><Pagination count={10} disabled /></div></>
+          ) : (
+          <div>
+            <div className="board-table">
+              <Person data = {friendCurrent} placement = {currentFriendPage} selfPlacement = {selfFriendPlacement}/>
+            </div>
+            <div className="selective-bar">
+              <Pagination
+                count={friendPage}
+                page={currentFriendPage}
+                onChange={handleFriendChange}
+                // sx={{ width: "100%" }}
+                // color='blue'
+              />
+            </div>
           </div>
-          <div className="selective-bar">
-          <Pagination
-            count={friendPage}
-            page={currentFriendPage}
-            onChange={handleFriendChange}
-            // sx={{ width: "100%" }}
-            // color='blue'
-          />
-          </div>
-        </div>
+          )}</>
         }
-          {global &&
-       <div>
-          <div className="board-table">
-            <Person data = {globalCurrent} color="8AEADF" placement = {currentGlobalPage} selfPlacement = {selfGlobalPlacement}/>
-          </div>
-          <div className="selective-bar">
-            <Pagination count={globalPage} page={currentGlobalPage} onChange={handleGlobalChange} />
-          </div>
-        </div>
+        {global &&
+          <>{globalBoard.length === 0 ? (
+            <> <div className="empty-sidebar">No data available</div>
+            <div className="selective-bar"><Pagination count={10} disabled /></div></>
+            ) : (
+            <div>
+                <div className="board-table">
+                  <Person data = {globalCurrent} placement = {currentGlobalPage} selfPlacement = {selfGlobalPlacement}/>
+                </div>
+                <div className="selective-bar">
+                  <Pagination count={globalPage} page={currentGlobalPage} onChange={handleGlobalChange} />
+                </div>
+              </div>
+          )}</>
         }
       </div>
       <div className = "friend-btns">
@@ -178,7 +207,7 @@ const SideBar = () => {
         </div>
       </Modal>
       <Button onClick= {openFriendRequestModal} variant="outlined">View Requests <span className="request-num">
-        <label>6</label>
+        <label>{friendRequestNum}</label>
       </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">

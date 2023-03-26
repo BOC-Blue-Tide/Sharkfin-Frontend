@@ -31,11 +31,6 @@ router.post('/logout', (req, res) => {
   res.redirect('/');
 })
 
-router.get('/user', (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
-})
-
 router.post('/login', (req, res) => {
   // console.log(req.body);
   controllers.login.verify(req.body.credential)
@@ -93,28 +88,28 @@ router.get('/pallopos', controllers.portfolio.getPAllocationAndPosition)
 
 //IMAGE UPLOAD:
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + '-' + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, 'uploads/');
+//   },
+//   filename: function (req, file, cb) {
+//     cb(null, Date.now() + '-' + file.originalname);
+//   },
+// });
 
-const upload = multer({ storage: storage });
+// const upload = multer({ storage: storage });
 
-router.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res) => {
-  const userInfo = JSON.parse(req.body.userInfo);
-  const profilePic = req.file;
-  const imagePath = './uploads/' + profilePic.filename;
-  userInfo.profilePic = imagePath;
+// router.post('/api/updateUserInfo', upload.single('profilePic'), async (req, res) => {
+//   const userInfo = JSON.parse(req.body.userInfo);
+//   const profilePic = req.file;
+//   const imagePath = './uploads/' + profilePic.filename;
+//   userInfo.profilePic = imagePath;
 
-  // Save the user information and image file to your storage service or database
-  await saveUserData(userInfo);
+//   // Save the user information and image file to your storage service or database
+//   await saveUserData(userInfo);
 
-  res.send({ status: 'success' });
-});
+//   res.send({ status: 'success' });
+// });
 
 
 

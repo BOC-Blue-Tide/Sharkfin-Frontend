@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
-const Placement = () => {
+const Placement = (props) => {
+  console.log(props);
   const [topFive, setTopFive] = useState([])
   const [selfPlace, setSelfPlace] = useState ({name: 'Lenord', placement:'5th', gain: 10})
   const [QuarterLeft, setQuarterLeft] = useState(0)
@@ -60,14 +61,14 @@ const Placement = () => {
 
   return (
     <div className="mainpage-greeting-leaderboard">
-      <div className="greeting-title"><h1>Good Afternoon, {selfPlace.name}</h1></div>
+      <div className="greeting-title"><h1>Good Afternoon, {props.user.firstname}</h1></div>
       <div className="profilePic-greeting-container">
         <div className="profilePic">
           {/* BG -> IMG */}
           <div className="profile-box">
 
             {/* <img src={ profilePic }></img> */}
-            <img src={profilePic}></img>
+            <img src={props.user.profilepic_url}></img>
           </div>
           <div className = "friend-btns">
             <Button onClick= {openPicSlect} variant="outlined">Chage Photo</Button>

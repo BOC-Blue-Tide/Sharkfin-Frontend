@@ -9,6 +9,7 @@ const axios = require('axios').default;
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props);
   }
 
   responseMessage = (response) => {
@@ -30,6 +31,7 @@ class Login extends React.Component {
       };
       this.props.updateEmail(googleInfo.email);
       localStorage.setItem("googleInfo", JSON.stringify(googleInfo));
+      this.props.getUser();
     })
     .catch((error) => {
       console.log('fail', error);

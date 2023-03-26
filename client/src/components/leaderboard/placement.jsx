@@ -75,7 +75,7 @@ const Placement = () => {
           <div className="profile-box">
 
             {/* <img src={ profilePic }></img> */}
-            <img src={profilePic}></img>
+            <img src={props.user.profilepic_url}></img>
           </div>
 
         </div>

@@ -1,11 +1,10 @@
 import React from 'react';
-import Axios from 'axios'
-const axios = require('axios').default;
 import StockPage from './stockCrypto/stockPage.jsx'
 import CryptoPage from './stockCrypto/cryptoPage.jsx'
 import helpers from './stockCrypto/helperFunctions/requestHelpers.js'
 import Order from './stockCrypto/orderForm/orderTab.jsx'
 import moment from 'moment-timezone'
+const axios = require('axios').default;
 const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
 const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
@@ -132,6 +131,7 @@ class App extends React.Component {
       coinToday: null,
       coinPrevious: null,
       orderObj: null,
+      orderAcctNum: null,
       userInfo: {
         user_id: 0,
         firstname: '',
@@ -163,12 +163,28 @@ class App extends React.Component {
     this.getTransactionData();
   }
 
-  //Axios get request in componentdidmountto get this information
   async getUserInfo() {
     var id = JSON.parse(localStorage.googleInfo).id;
     const response = await axios.get(`http://localhost:8080/users/${id}`);
     console.log('RESPONSE:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
+  }
+
+  async getAccountNumber(userid) {
+    try {
+      // send userid to backend
+      var acctNum = await axios.get('http://localhost:8080/getAccountNumber', { params: { userid: userid } })
+        .then(acctNum => {
+          this.setState({ orderAcctNum: acctNum.data })
+        })
+    }
+    catch (err) {
+      console.log(err);
+    }
+
+  }
+  getBuyPowerandHolding(symbol) {
+
   }
 
   handleOrderClick(orderObj) {
@@ -207,12 +223,12 @@ class App extends React.Component {
     try {
       this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
         if (scope === 'stock') {
-          var symbolData = await Axios.get('/symbolLookup', { params: { symbol: symbol } })
+          var symbolData = await axios.get('/symbolLookup', { params: { symbol: symbol } })
             .then(async (symbolData) => {
               this.setState({ stockObj: symbolData.data })
             })
             .then(async () => {
-              var stockQoute = await Axios.get('/getStockQoute', { params: { symbol: symbol } })
+              var stockQoute = await axios.get('/getStockQoute', { params: { symbol: symbol } })
               // console.log(stockQoute)
               if (!stockQoute.data.Note) {
                 this.setState({ qouteData: stockQoute.data['Global Quote'] })
@@ -228,7 +244,7 @@ class App extends React.Component {
         }
         else if (scope === 'crypto') {
 
-          let coinMeta = await Axios.get('/getCoinMeta', { params: { symbol: symbol } })
+          let coinMeta = await axios.get('/getCoinMeta', { params: { symbol: symbol } })
             .then(async (coinMetaData) => {
               var coinMetaArr = coinMetaData.data
               this.setState({ coinMeta: coinMetaArr[symbol] })
@@ -237,12 +253,12 @@ class App extends React.Component {
               await this.getCoinBarData(symbol)
             })
             .then(async () => {
-              let coinToday = await Axios.get('/getCoinToday', { params: { symbol: symbol } })
+              let coinToday = await axios.get('/getCoinToday', { params: { symbol: symbol } })
               //console.log(coinToday.data)
               this.setState({ coinToday: coinToday.data })
             })
             .then(async () => {
-              let coinPrevious = await Axios.get('/getCoinPrevious', { params: { symbol: symbol } })
+              let coinPrevious = await axios.get('/getCoinPrevious', { params: { symbol: symbol } })
               console.log(coinPrevious.data.results)
               this.setState({ coinPrevious: coinPrevious.data.results })
             })
@@ -273,7 +289,7 @@ class App extends React.Component {
           requestOptions.params.toDate = timeRange.toDate
         })
         .then(async () => {
-          var coinBar = await Axios.get('/getCoinBar', requestOptions)
+          var coinBar = await axios.get('/getCoinBar', requestOptions)
           this.setState({ coinBarData: coinBar.data.results })
         })
 
@@ -298,7 +314,7 @@ class App extends React.Component {
               timeframe: timeframe
             }
           }
-          var barData = await Axios.get('/getBarData', requestOptions)
+          var barData = await axios.get('/getBarData', requestOptions)
           this.setState({ barData: barData.data })
         })
 

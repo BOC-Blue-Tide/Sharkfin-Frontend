@@ -27,7 +27,8 @@ const stats = (props) => {
 
   useEffect(() => {
     (async () => {
-      if (qouteData) {
+
+      if (qouteData !== undefined && Object.keys(qouteData).length > 0) {
         if (qouteData['06. volume'].length > 0) {
           let formattedVolume = await helpers.statsFormatter(qouteData['06. volume'])
           setVolume(formattedVolume)
@@ -39,7 +40,7 @@ const stats = (props) => {
   return (
     <>
       <div className="stats-title">Stats</div>
-      {props.stockObj && props.qouteData ?
+      {stockObj && qouteData ?
         <Stack direction="row" spacing={1}>
           <List dense={true}>
             <ListItem>

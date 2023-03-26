@@ -133,47 +133,24 @@ class App extends React.Component {
       orderObj: null,
       orderAcctNum: null,
       userInfo: {
-        userId: 0,
-        firstName: '',
-        lastName: '',
-        userName: '',
+        user_id: 0,
+        firstname: '',
+        lastname: '',
+        username: '',
         email: '',
         bank: '',
-        accountNumber: 0,
-        profilePic: ''
+        account_number: 0,
+        profilepic_url: ''
       },
       transactionData: [],
       logged_email: ''
     }
     this.getTransactionData = this.getTransactionData.bind(this);
+    this.getUserInfo = this.getUserInfo.bind(this);
+    console.log('STATE:', this.state.userInfo);
   }
 
-  //Axios get request in componentdidmountto get this information
-  async updateUserInfo() {
-    var id = localStorage.getItem("id")
-    var request = {
-      headers: {
-        "user_id": id
-      }
-    }
 
-    //add axios get request using userid (stored in local storage) and set state for userInfo
-    axios.get('/user', request);
-    // const savedUser = JSON.parse(localStorage.getItem("user") || "null");
-
-    let updatedUserInfo = {
-      firstName: "Fred",
-      lastName: "Flinstone",
-      userName: "Dhalper",
-      email: "Fred@test.org",
-      bank: "CITI Bank",
-      accountNumber: "1",//"1234", changed for portfolio testing
-      profilePic: "../../../dist/mockProfile.png"
-    }
-    this.setState({ userInfo: updatedUserInfo })
-    console.log(this.state.userInfo);
-
-  }
 
   // componentDidMount() { // for development purpose only
   //   this.getData('msft', 'stock', 'search')
@@ -182,8 +159,15 @@ class App extends React.Component {
 
   componentDidMount() {
     this.checkLoginState();
-    this.updateUserInfo();
+    this.getUserInfo();
     this.getTransactionData();
+  }
+
+  async getUserInfo() {
+    var id = JSON.parse(localStorage.googleInfo).id;
+    const response = await axios.get(`http://localhost:8080/users/${id}`);
+    console.log('RESPONSE:', response.data[0]);
+    this.setState({ userInfo: response.data[0] })
   }
 
   async getAccountNumber(userid) {
@@ -286,8 +270,6 @@ class App extends React.Component {
     }
   }
 
-
-
   async getCoinBarData(symbol) {
     try {
       var requestOptions = {
@@ -320,7 +302,6 @@ class App extends React.Component {
 
   }
 
-
   async getBarData(symbol, start, timeframe) {
     try {
       // make sure start day is a business day
@@ -343,7 +324,6 @@ class App extends React.Component {
       this.setState({ errorMsg: 'Something went wrong.' })
     }
   }
-
 
   updateUser = (user) => {
     this.setState({ user: user });
@@ -383,7 +363,7 @@ class App extends React.Component {
 
     if (!this.state.logged_email) {
       return (
-        <Login updateEmail={this.updateEmail} user={this.state.logged_email} />
+        <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo}/>
       )
     } else {
       return (
@@ -414,8 +394,8 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio accountNum={this.state.userInfo.accountNumber}/>} />
-              <Route path="/accountInfo" element={<AccountInfo updateUserInfo={this.updateUserInfo} userInfo={this.state.userInfo}/>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} accountNum={this.state.userInfo.accountNumber}/>} />
+              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />

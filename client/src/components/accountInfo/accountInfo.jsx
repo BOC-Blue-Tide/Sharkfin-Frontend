@@ -8,6 +8,7 @@ import axios from 'axios';
 
 function AccountInfo(props) {
 
+   // console.log(props);
    const [edit, setEdit] = useState(false);
 
    let remainingFunds = 400;
@@ -21,7 +22,7 @@ function AccountInfo(props) {
       bank: props.userInfo.bank,
       accountNumber: props.userInfo.accountNumber
     });
-  
+
 
    const style = {
       gridCard: {
@@ -59,14 +60,14 @@ function AccountInfo(props) {
 
    const handleSubmit = async (event) => {
       event.preventDefault();
-    
+
       // Create a new FormData object
       const formData = new FormData();
-    
+
       // Append the user information and image file to the FormData object
       formData.append('userInfo', JSON.stringify(userInfo));
       formData.append('profilePic', userInfo.profilePic);
-    
+
       try {
         // Send an axios post request with the FormData object
         const response = await axios.post('/api/updateUserInfo', formData, {

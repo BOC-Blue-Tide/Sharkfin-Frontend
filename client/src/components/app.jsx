@@ -131,7 +131,7 @@ class App extends React.Component {
       coinToday: null,
       coinPrevious: null,
       orderObj: null,
-      orderAcctNum: null,
+      assetData: null,
       userInfo: {
         user_id: 0,
         firstname: '',
@@ -163,6 +163,15 @@ class App extends React.Component {
     this.getTransactionData();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+
+    if (prevState.userInfo.email !== this.state.userInfo.email) {
+      console.log('trigger')
+      this.getAssetData(this.state.userInfo.user_id)
+    }
+
+  }
+
   //Axios get request in componentdidmountto get this information
   async getUserInfo() {
     var id = JSON.parse(localStorage.googleInfo).id;
@@ -171,20 +180,17 @@ class App extends React.Component {
     this.setState({ userInfo: response.data[0] })
   }
 
-  async getAccountNumber(userid) {
+  async getAssetData(userid) {
     try {
       // send userid to backend
-      var acctNum = await axios.get('http://localhost:8080/getAccountNumber', { params: { userid: userid } })
-        .then(acctNum => {
-          this.setState({ orderAcctNum: acctNum.data })
-        })
+      var assetData = await axios.get('http://localhost:8080/getAssetData', { params: { userid: userid } })
+      // .then(acctNum => {
+      //   this.setState({ assetData: assetData.data })
+      // })
     }
     catch (err) {
       console.log(err);
     }
-
-  }
-  getBuyPowerandHolding(symbol) {
 
   }
 
@@ -364,7 +370,7 @@ class App extends React.Component {
 
     if (!this.state.logged_email) {
       return (
-        <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo}/>
+        <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo} />
       )
     } else {
       return (
@@ -391,14 +397,14 @@ class App extends React.Component {
             <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
           </div> */}
 
-          {/* <AddFriends />
+            {/* <AddFriends />
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*//>} />
-              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*/ />} />
+              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
-              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
+              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>

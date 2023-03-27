@@ -51,7 +51,6 @@ const BankSearch = (props) => {
         }
         setTimeout(() => {
             setShowSearch(false);
-            props.handleBankInput(searchQuery)
         }, 200);
     };
 
@@ -81,7 +80,7 @@ const BankSearch = (props) => {
             <Card className="search">
                 {showSearch &&
                     bankList.map((bank, index) => (
-                        <Typography key={index} variant="body2" onClick={() => setSearchQuery(bank.data.NAME)} component="div">
+                        <Typography key={index} variant="body2" onClick={() => {setSearchQuery(bank.data.NAME); props.handleBankInput(bank.data.NAME)}} component="div">
                             {bank.data.NAME} ({bank.data.ID})
                         </Typography>
                     ))}

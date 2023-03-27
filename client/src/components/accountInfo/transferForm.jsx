@@ -17,14 +17,15 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Graphic from '../../../dist/sharkfin-graphic.png';
 import Logo from '../../../dist/logo-dark.png';
-import BankSearch from './bankSearch.jsx'
+import BankSearch from './bankSearch.jsx';
+import axios from 'axios';
 
-let userInfo = {
-    firstName: 'Daniel',
-    lastName: 'Halper',
-    userName: 'Dhalper',
-    email: 'Dhalper@test.org',
-};
+// let userInfo = {
+//     firstName: 'Daniel',
+//     lastName: 'Halper',
+//     userName: 'Dhalper',
+//     email: 'Dhalper@test.org',
+// };
 
 const style = {
     gridCard: {
@@ -48,8 +49,7 @@ const style = {
 
 
 
-function TransferForm() {
-
+function TransferForm(props) {
     const location = useLocation();
     const propsData = location.state || {};
     const [page, setPage] = useState(propsData.page || 1);
@@ -80,13 +80,23 @@ function TransferForm() {
         }
     };
 
-    const handleBankSubmit = () => { 
-        //Post request here to user's table
-        console.log("Bank:", bank, "Account Number", accountNumber);
-        setPage(page + 1)
+    const handleBankSubmit = () => {
+        let bankInfo = {
+            bank: bank,
+            account_number: accountNumber
+        }
+        axios.post(`http://localhost:8080/users/${props.userInfo.user_id}/update/bank`, bankInfo)
+        .then((result) => {
+            console.log(result);
+            props.getUserInfo();
+            setPage(page + 1);
+        })
+        .catch((err) => {
+            console.log('Something went wrong...', err);
+        })
     };
 
-    const handleTransferSubmit = () => { 
+    const handleTransferSubmit = () => {
         //Post request here to user's table
         console.log( 'Transfer Amount', transferAmount);
         setPage(page + 1)
@@ -94,7 +104,7 @@ function TransferForm() {
 
     useEffect(() => {
         setIsButtonDisabled(
-            routingNumber === 0 || 
+            routingNumber === 0 ||
             accountNumber === 0 ||
             swiftCode === "" ||
             errors.routingNumber ||
@@ -232,7 +242,7 @@ const OnboardingSlide = () => {
         return (
             <Box key="firstPage" display="flex" flexDirection="column" sx={style.gridCard}>
                 <Typography variant="h2" sx={style.headerText}>
-                    Let's get some info, {userInfo.firstName}
+                    Let's get some info, {props.userInfo.firstname}
                 </Typography>
 
                 <Grid sx={{ marginBottom: '30px' }} container spacing={2}>
@@ -240,14 +250,14 @@ const OnboardingSlide = () => {
                         <TextField
                             id="first-name-input-1"
                             label="Legal First Name"
-                            defaultValue={userInfo.firstName}
+                            defaultValue={props.userInfo.firstname}
                         />
                     </Grid>
                     <Grid item xs={6} sm={6}>
                         <TextField
                             id="last-name-input-2"
                             label="Legal Last Name"
-                            defaultValue={userInfo.lastName}
+                            defaultValue={props.userInfo.lastname}
                         />
                     </Grid>
                 </Grid>
@@ -350,7 +360,7 @@ const OnboardingSlide = () => {
     let currentPage = (
         <>
             { page === -1 ? (
-                <OnboardingSlide/> 
+                <OnboardingSlide/>
             ) : page === 1 ? (
                 firstPage()
             ) : page === 2 ? (
@@ -382,7 +392,7 @@ const OnboardingSlide = () => {
                     </Grid>
                     <Box sx={{ width:'100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
     <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
-</Box>                
+</Box>
 </Grid>
             </Grid>
         </Box>

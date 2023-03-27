@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
-const Placement = () => {
+const Placement = (props) => {
   const [friendBoard, setFriendBoard] = useState([])
   const [userId, setUserId] = useState(67)
   // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
@@ -75,7 +75,7 @@ const Placement = () => {
           <div className="profile-box">
 
             {/* <img src={ profilePic }></img> */}
-            <img src={props.user.profilepic_url}></img>
+            <img src={profilePic}></img>
           </div>
 
         </div>

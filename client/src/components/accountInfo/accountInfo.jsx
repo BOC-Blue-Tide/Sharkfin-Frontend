@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import ProfilePic from '../../../dist/mockProfile.png';
 import axios from 'axios';
+const imagebb_key = process.env.IMAGEBB_KEY;
 
 function AccountInfo(props) {
    const [edit, setEdit] = useState(false);
@@ -17,10 +18,20 @@ function AccountInfo(props) {
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
       username: props.userInfo.username,
-      profilepic_url: props.userInfo.profilepic_url,
+      profilepic_url: JSON.parse(localStorage.getItem("googleInfo")).picture,
       bank: props.userInfo.bank,
       account_number: props.userInfo.account_number
     });
+
+    //image upload state
+    const [imageUrl, setImageUrl] = useState('');
+    //update state when get the upload photo url
+    useEffect(() => {
+      setUserInfo({
+         ...userInfo,
+         profilepic_url: imageUrl
+       });
+    }, [imageUrl])
 
 
    const style = {
@@ -107,6 +118,14 @@ function AccountInfo(props) {
       document.getElementById("profile-picture-input").click();
    };
 
+   const handleImageChange = async (event) => {
+      const formData = new FormData();
+      formData.append('image', event.target.files[0]);
+      formData.append('key', imagebb_key);
+      const response = await axios.post('https://api.imgbb.com/1/upload', formData);
+      setImageUrl(response.data.data.display_url);
+   };
+
    return (
       <form onSubmit={handleSubmit}>
 
@@ -163,14 +182,15 @@ function AccountInfo(props) {
                   <Tooltip title={edit? "Change your profile picture": "Visible to other users"} arrow>
                      {/* Add onClick event to the Avatar */}
                      <div sx={style.profilePicContainer} onClick={edit? handleAvatarClick: null}>
-                        <Avatar sx={style.profilePic} alt="Profile picture" src={userInfo.profilepic_url} />
+                        {/* change src if there is updated */}
+                        <Avatar sx={style.profilePic} alt="Profile picture" src={imageUrl || userInfo.profilepic_url} />
                      </div>
                   </Tooltip>
                   {/* Add hidden input for file selection */}
                   <input
                      type="file"
                      id="profile-picture-input"
-                     onChange={handleFileInputChange}
+                     onChange={handleImageChange}
                      accept="image/*"
                      hidden
                   />

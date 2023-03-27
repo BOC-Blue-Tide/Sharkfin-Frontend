@@ -9,6 +9,7 @@ import AllocationChart from '../portfolio/allocationChart.jsx';
 
 const LeaderBoard = () => {
   const [dayLeft, setdayLeft] = useState(0)
+  const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
 
     useEffect(() => {
       var day = daysUntilNextQuarter()
@@ -30,7 +31,7 @@ const LeaderBoard = () => {
           <SideBar/>
         </div>
         <div className="info-container">
-          <div className="investment-profile-leaderboard">
+          {/* <div className="investment-profile-leaderboard">
             <h2>My Net Worth</h2>
             <PortfolioChart/>
           </div>
@@ -41,7 +42,7 @@ const LeaderBoard = () => {
           <div className="pie-chart-leaderboard">
             <h2>My Asset Allocation</h2>
             <AllocationChart/>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

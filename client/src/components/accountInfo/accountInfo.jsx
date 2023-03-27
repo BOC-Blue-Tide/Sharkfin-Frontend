@@ -105,6 +105,8 @@ function AccountInfo(props) {
       formData.append('key', imagebb_key);
       const response = await axios.post('https://api.imgbb.com/1/upload', formData);
       setImageUrl(response.data.data.display_url);
+   }
+
    const accountNumberTrimmer = (number) => {
           return number.slice(-4);
    };

@@ -287,12 +287,11 @@ input[type="number"] {
 }
 
 .empty-sidebar {
-  height: 409px;
+  height: 370px;
   text-align: center;
   align-content: center;
   display: grid;
   background-color: #E4E4E4;
-  margin-bottom: 20px;
 }
 
 .mainpage-tf {

@@ -64,16 +64,25 @@ const Person = (props) => {
   tableChart += selfHTML
   tableChart += "</table>"
 
+  var noFriendTable = `<table class="fg-table"><tr class="self-tr">
+  <th><h6>-</h6></th>
+  <th><div class = "small-profile-box"><img src=${JSON.parse(localStorage.getItem("googleInfo")).picture}></img></div></th>
+  <th><h6>${JSON.parse(localStorage.getItem("googleInfo")).firstname}</h6></th>
+  <th></th><th><h6 style="color:green;">0%</h6></th>
+  </tr></table>`
+
   if (props.data.length === 0) {
     return (
-      <p>Rendering</p>
+      <>
+      <div className="leader-table" dangerouslySetInnerHTML={{__html: noFriendTable}} />
+      </>
     )
   } else {
     return (
-      <div>
+      <>
          <div className="leader-table" dangerouslySetInnerHTML={{__html: tableChart}} />
 
-      </div>
+      </>
 
     )
   }

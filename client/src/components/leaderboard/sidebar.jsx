@@ -20,8 +20,8 @@ const SideBar = () => {
   const [global, setGlobal] = useState(false)
   const [friendPage, setFriendPage] = useState(1)
   const [globalPage, setGlobalPage] = useState(1)
-  const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, name: null, gain: null})
-  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
+  const [selfFriendPlacement, setSelfFriendPlacement] = useState({})
+  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({})
 
   useEffect(() => {
     getFriendBoardData(userId)
@@ -157,7 +157,12 @@ const SideBar = () => {
   };
 
 
-
+  var noFriendTable = `<table class="fg-table"><tr class="self-tr">
+  <th><h6>-</h6></th>
+  <th><div class = "small-profile-box"><img src=${JSON.parse(localStorage.getItem("googleInfo")).picture}></img></div></th>
+  <th><h6>${JSON.parse(localStorage.getItem("googleInfo")).firstname}</h6></th>
+  <th></th><th><h6 style="color:green;">0%</h6></th>
+  </tr></table>`
 
   return (
     <div className = "main-wrapper">
@@ -168,8 +173,11 @@ const SideBar = () => {
       <div>
        {friend &&
           <>{friendBoard.length === 0 ? (
-            <> <div className="empty-sidebar">No data available</div>
-            <div className="selective-bar"><Pagination count={10} disabled /></div></>
+            <>
+            <div className="empty-sidebar">Add more friend!</div>
+            <div className="leader-table" dangerouslySetInnerHTML={{__html: noFriendTable}} />
+            <div className="selective-bar"><Pagination count={10} disabled /></div>
+            </>
           ) : (
           <div>
             <div className="board-table">
@@ -189,7 +197,7 @@ const SideBar = () => {
         }
         {global &&
           <>{globalBoard.length === 0 ? (
-            <> <div className="empty-sidebar">No data available</div>
+            <> <div className="empty-sidebar">Start Adding Friends!</div>
             <div className="selective-bar"><Pagination count={10} disabled /></div></>
             ) : (
             <div>

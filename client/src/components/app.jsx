@@ -397,7 +397,7 @@ class App extends React.Component {
             <Routes>
               <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*//>} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
-              <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo}/>} />
               <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={

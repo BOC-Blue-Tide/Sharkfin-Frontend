@@ -6,8 +6,9 @@ import {daysUntilNextQuarter} from '../helper/leaderboardHelper.js'
 import PositionTable from '../portfolio/positionTable.jsx';
 import PortfolioChart from '../portfolio/portfolioChart.jsx';
 import AllocationChart from '../portfolio/allocationChart.jsx';
+import Portfolio from '../portfolio/portfolio.jsx';
 
-const LeaderBoard = () => {
+const LeaderBoard = (props) => {
   const [dayLeft, setdayLeft] = useState(0)
   const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
 
@@ -31,6 +32,7 @@ const LeaderBoard = () => {
           <SideBar/>
         </div>
         <div className="info-container">
+        <Portfolio user={props.user} leaderBoardPage={true}/>
           {/* <div className="investment-profile-leaderboard">
             <h2>My Net Worth</h2>
             <PortfolioChart/>

@@ -8,6 +8,7 @@ import mockData from '../../../../mockData.js';
 import ChatList from './chats.jsx';
 import FriendListChat from './friendlist.jsx';
 import axios from 'axios';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -38,7 +39,7 @@ const chatApp = function() {
       message: message,
       datetime: date.toUTCString()
     }
-    axios.post('http://localhost:8080/chat', data)
+    axios.post(`http://${SERVER_URL}/chat`, data)
     .then((response) => {
       console.log(response);
       setChatData([...chatData, data]);
@@ -50,8 +51,8 @@ const chatApp = function() {
   }
 
   useEffect(() => {
-    let getChatLog = axios.get('http://localhost:8080/chat');
-    let getFriendList = axios.get('http://localhost:8080/chat/friends');
+    let getChatLog = axios.get(`http://${SERVER_URL}/chat`);
+    let getFriendList = axios.get(`http://${SERVER_URL}/chat/friends`);
 
     Promise.all([getChatLog, getFriendList])
     .then(([response1, response2]) => {

@@ -8,6 +8,7 @@ import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
 const Placement = (props) => {
+  console.log(props);
   const [friendBoard, setFriendBoard] = useState([])
   // const [userId, setUserId] = useState(1)
   const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
@@ -15,7 +16,7 @@ const Placement = (props) => {
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
-  const [profilePic, setProfilePic] = useState(JSON.parse(localStorage.getItem("googleInfo")).picture)
+  const [profilePic, setProfilePic] = useState(props.user.profilepic_url)
   // from app.jsx
   const [userInfo, setUserInfo] = useState({})
 
@@ -71,7 +72,7 @@ const Placement = (props) => {
   }
 
   const checkProfilePic = () => {
-    if (userInfo.profilepic_url !== undefined) {
+    if (profilePic !== undefined) {
       setProfilePic(userInfo.profilepic_url)
     }
   }

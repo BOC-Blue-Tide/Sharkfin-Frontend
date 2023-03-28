@@ -4,6 +4,7 @@ import {friends, searchResults} from  '../../../../mockData_friends.js';
 import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const AddFriends = (props) => {
   const [searchInput, setSearchInput] = useState('');
@@ -12,7 +13,7 @@ const AddFriends = (props) => {
 
   useEffect(() => {
     let userId = JSON.parse(localStorage.getItem("googleInfo")).id;
-    axios.get('http://localhost:8080/getRecommendedFriends', {params: {id: userId}})
+    axios.get(`http://${SERVER_URL}/getRecommendedFriends`, {params: {id: userId}})
     .then((response) => {
       console.log('get recommended friends', response);
       setFriendsList(response.data.rows);
@@ -29,7 +30,7 @@ const AddFriends = (props) => {
     e.preventDefault();
     if (searchInput.length > 0) {
       console.log('search words:', searchInput);
-      axios.get('http://localhost:8080/getUserByEmail', {params: {email: searchInput}})
+      axios.get(`http://${SERVER_URL}/getUserByEmail`, {params: {email: searchInput}})
       .then((response) => {
         setFriendsList(response.data.rows);
         setShowList(false);
@@ -44,7 +45,7 @@ const AddFriends = (props) => {
 
   const handleRequest = (e) => {
     let friendId = JSON.parse(localStorage.getItem("googleInfo")).id;
-    axios.post('http://localhost:8080/addFriend', {data: {user_id: e.target.id, friend_id: friendId}})
+    axios.post(`http://${SERVER_URL}/addFriend`, {data: {user_id: e.target.id, friend_id: friendId}})
     .then((response) => {
       const index = friendsList.findIndex((item) => {
         return item.id === Number(e.target.id);

@@ -1,16 +1,17 @@
 require('dotenv').config();
 const axios = require('axios');
 const backurl = process.env.BACKEND_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 module.exports = {
-  getPChart : async (req, res) => {
+  getPChart: async (req, res) => {
     var accountNum = req.query.accountNum;
     var timeWindow = req.query.timeSelect;
     var paramsC = {
-      'accountNum' : accountNum,
-      'timeWindow' : timeWindow
+      'accountNum': accountNum,
+      'timeWindow': timeWindow
     };
-    await axios.get(`http://localhost:4000/pchart`, {params: paramsC})
+    await axios.get(`http://${SERVER_URL}/pchart`, {params: paramsC})
       .then((result) => {
         res.status(200).send(result.data);
       })
@@ -18,12 +19,12 @@ module.exports = {
         console.log(err);
       })
   },
-  getPAllocationAndPosition : async (req, res) => {
+  getPAllocationAndPosition: async (req, res) => {
     var accountNum = req.query.accountNum;
     var paramsAP = {
-      'accountNum' : accountNum
+      'accountNum': accountNum
     };
-    await axios.get(`http://localhost:4000/pallocation`, {params: paramsAP})
+    await axios.get(`http://${SERVER_URL}/pallocation`, {params: paramsAP})
       .then((result) => {
         res.status(200).send(result.data);
       })

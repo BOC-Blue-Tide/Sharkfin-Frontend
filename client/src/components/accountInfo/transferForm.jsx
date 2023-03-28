@@ -19,6 +19,7 @@ import Graphic from '../../../dist/sharkfin-graphic.png';
 import Logo from '../../../dist/logo-dark.png';
 import BankSearch from './bankSearch.jsx';
 import axios from 'axios';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 // let userInfo = {
 //     firstName: 'Daniel',
@@ -85,7 +86,7 @@ function TransferForm(props) {
             bank: bank,
             account_number: accountNumber
         }
-        axios.post(`http://localhost:8080/users/${props.userInfo.user_id}/update/bank`, bankInfo)
+        axios.post(`http://${SERVER_URL}/users/${props.userInfo.user_id}/update/bank`, bankInfo)
         .then((result) => {
             console.log(result);
             props.getUserInfo();

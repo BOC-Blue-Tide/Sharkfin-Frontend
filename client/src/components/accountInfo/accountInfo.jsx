@@ -20,7 +20,7 @@ function AccountInfo(props) {
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
       username: props.userInfo.username,
-      profilepic_url: JSON.parse(localStorage.getItem("googleInfo")).picture,
+      profilepic_url: props.userInfo.profilepic_url,
       bank: props.userInfo.bank,
       account_number: props.userInfo.account_number
     });

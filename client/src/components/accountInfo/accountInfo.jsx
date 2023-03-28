@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import ProfilePic from '../../../dist/mockProfile.png';
 import axios from 'axios';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 function AccountInfo(props) {
+
    const [edit, setEdit] = useState(false);
 
    let remainingFunds = 400;
@@ -62,7 +64,7 @@ function AccountInfo(props) {
 
       if (!edit) {
          console.log(userInfo);
-         axios.post(`http://localhost:8080/users/${userInfo.user_id}/update`, userInfo)
+         axios.post(`http://${SERVER_URL}/users/${userInfo.user_id}/update`, userInfo)
          .then((result) => {
             console.log(result);
             props.getUserInfo();

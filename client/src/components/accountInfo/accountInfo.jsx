@@ -24,7 +24,7 @@ function AccountInfo(props) {
     });
 
     //image upload state
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState(userInfo.profilepic_url);
     //update state when get the upload photo url
     useEffect(() => {
       setUserInfo({
@@ -168,7 +168,7 @@ function AccountInfo(props) {
                      {/* Add onClick event to the Avatar */}
                      <div sx={style.profilePicContainer} onClick={edit? handleAvatarClick: null}>
                         {/* change src if there is updated */}
-                        <Avatar sx={style.profilePic} alt="Profile picture" src={imageUrl || userInfo.profilepic_url} />
+                        <Avatar sx={style.profilePic} alt="Profile picture" src={imageUrl || JSON.parse(localStorage.getItem("googleInfo")).picture} />
                      </div>
                   </Tooltip>
                   {/* Add hidden input for file selection */}

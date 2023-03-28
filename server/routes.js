@@ -9,6 +9,7 @@ const jwt_decode = require("jwt-decode");
 //leaderBoard
 router.get('/friendBoard', controllers.leaderBoard.getFriendBoard)
 router.get('/globalBoard', controllers.leaderBoard.getGlobalBoard)
+router.get('/getuserdetail', controllers.leaderBoard.getuserdetail)
 
 // get market data
 router.get('/symbolLookup', controllers.getAPIData.symbolLookup)
@@ -30,9 +31,10 @@ router.post('/logout', (req, res) => {
 
 router.post('/login', (req, res) => {
   // console.log(req.body);
+  //google login success
   controllers.login.verify(req.body.credential)
   .then((resp)=>{
-    // console.log('verify success', resp);
+    console.log('verify success', resp);
   })
   .catch((err)=> {
     console.log('verify failed', err);
@@ -63,19 +65,19 @@ router.post('/login', (req, res) => {
         axios.post('http://localhost:8080/addUser', {data: newUser})
         .then((response1) => {
           console.log('login, addUser resp', response1.data.rows[0].id)
-          //res.send(response1.data.rows[0].id);
+          res.send(response1.data.rows[0].id);
           let data = response1.data.rows[0].id;
           res.json(data);
         })
         .catch((err) => {
           console.log('post new user error', err);
-          res.json(0); // TODO: remove it later.
+          res.json(1); // TODO: remove it later.
         })
       }
     })
     .catch((err) => {
       console.log('getUserByEmail error', err);
-      res.json(0); // TODO: remove it later.
+      res.json(1); // TODO: remove it later.
     });
   })
 })

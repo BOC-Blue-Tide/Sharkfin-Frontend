@@ -24,7 +24,7 @@ const SideBar = () => {
   const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
 
   useEffect(() => {
-    getFriendBoardData()
+    getFriendBoardData(userId)
     getGlobalBoardData()
     // getFriendRequestNum(userId)
   }, [])
@@ -42,8 +42,8 @@ const SideBar = () => {
     .catch(err => console.log('getFriendRequestsByID', err));
   }
 
-  const getFriendBoardData = async () => {
-    await Axios.get('/friendBoard')
+  const getFriendBoardData = async (userID) => {
+    await Axios.get('/friendBoard', {params: {"id" : userID}})
     .then((response) => {
       var data = response.data
       setFriendBoard(data)
@@ -102,23 +102,27 @@ const SideBar = () => {
   //check self placement
   const checkFriendPlacement = (id) => {
     for (var x = 0; x < friendBoard.length; x ++) {
+      let newFriendBoard = JSON.parse(JSON.stringify(friendBoard[x]));
       if (friendBoard[x].id == id) {
-        friendBoard[x].placement = x + 1
-        setSelfFriendPlacement(friendBoard[x])
+        newFriendBoard.placement = x + 1
+        setSelfFriendPlacement(newFriendBoard)
+        break
       } else {
-        //update User info
-        setSelfFriendPlacement({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
+        newFriendBoard.placement = undefined
+        setSelfFriendPlacement(newFriendBoard)
       }
     }
   }
   const checkGlobalPlacement = (id) => {
     for (var x = 0; x < globalBoard.length; x ++) {
+      let newGlobalBoard = JSON.parse(JSON.stringify(globalBoard[x]));
       if (globalBoard[x].id == id) {
-        globalBoard[x].placement = x + 1
-        setSelfGlobalPlacement(globalBoard[x])
+        newGlobalBoard.placement = x + 1
+        setSelfGlobalPlacement(newGlobalBoard)
+        break
       } else {
-         //update User info
-        setSelfGlobalPlacement({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
+        newGlobalBoard.placement = undefined
+        setSelfGlobalPlacement(newGlobalBoard)
       }
     }
   }

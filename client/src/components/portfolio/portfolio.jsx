@@ -56,7 +56,7 @@ const Portfolio = (props) => {
     <div className='portfolio-container'>
       <div className='greeting-net-worth-chart'>
         <div className="greeting-leaderboard">
-          <Placement user={props.user}/>
+          <Placement/>
         </div>
         <div className='portfolio-my-net-worth-chart'>
           <h2>My Net Worth</h2>

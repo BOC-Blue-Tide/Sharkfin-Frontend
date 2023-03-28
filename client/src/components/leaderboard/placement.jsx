@@ -9,20 +9,21 @@ import Topfive from './topfive.jsx';
 
 const Placement = (props) => {
   const [friendBoard, setFriendBoard] = useState([])
-  const [userId, setUserId] = useState(67)
-  // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setUserId] = useState(1)
+  const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
   const [profilePic, setProfilePic] = useState(JSON.parse(localStorage.getItem("googleInfo")).picture)
   // from app.jsx
-  const [userInfo, setUserInfo] = useState({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
+  const [userInfo, setUserInfo] = useState({})
 
 
 
   useEffect(() => {
     getFriendBoardData(userId)
+    getSelfInfo(userId)
     setQuarterLeft(daysUntilNextQuarter())
   }, [])
 
@@ -34,24 +35,35 @@ const Placement = (props) => {
 
 
   const addSelfPlacement = (id) => {
-    console.log(friendBoard)
-    for (var x = 0; x < friendBoard.length; x ++) {
-      if (friendBoard[x].id == id) {
-        if (x == 0) {
-          setSelfPlacement("1st")
-        } else if (x == 1) {
-          setSelfPlacement("2nd")
-        } else if (x == 2) {
-          setSelfPlacement("3rd")
-        } else {
-          setSelfPlacement(`${x + 1}th`)
+    if (friendBoard.length > 0) {
+      for (var x = 0; x < friendBoard.length; x ++) {
+        if (friendBoard[x].id == id) {
+          if (x == 0) {
+            setSelfPlacement("1st")
+          } else if (x == 1) {
+            setSelfPlacement("2nd")
+          } else if (x == 2) {
+            setSelfPlacement("3rd")
+          } else {
+            setSelfPlacement(`${x + 1}th`)
+          }
         }
       }
     }
   }
 
+  const getSelfInfo = async (id) => {
+    await Axios.get('/getuserdetail', {params: {"id": id}})
+    .then((response) => {
+      console.log(response.data, 'userinfo')
+      var data = response.data
+      setUserInfo(data)
+    })
+  }
+
   const getFriendBoardData = async (id) => {
-    await Axios.get('/friendBoard')
+
+    await Axios.get('/friendBoard', {params: {"id" : id}})
     .then((response) => {
       var data = response.data
         setFriendBoard(data)

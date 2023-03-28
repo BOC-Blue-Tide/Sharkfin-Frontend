@@ -11,21 +11,21 @@ const Person = (props) => {
     var selfHTML = `<tr class="self-tr">
     <th><h6>${props.selfPlacement.placement}.</h6></th>
     <th><div class = "small-profile-box"><img src=${props.selfPlacement.profilepic_url}></img></div></th>
-    <th><h6>${props.selfPlacement.first_name}</h6></th>
+    <th><h6>${props.selfPlacement.firstname}</h6></th>
     ${selfLine}
     </tr>`
   } else {
     var selfHTML = `<tr class="self-tr">
     <th><h6>-</h6></th>
     <th><div class = "small-profile-box"><img src=${props.selfPlacement.profilepic_url}></img></div></th>
-    <th><h6>${props.selfPlacement.first_name}</h6></th>
+    <th><h6>${props.selfPlacement.firstname}</h6></th>
     ${selfLine}
     </tr>`
   }
   var tableChart = `<table class="fg-table">`
   for (var x = 0; x < props.data.length; x ++) {
     var first = (props.placement - 1) * 10 + x + 1
-    var second = props.data[x].first_name
+    var second = props.data[x].firstname
     var number = Number(props.data[x].performance_percentage)
     var photo = props.data[x].profilepic_url
     var third = ""

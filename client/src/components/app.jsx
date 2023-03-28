@@ -170,7 +170,6 @@ class App extends React.Component {
     }
   }
 
-  //Axios get request in componentdidmountto get this information
   async getUserInfo() {
     var id = JSON.parse(localStorage.googleInfo).id;
     console.log(id);
@@ -228,7 +227,7 @@ class App extends React.Component {
     this.setState({ orderObj: orderObj });
     axios({
       method: 'post',
-      url: `http://${REACT_APP_SERVER_URL}/transactions`,
+      url: `http://${SERVER_URL}/transactions`,
       data: orderObj,
     });
   }

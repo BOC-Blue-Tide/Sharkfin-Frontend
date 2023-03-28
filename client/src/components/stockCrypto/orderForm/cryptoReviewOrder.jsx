@@ -100,10 +100,6 @@ const cryptoReviewOrder = (props) => {
         </Typography>
         <Stack spacing={2}>
           <Stack direction="row" spacing={1}>
-            <span>Account: </span>
-            <span>12345678</span>
-          </Stack>
-          <Stack direction="row" spacing={1}>
             <span>Symbol: </span>
             <span>{coinMeta[0].symbol}</span>
           </Stack>

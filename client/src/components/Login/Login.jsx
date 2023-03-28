@@ -5,14 +5,14 @@ import Checkbox from '@mui/material/Checkbox';
 import jwt_decode from "jwt-decode";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 const axios = require('axios').default;
+import { useNavigate } from 'react-router-dom';
 
-class Login extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
 
-  responseMessage = (response) => {
+
+const Login = (props) => {
+  const navigate = useNavigate()
+
+  const responseMessage = (response) => {
     var decoded = jwt_decode(response.credential);
     //console.log('success', response, decoded);
     axios.post('/login', {
@@ -22,30 +22,36 @@ class Login extends React.Component {
     .then((res) =>{
       // console.log('res.data',res, res.data);
       var googleInfo = {
-        id: res.data,
+        id: res.data.id,
         email: decoded.email,
         username: decoded.name,
         firstname: decoded.given_name,
         lastname: decoded.family_name,
         picture: decoded.picture
       };
-      this.props.updateEmail(googleInfo.email);
+      props.updateEmail(googleInfo.email);
+      console.log('login succeeds', res.data);
       localStorage.setItem("googleInfo", JSON.stringify(googleInfo));
-      this.props.getUser();
+      props.getUser();
+      if (res.data.newUser) {
+        navigate(`/transferForm`);
+      }
+
     })
     .catch((error) => {
       console.log('fail', error);
     });
 
 };
-  errorMessage = (error) => {
+
+const errorMessage = (error) => {
     console.log(error);
 };
 
-logout = () => {
+const logout = () => {
   axios.post('/logout')
   .then((response) => {
-    this.props.updateEmail('');
+    props.updateEmail('');
     localStorage.removeItem("googleInfo");
     // console.log('logout success', response);
   })
@@ -55,23 +61,23 @@ logout = () => {
 }
 
 
-  render() {
+
     return (
       <div>
         <h1>  Welcome to Shark Fin </h1>
         <div> The gamified stock market experience</div>
 
-        {!this.props.user ?
+        {!props.user ?
         (<div>
-          <GoogleLogin onSuccess={this.responseMessage.bind(this)} onError={this.errorMessage.bind(this)} />
+          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
         </div>)
-        :  <button onClick={this.logout}>Log out</button>
+        :  <button onClick={logout}>Log out</button>
 
         }
       </div>
     )
-  }
-}
+
+      }
 
 export default Login;
 

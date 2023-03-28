@@ -133,7 +133,7 @@ class App extends React.Component {
       coinToday: null,
       coinPrevious: null,
       orderObj: null,
-      orderAcctNum: null,
+      assetData: null,
       userInfo: {
         user_id: 0,
         firstname: '',
@@ -152,15 +152,22 @@ class App extends React.Component {
     console.log('STATE:', this.state.userInfo);
   }
 
-  // componentDidMount() { // for development purpose only
-  //   this.getData('msft', 'stock', 'search')
-  //   this.getBarData('msft', this.state.start, this.state.timeframe)
-  // }
 
   componentDidMount() {
     this.checkLoginState();
     this.getUserInfo();
     this.getTransactionData();
+
+    //   this.getData('msft', 'stock', 'search') // for development purpose only
+    //   this.getBarData('msft', this.state.start, this.state.timeframe) // for development purpose only
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.userInfo.email !== this.state.userInfo.email) {
+      (async () => {
+        await this.getAvailBalance(this.state.userInfo.user_id)
+      })()
+    }
   }
 
   //Axios get request in componentdidmountto get this information
@@ -172,21 +179,49 @@ class App extends React.Component {
     this.setState({ userInfo: response.data[0] })
   }
 
-  async getAccountNumber(userid) {
+  async getAvailBalance(userid) {
     try {
       // send userid to backend
-      var acctNum = await axios.get(`http://${SERVER_URL}/getAccountNumber`, { params: { userid: userid } })
-        .then(acctNum => {
-          this.setState({ orderAcctNum: acctNum.data })
+      let assetData = this.state.assetData
+      var availBalance = await axios.get(`http://${SERVER_URL}/getAvailBalance`, { params: { userid: userid } })
+        .then(availBalance => {
+          console.log(availBalance.data[0])
+          if (assetData === null) {
+            assetData = {}
+            assetData.availBalance = availBalance.data[0]
+            this.setState({ assetData: assetData })
+          } else {
+            assetData.availBalance = availBalance.data[0]
+            this.setState({ assetData: assetData })
+          }
         })
     }
     catch (err) {
       console.log(err);
     }
-
   }
-  getBuyPowerandHolding(symbol) {
 
+  async getHoldingAmount(symbol) {
+    try {
+      console.log('trigger')
+      let assetData = this.state.assetData
+      let userid = this.state.userInfo.user_id
+      var holding = await axios.get(`http://${SERVER_URL}/getHoldingAmount`, { params: { userid: userid, symbol: symbol } })
+        .then(holding => {
+          console.log('check', holding.data[0])
+          if (assetData === null) {
+            assetData = {}
+            assetData.holding = holding.data[0]
+            this.setState({ assetData: assetData })
+          } else {
+            assetData.holding = holding.data[0]
+            this.setState({ assetData: assetData })
+          }
+        })
+    }
+    catch (err) {
+      console.log(err);
+    }
   }
 
   handleOrderClick(orderObj) {
@@ -365,7 +400,7 @@ class App extends React.Component {
 
     if (!this.state.logged_email) {
       return (
-        <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo}/>
+        <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo} />
       )
     } else {
       return (
@@ -379,7 +414,7 @@ class App extends React.Component {
               rel="stylesheet"
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
-            <Header getData={this.getData.bind(this)} updateEmail={this.updateEmail} />
+            <Header getData={this.getData.bind(this)} updateEmail={this.updateEmail} getHoldingAmount={this.getHoldingAmount.bind(this)} />
 
             {/* test only, will delete later */}
             {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
@@ -392,14 +427,14 @@ class App extends React.Component {
             <img src={JSON.parse(localStorage.getItem("googleInfo")).picture} />
           </div> */}
 
-          {/* <AddFriends />
+            {/* <AddFriends />
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*//>} />
-              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*/ />} />
+              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
-              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
+              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>
@@ -415,7 +450,9 @@ class App extends React.Component {
                             barData={this.state.barData}
                             qouteData={this.state.qouteData}
                             symbol={this.state.currentSymbol}
-                            handleOrderClick={this.handleOrderClick.bind(this)} />
+                            handleOrderClick={this.handleOrderClick.bind(this)}
+
+                          />
                         </Grid>
                         <Grid item xs={4}>
                           <Order pageType={'stock'}
@@ -442,6 +479,7 @@ class App extends React.Component {
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                             handleOrderClick={this.handleOrderClick.bind(this)}
+
                           />
                         </Grid>
                         <Grid item xs={4}>

@@ -75,10 +75,12 @@ const searchBar = (props) => {
     e.preventDefault()
     if (searchInput.length > 0 && searchScope === 'Stock') {
       //console.log(searchInput)
+      props.getHoldingAmount(searchInput)
       props.getData(searchInput, searchScope)
       e.target.reset()
       navigate(`/stockContent`);
     } else if (searchInput.length > 0 && searchScope === 'Crypto') {
+      props.getHoldingAmount(searchInput)
       props.getData(searchInput, searchScope)
       e.target.reset()
       navigate(`/cryptoContent`);

@@ -69,13 +69,13 @@ router.post('/login', (req, res) => {
         })
         .catch((err) => {
           console.log('post new user error', err);
-          res.json({id: 0, newUser: false});
+          res.json({id: 1, newUser: false});
         })
       }
     })
     .catch((err) => {
       console.log('getUserByEmail error', err);
-      res.json({id: 0, newUser: false});
+      res.json({id: 1, newUser: false});
     });
   })
 })

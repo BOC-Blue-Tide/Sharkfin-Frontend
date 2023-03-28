@@ -142,7 +142,7 @@ class App extends React.Component {
         email: '',
         bank: '',
         account_number: 0,
-        profilepic_url: ''
+        profilepic_url: JSON.parse(localStorage.getItem("googleInfo")).picture
       },
       transactionData: [],
       logged_email: ''

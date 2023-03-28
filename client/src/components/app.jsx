@@ -152,6 +152,8 @@ class App extends React.Component {
 
 
   componentDidMount() {
+    console.log('pp', process.env.REACT_APP_ALPACA_KEY1)
+    console.log('dd', API_KEY)
     this.checkLoginState();
     this.getUserInfo();
     this.getTransactionData();

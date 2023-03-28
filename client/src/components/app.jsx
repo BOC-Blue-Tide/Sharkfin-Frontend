@@ -9,6 +9,7 @@ const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
 const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
 const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
 //Jacinthe
 import TransactionList from './transactions/TransactionList.jsx';
@@ -33,6 +34,7 @@ import Header from './header.jsx'
 import Login from './Login/Login.jsx';
 import AddFriends from './Friends/AddFriends.jsx';
 import ViewRequests from './Friends/ViewRequests.jsx';
+
 
 const theme = createTheme({
   palette: {
@@ -171,7 +173,8 @@ class App extends React.Component {
   //Axios get request in componentdidmountto get this information
   async getUserInfo() {
     var id = JSON.parse(localStorage.googleInfo).id;
-    const response = await axios.get(`http://localhost:8080/users/${id}`);
+    console.log(id);
+    const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
   }
@@ -180,7 +183,7 @@ class App extends React.Component {
     try {
       // send userid to backend
       let assetData = this.state.assetData
-      var availBalance = await axios.get('http://localhost:8080/getAvailBalance', { params: { userid: userid } })
+      var availBalance = await axios.get(`http://${SERVER_URL}/getAvailBalance`, { params: { userid: userid } })
         .then(availBalance => {
           console.log(availBalance.data[0])
           if (assetData === null) {
@@ -203,7 +206,7 @@ class App extends React.Component {
       console.log('trigger')
       let assetData = this.state.assetData
       let userid = this.state.userInfo.user_id
-      var holding = await axios.get('http://localhost:8080/getHoldingAmount', { params: { userid: userid, symbol: symbol } })
+      var holding = await axios.get(`http://${SERVER_URL}/getHoldingAmount`, { params: { userid: userid, symbol: symbol } })
         .then(holding => {
           console.log('check', holding.data[0])
           if (assetData === null) {
@@ -225,14 +228,14 @@ class App extends React.Component {
     this.setState({ orderObj: orderObj });
     axios({
       method: 'post',
-      url: 'http://localhost:8080/transactions',
+      url: `http://${REACT_APP_SERVER_URL}/transactions`,
       data: orderObj,
     });
   }
 
   async getTransactionData() {
     try {
-      const response = await axios.get('http://localhost:8080/transactions');
+      const response = await axios.get(`http://${SERVER_URL}/transactions`);
       this.setState({ transactionData: response.data });
     } catch (err) {
       console.log(err);

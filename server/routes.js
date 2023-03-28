@@ -1,7 +1,7 @@
 require("dotenv").config();
 const router = require("express").Router();
 const multer = require('multer');
-
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const controllers = require('./controllers')
 const axios = require('axios').default;
 const jwt_decode = require("jwt-decode");
@@ -44,7 +44,7 @@ router.post('/login', (req, res) => {
     // res.json(0);
   })
   .then(() => {
-    axios.get('http://localhost:8080/getUserByEmail', {params: {email: req.body.email}})
+    axios.get(`http://${SERVER_URL}/getUserByEmail`, {params: {email: req.body.email}})
     .then((response) => {
       var userInfo = response.data.rows;
       console.log('getUserByEmail response', userInfo);
@@ -59,7 +59,7 @@ router.post('/login', (req, res) => {
           "email": decoded.email,
           "picture": decoded.picture
         }
-        axios.post('http://localhost:8080/addUser', {data: newUser})
+        axios.post(`http://${SERVER_URL}/addUser`, {data: newUser})
         .then((response1) => {
           console.log('login, addUser resp', response1.data.rows[0].id)
           let data = response1.data.rows[0].id;

@@ -4,13 +4,14 @@ import {friends, searchResults} from  '../../../../mockData_friends.js';
 import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const ViewRequests = (props) => {
   const [friendsList, setFriendsList] = useState([]);
 
   useEffect(() => {
     let userId = JSON.parse(localStorage.getItem("googleInfo")).id;
-    axios.get('http://localhost:8080/getFriendRequestsByID', {params: {user_id: userId}})
+    axios.get(`http://${SERVER_URL}/getFriendRequestsByID`, {params: {user_id: userId}})
     .then((response) => {
       console.log('get recommended friends', response);
       setFriendsList(response.data.rows);
@@ -21,7 +22,7 @@ const ViewRequests = (props) => {
 
   const handleRequest = (e) => {
     let relationshipId = e.target.id
-    axios.post('http://localhost:8080/updateFriendStatus', {data: {id: relationshipId}})
+    axios.post(`http://${SERVER_URL}/updateFriendStatus`, {data: {id: relationshipId}})
     .then((response) => {
       const index = friendsList.findIndex((item) => {
         return item.id === Number(e.target.id);

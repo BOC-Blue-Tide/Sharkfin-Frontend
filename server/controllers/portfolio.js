@@ -1,6 +1,7 @@
 require('dotenv').config();
 const axios = require('axios');
 const backurl = process.env.BACKEND_URL;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 module.exports = {
   getPChart: async (req, res) => {
@@ -10,7 +11,7 @@ module.exports = {
       'accountNum': accountNum,
       'timeWindow': timeWindow
     };
-    await axios.get(`http://localhost:8080/pchart`, { params: paramsC })
+    await axios.get(`http://${SERVER_URL}/pchart`, {params: paramsC})
       .then((result) => {
         res.status(200).send(result.data);
       })
@@ -23,7 +24,7 @@ module.exports = {
     var paramsAP = {
       'accountNum': accountNum
     };
-    await axios.get(`http://localhost:8080/pallocation`, { params: paramsAP })
+    await axios.get(`http://${SERVER_URL}/pallocation`, {params: paramsAP})
       .then((result) => {
         res.status(200).send(result.data);
       })

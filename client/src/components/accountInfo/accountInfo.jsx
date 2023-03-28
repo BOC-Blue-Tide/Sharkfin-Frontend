@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import ProfilePic from '../../../dist/mockProfile.png';
 import axios from 'axios';
-const imagebb_key = process.env.IMAGEBB_KEY;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 
 function AccountInfo(props) {
+
    const [edit, setEdit] = useState(false);
 
    let remainingFunds = 400;
@@ -18,7 +20,7 @@ function AccountInfo(props) {
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
       username: props.userInfo.username,
-      profilepic_url: JSON.parse(localStorage.getItem("googleInfo")).picture,
+      profilepic_url: props.userInfo.profilepic_url,
       bank: props.userInfo.bank,
       account_number: props.userInfo.account_number
     });
@@ -73,7 +75,7 @@ function AccountInfo(props) {
 
       if (!edit) {
          console.log(userInfo);
-         axios.post(`http://localhost:8080/users/${userInfo.user_id}/update`, userInfo)
+         axios.post(`http://${SERVER_URL}/users/${userInfo.user_id}/update`, userInfo)
          .then((result) => {
             console.log(result);
             props.getUserInfo();

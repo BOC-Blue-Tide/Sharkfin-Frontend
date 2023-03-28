@@ -163,7 +163,7 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.userInfo.email !== this.state.userInfo.email) {
+    if ((prevState.userInfo) && (this.state.userInfo) && (prevState.userInfo.email !== this.state.userInfo.email)) {
       (async () => {
         await this.getAvailBalance(this.state.userInfo.user_id)
       })()
@@ -171,8 +171,10 @@ class App extends React.Component {
   }
 
   async getUserInfo() {
+    if (!localStorage.googleInfo) {
+      return;
+    }
     var id = JSON.parse(localStorage.googleInfo).id;
-    console.log(id);
     const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
@@ -430,7 +432,7 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*/ />} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} accountNum={this.state.userInfo.user_id} />} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />

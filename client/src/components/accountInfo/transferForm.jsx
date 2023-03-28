@@ -51,10 +51,11 @@ const style = {
 
 
 function TransferForm(props) {
+    console.log('TRANSFER FORM PROPS:', props);
     const location = useLocation();
     const propsData = location.state || {};
     const [page, setPage] = useState(propsData.page || 1);
-    const [accountNumber, setAccountNumber] = useState(0);
+    const [accountNumber, setAccountNumber] = useState(props.userInfo.account_number);
     const [routingNumber, setRoutingNumber] = useState(0);
     const [swiftCode, setSwiftCode] = useState("");
     const [bank, setBank] = useState("");
@@ -98,7 +99,18 @@ function TransferForm(props) {
     };
 
     const handleTransferSubmit = () => {
-        //Post request here to user's table
+        let data = {
+            user_id: props.userInfo.user_id,
+            amount: transferAmount,
+            transaction_type: 'bank'
+        }
+        axios.post(`http://${SERVER_URL}/finances`, data)
+        .then((result) => {
+            console.log(result);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
         console.log( 'Transfer Amount', transferAmount);
         setPage(page + 1)
     };
@@ -350,7 +362,7 @@ const OnboardingSlide = () => {
     const ThirdPage = () => (
         <Box display="flex" flexDirection="column" sx={style.gridCard}>
             <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
-            <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer()}</Box>. Are you sure you want to proceed?</Typography>
+            <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer(accountNumber)}</Box>. Are you sure you want to proceed?</Typography>
             <Box display="flex" flexDirection="row">
             <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
                 <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} variant="outlined" color="primary">Confirm</Button></Link>

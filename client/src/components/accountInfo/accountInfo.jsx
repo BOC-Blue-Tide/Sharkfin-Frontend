@@ -120,7 +120,7 @@ function AccountInfo(props) {
          <Box>
             <h1>Account Information</h1>
 
-            {userInfo.accountNumber ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
+            {userInfo.account_number ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
                <Typography sx={style.headerText} variant="body1">You have ${remainingFunds} available funds for trading.</Typography>
 
                <Link state={{ page: -1 }} to="/transferForm">

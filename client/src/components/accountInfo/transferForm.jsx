@@ -51,7 +51,7 @@ function TransferForm(props) {
     const [routingNumber, setRoutingNumber] = useState(0);
     const [swiftCode, setSwiftCode] = useState("");
     const [bank, setBank] = useState("");
-    const [transferAmount, setTransferAmount] = useState(1000);
+    const [transferAmount, setTransferAmount] = useState(1000 - props.availFunds.net_deposits);
     const [errors, setErrors] = useState({
         accountNumber: false,
         routingNumber: false,
@@ -98,7 +98,11 @@ function TransferForm(props) {
         }
         axios.post(`http://${SERVER_URL}/finances`, data)
         .then((result) => {
-            props.updateBalance(transferAmount + props.availBalance);
+            let newAvailFunds = {
+                avail_balance: props.availFunds.avail_balance + transferAmount,
+                net_deposits: props.availFunds.net_deposits + transferAmount
+            }
+            props.updateBalance(newAvailFunds);
             props.getAvailBalance(props.userInfo.user_id);
         })
         .catch((err) => {
@@ -332,22 +336,28 @@ const OnboardingSlide = () => {
                 )}
             </Box>
             <Slider
-                defaultValue={1000}
+                defaultValue={1000 - props.availFunds.net_deposits}
                 value={transferAmount}
                 aria-label="Default"
                 valueLabelDisplay="auto"
-                min={100}
+                min={0}
                 step={10}
-                max={1000}
+                max={1000 - props.availFunds.net_deposits}
                 onChangeCommitted={(_, newValue) => setTransferAmount(newValue)}
             />
-            <Button
+            {transferAmount !== 0 ? (
+                <Button
                 onClick={() => setPage(page + 1)}
                 variant="contained"
                 color="primary"
             >
                 Next
             </Button>
+            ) : (
+                <Typography variant="h4" sx={style.headerText}>
+                You've already transferred the max amount!
+            </Typography>
+            )}
         </Box>
     );
 

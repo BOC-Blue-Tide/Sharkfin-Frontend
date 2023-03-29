@@ -4,6 +4,8 @@ const Person = (props) => {
   var selfLine = ""
   if (Number(props.selfPlacement.performance_percentage) > 0) {
     selfLine = `<th><img src="arrow-up.png" alt="arrow up" width="20"></th><th><h6 style="color:green;">${props.selfPlacement.performance_percentage}%</h6></th>`
+  } else if (props.selfPlacement.placement === undefined) {
+    selfLine = `<th></th><th><h6 style="color:green;">0%</h6></th>`
   } else {
     selfLine = `<th><img src="arrow-down.png" alt="arrow down" width="20"></th><th><h6 style="color:red;">${props.selfPlacement.performance_percentage}%</h6></th>`
   }
@@ -11,21 +13,21 @@ const Person = (props) => {
     var selfHTML = `<tr class="self-tr">
     <th><h6>${props.selfPlacement.placement}.</h6></th>
     <th><div class = "small-profile-box"><img src=${props.selfPlacement.profilepic_url}></img></div></th>
-    <th><h6>${props.selfPlacement.first_name}</h6></th>
+    <th><h6>${props.selfPlacement.firstname}</h6></th>
     ${selfLine}
     </tr>`
   } else {
     var selfHTML = `<tr class="self-tr">
     <th><h6>-</h6></th>
     <th><div class = "small-profile-box"><img src=${props.selfPlacement.profilepic_url}></img></div></th>
-    <th><h6>${props.selfPlacement.first_name}</h6></th>
+    <th><h6>${props.selfPlacement.firstname}</h6></th>
     ${selfLine}
     </tr>`
   }
   var tableChart = `<table class="fg-table">`
   for (var x = 0; x < props.data.length; x ++) {
     var first = (props.placement - 1) * 10 + x + 1
-    var second = props.data[x].first_name
+    var second = props.data[x].firstname
     var number = Number(props.data[x].performance_percentage)
     var photo = props.data[x].profilepic_url
     var third = ""
@@ -64,16 +66,25 @@ const Person = (props) => {
   tableChart += selfHTML
   tableChart += "</table>"
 
+  var noFriendTable = `<table class="fg-table"><tr class="self-tr">
+  <th><h6>-</h6></th>
+  <th><div class = "small-profile-box"><img src=${JSON.parse(localStorage.getItem("googleInfo")).picture}></img></div></th>
+  <th><h6>${JSON.parse(localStorage.getItem("googleInfo")).firstname}</h6></th>
+  <th></th><th><h6 style="color:green;">0%</h6></th>
+  </tr></table>`
+
   if (props.data.length === 0) {
     return (
-      <p>Rendering</p>
+      <>
+      <div className="leader-table" dangerouslySetInnerHTML={{__html: noFriendTable}} />
+      </>
     )
   } else {
     return (
-      <div>
+      <>
          <div className="leader-table" dangerouslySetInnerHTML={{__html: tableChart}} />
 
-      </div>
+      </>
 
     )
   }

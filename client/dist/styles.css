@@ -287,12 +287,31 @@ input[type="number"] {
 }
 
 .empty-sidebar {
-  height: 409px;
+  height: 370px;
   text-align: center;
   align-content: center;
   display: grid;
   background-color: #E4E4E4;
-  margin-bottom: 20px;
+  position: relative;
+}
+
+.empty-sidebar img {
+  filter: blur(5px);
+  opacity: 0.8;
+  outline: rgba(255,255,255) 10px solid;
+}
+
+.empty-text {
+  position: absolute;
+  transform: translate(-50%,-50%);
+  left: 50%;
+  top: 50%;
+  font-weight: 600;
+}
+
+.leader-table {
+  position: relative;
+  z-index: 1;
 }
 
 .mainpage-tf {
@@ -556,6 +575,10 @@ input[type="number"] {
   content: "rd";
 }
 
+.mainpage-tf .tf-box:only-child .leaderboard-relative-box span:after {
+  content: "";
+}
+
 .first-place {
   border: 5px solid #edc400;
   margin-left: -5px;
@@ -595,17 +618,87 @@ input[type="number"] {
   color: #cd7f32;
 }
 
+.friend-btns button {
+  padding: 10px 10px;
+  white-space: nowrap;
+  font-size: 0.5em;
+}
+
+/* Viewport */
 @media screen and (max-width: 830px) {
+  main {
+    padding: 0;
+  }
+
+  #root {
+    padding: 0;
+  }
+
   .greeting-net-worth-chart {
     display: block;
   }
 
   .greeting-leaderboard {
     width: 100%;
+    padding: 0;
+  }
+
+  .profilePic-greeting-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profilePic {
+    padding: 0;
+  }
+
+  .profile-box {
+    width: 30vw;
+    height: 30vw;
   }
 
   .portfolio-my-net-worth-chart {
     width: 100%;
+  }
+
+  .portfolio-container .greeting-title h1 {
+    padding-left: 25px;
+    margin-bottom: 30px;
+  }
+
+  .mainpage-tf {
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    width: 100%;
+  }
+
+  .mainpage-leaderboard h3 {
+    text-align: center;
+  }
+
+  .mainpage-tf .tf-box {
+    margin-bottom: 15px;
+    min-width: auto;
+    width: 65%;
+    justify-content: space-between;
+  }
+
+  .leaderboard-details {
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+  }
+
+  /* Leaderboard Page */
+  .leaderboard-main-container {
+    display: block;
+  }
+
+  .sidebar-container {
+    max-width: inherit;
+    width: 90%;
+    margin: 0 auto;
   }
 }
 

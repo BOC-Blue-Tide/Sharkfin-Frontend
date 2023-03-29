@@ -228,7 +228,7 @@ class App extends React.Component {
     this.setState({ orderObj: orderObj });
     axios({
       method: 'post',
-      url: `http://${REACT_APP_SERVER_URL}/transactions`,
+      url: `http://${SERVER_URL}/transactions`,
       data: orderObj,
     });
   }
@@ -432,7 +432,7 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*//>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} />} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo}/>} />
               <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />

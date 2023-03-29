@@ -32,19 +32,7 @@ const LeaderBoard = (props) => {
           <SideBar/>
         </div>
         <div className="info-container">
-        <Portfolio user={props.user} leaderBoardPage={true}/>
-          {/* <div className="investment-profile-leaderboard">
-            <h2>My Net Worth</h2>
-            <PortfolioChart/>
-          </div>
-          <div className="position-chart-leaderboard">
-            <h2>My Positions</h2>
-            <PositionTable/>
-          </div>
-          <div className="pie-chart-leaderboard">
-            <h2>My Asset Allocation</h2>
-            <AllocationChart/>
-          </div> */}
+          <Portfolio user={props.user} leaderBoardPage={true}/>
         </div>
       </div>
     </>

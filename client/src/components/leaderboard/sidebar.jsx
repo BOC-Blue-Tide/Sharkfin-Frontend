@@ -8,6 +8,7 @@ import { Button } from '@mui/material';
 //Mengna
 import AddFriends from '../Friends/AddFriends.jsx'
 import ViewRequests from '../Friends/ViewRequests.jsx'
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const SideBar = () => {
   const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
@@ -35,7 +36,7 @@ const SideBar = () => {
   }, [friendBoard, globalBoard])
 
   const getFriendRequestNum = async (id) => {
-    axios.get('http://localhost:8080/getFriendRequestsByID', {params: {user_id: id}})
+    axios.get(`http://${SERVER_URL}/getFriendRequestsByID`, {params: {user_id: id}})
     .then((response) => {
       friendRequestNum(response.data.rows.length);
     })

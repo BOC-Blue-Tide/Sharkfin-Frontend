@@ -37,7 +37,6 @@ const BankSearch = (props) => {
                     'Content-Type': 'application/json',
                 },
             });
-            console.log('NAME:', input, response.data.data)
             setBankList(response.data.data);
         } catch (error) {
             console.error('Error fetching institutions:', error);

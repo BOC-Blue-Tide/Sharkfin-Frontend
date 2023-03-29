@@ -16,7 +16,8 @@ const Placement = (props) => {
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
-  const [profilePic, setProfilePic] = useState(props.user.profilepic_url)
+  // const [profilePic, setProfilePic] = useState(props.user.profilepic_url)
+  const [profilePic, setProfilePic] = useState(JSON.parse(localStorage.getItem("googleInfo")).picture)
   // from app.jsx
   const [userInfo, setUserInfo] = useState({})
 

@@ -10,7 +10,7 @@ import Axios from 'axios';
 
 
 const Portfolio = (props) => {
-  const [accountNum, setAccountNum] = useState(props.user.user_id);
+  const [userID, setUserID] = useState(props.user.user_id);
   const [timeWindow, setTimeWindow] = useState('1W');
   const [chartData, setChartData] = useState({});
   const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbol: [], ratios: []}});
@@ -18,7 +18,7 @@ const Portfolio = (props) => {
 
   useEffect(() => {
     var paramsC = {
-      accountNum : accountNum,
+      user_id : userID,
       timeSelect: timeWindow
     };
     var fetchChartData = async () => {
@@ -35,11 +35,12 @@ const Portfolio = (props) => {
 
   useEffect(() => {
     var paramsAP = {
-      accountNum : accountNum
+      user_id : userID
     };
     const fetchAlloPosData = async () => {
       await Axios.get('/pallopos', {params: paramsAP})
         .then((result) => {
+          console.log(result.data);
           setAlloPosData(result.data);
         })
         .catch((err) => {

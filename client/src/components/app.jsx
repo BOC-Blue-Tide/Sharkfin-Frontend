@@ -255,7 +255,8 @@ class App extends React.Component {
   }
 
   async getData(input, selectedScope) {
-    var symbol = input.toUpperCase()
+    var symbol = input.toUpperCase();
+    console.log(symbol);
     var scope = selectedScope.toLowerCase()
     try {
       this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {

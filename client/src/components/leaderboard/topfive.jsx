@@ -16,7 +16,7 @@ const Topfive = (props) => {
 
 
   const setTfDiv = () => {
-    if (friendBoard.length !== 0 && friendBoard.length <= 3) {
+    if (friendBoard.length !== 0 && friendBoard.length < 3) {
       var tfDiv = ""
       for (var x = 0; x < friendBoard.length; x ++) {
         var box = `<div class="tf-box">`

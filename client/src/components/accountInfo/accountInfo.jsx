@@ -92,9 +92,9 @@ function AccountInfo(props) {
     };
 
    //  handle the file input change event
-   const handleFileInputChange = (e) => {
-      setUserInfo({...userInfo, profilePic: e.target.files[0]});
-   };
+   // const handleFileInputChange = (e) => {
+   //    setUserInfo({...userInfo, profilePic: e.target.files[0]});
+   // };
 
    //  handle the click event on the Avatar
    const handleAvatarClick = () => {
@@ -106,7 +106,8 @@ function AccountInfo(props) {
       formData.append('image', event.target.files[0]);
       formData.append('key', imagebb_key);
       const response = await axios.post('https://api.imgbb.com/1/upload', formData);
-      setImageUrl(response.data.data.display_url);
+      setImageUrl(response.data.data.display_url)
+      setUserInfo({...userInfo, profilepic_url: e.target.files[0]});
    }
 
    const accountNumberTrimmer = (number) => {

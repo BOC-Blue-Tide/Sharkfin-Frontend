@@ -5,10 +5,10 @@ import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
 const Placement = (props) => {
-  // console.log(props);
+  console.log(props);
   const [friendBoard, setFriendBoard] = useState([])
+  // const [userId, setUserId] = useState(props.user.user_id)
   const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
-  // const [userId, setUserId] = useState(1)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(565)

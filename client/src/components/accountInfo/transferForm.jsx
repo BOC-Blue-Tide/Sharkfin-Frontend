@@ -51,7 +51,6 @@ const style = {
 
 
 function TransferForm(props) {
-    console.log('TRANSFER FORM PROPS:', props);
     const location = useLocation();
     const propsData = location.state || {};
     const [page, setPage] = useState(propsData.page || 1);

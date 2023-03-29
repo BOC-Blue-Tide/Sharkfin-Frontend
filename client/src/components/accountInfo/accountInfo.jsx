@@ -11,7 +11,7 @@ const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 function AccountInfo(props) {
 
    const [edit, setEdit] = useState(false);
-
+   const [avail_balance, setBalance] = useState(0);
    let remainingFunds = 400;
 
    const [userInfo, setUserInfo] = useState({
@@ -29,6 +29,7 @@ function AccountInfo(props) {
     const [imageUrl, setImageUrl] = useState('');
     //update state when get the upload photo url
     useEffect(() => {
+
       setUserInfo({
          ...userInfo,
          profilepic_url: imageUrl

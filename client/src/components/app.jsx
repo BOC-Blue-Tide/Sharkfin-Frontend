@@ -236,7 +236,8 @@ class App extends React.Component {
 
   async getTransactionData() {
     try {
-      const response = await axios.get(`http://${SERVER_URL}/transactions`);
+      var id = JSON.parse(localStorage.googleInfo).id;
+      const response = await axios.get(`http://${SERVER_URL}/transactions/${id}`);
       this.setState({ transactionData: response.data });
     } catch (err) {
       console.log(err);

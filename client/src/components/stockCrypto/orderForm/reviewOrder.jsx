@@ -26,7 +26,8 @@ const reviewOrder = (props) => {
   const [equity, setEquity] = useState({})
   const [availBalance, setAvailBalance] = useState('')
   const [userid, setUserid] = useState(null)
-
+  const [remaining, setRemaining] = useState(null)
+  const [holding, setHolding] = useState(null)
 
 
   useEffect(() => {
@@ -38,6 +39,17 @@ const reviewOrder = (props) => {
   }, [props.value])
 
   useEffect(() => {
+    (async () => {
+      if (typeof estimate !== 'string' && orderType.length > 0) {
+        //console.log(props.orderIn, props.orderInput.amount, availBalance, estimate, orderType, holding)
+        let remaining = await helpers.calculateRemaining(props.orderIn, props.orderInput.amount, availBalance, estimate, orderType, holding)
+        setRemaining(remaining)
+      }
+    })()
+
+  }, [estimate, orderType])
+
+  useEffect(() => {
     if (props.userid && props.userid !== 0) {
       setUserid(props.userid)
     }
@@ -46,6 +58,7 @@ const reviewOrder = (props) => {
   useEffect(() => {
     if (props.assetData.availBalance) {
       setAvailBalance(props.assetData.availBalance)
+      setHolding(props.assetData.holding)
     }
   }, [props.assetData.availBalance])
 
@@ -99,6 +112,7 @@ const reviewOrder = (props) => {
     orderObj.amount = props.orderInput.amount
     orderObj.price = props.barData[props.barData.length - 1].c
     orderObj.equity = equity
+    orderObj.newRemaining = remaining
     console.log(orderObj)
     props.handleOrderClick(orderObj)
   }
@@ -120,6 +134,10 @@ const reviewOrder = (props) => {
           <Stack direction="row" spacing={1}>
             <span>Available Fund: </span>
             <span>{`$${availBalance}`}</span>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <span>Current Holding: </span>
+            <span>{`${holding} shares`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
             <span>Symbol: </span>
@@ -154,13 +172,17 @@ const reviewOrder = (props) => {
               <>
                 {props.value === 0 ? <span>Estimated number of shares buying:  </span> : <span>Estimated number of shares selling:  </span>}
 
-                <span>{`${estimate} shares`}</span>
+                <span>{`${parseFloat(estimate).toFixed(3)} shares`}</span>
               </> : null}
 
           </Stack>
           <Stack direction="row" spacing={1}>
-            <span>Remaining Buying Power:  </span>
-            <span>$1</span>
+            {remaining !== null ?
+              <>
+                <span>New Buying Power:  </span>
+                <span>{`$${parseFloat(remaining.buyPower).toFixed(2)}`}</span>
+                <span>New Holding:  </span>
+                <span>{`${parseFloat(remaining.holding).toFixed(3)}`}</span> </> : null}
           </Stack>
 
         </Stack>

@@ -61,7 +61,7 @@ const orderCard = (props) => {
         } else {
           orderCheckPass = await helpers.calculateOrder(amount, orderIn, availBalance, holding, props.value, props.coinBarData[props.coinBarData.length - 1].c)
         }
-        console.log('checkOrder', orderCheckPass)
+        //console.log('checkOrder', orderCheckPass)
         if (orderCheckPass) {
           let orderInputObj = {
             orderIn: orderIn,

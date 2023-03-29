@@ -255,7 +255,8 @@ class App extends React.Component {
   }
 
   async getData(input, selectedScope) {
-    var symbol = input.toUpperCase()
+    var symbol = input.toUpperCase();
+    console.log(symbol);
     var scope = selectedScope.toLowerCase()
     try {
       this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
@@ -431,8 +432,8 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo} /*accountNum={this.state.userInfo.user_id}*/ />} />
-              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo}/>} />
+              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />

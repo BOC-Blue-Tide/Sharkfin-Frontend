@@ -8,7 +8,6 @@ import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
 const Placement = (props) => {
-  console.log(props);
   const [friendBoard, setFriendBoard] = useState([])
   // const [userId, setUserId] = useState(props.user.user_id)
   const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
@@ -35,7 +34,7 @@ const Placement = (props) => {
 
 
   const addSelfPlacement = (id) => {
-    console.log(friendBoard)
+    // console.log(friendBoard)
     for (var x = 0; x < friendBoard.length; x ++) {
       if (friendBoard[x].id == id) {
         if (x == 0) {

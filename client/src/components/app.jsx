@@ -134,6 +134,7 @@ class App extends React.Component {
       coinPrevious: null,
       orderObj: null,
       assetData: null,
+      availBalance: 0,
       userInfo: {
         user_id: 0,
         firstname: '',
@@ -149,7 +150,6 @@ class App extends React.Component {
     }
     this.getTransactionData = this.getTransactionData.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
-    console.log('STATE:', this.state.userInfo);
   }
 
 
@@ -174,8 +174,7 @@ class App extends React.Component {
     if (!localStorage.googleInfo) {
       return;
     }
-    var id = JSON.parse(localStorage.googleInfo).id;
-    console.log(id);
+    var id = JSON.parse(localStorage.getItem(['googleInfo'])).id;
     const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
@@ -185,9 +184,10 @@ class App extends React.Component {
     try {
       // send userid to backend
       let assetData = this.state.assetData
-      var availBalance = await axios.get(`http://${SERVER_URL}/getAvailBalance`, { params: { userid: userid } })
+      var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          console.log(availBalance.data[0])
+          console.log('available', availBalance.data[0].avail_balance);
+          this.setState({ availBalance: availBalance.data[0].avail_balance})
           if (assetData === null) {
             assetData = {}
             assetData.availBalance = availBalance.data[0]
@@ -201,6 +201,10 @@ class App extends React.Component {
     catch (err) {
       console.log(err);
     }
+  }
+
+  updateBalance(newBalance) {
+    this.setState({ availBalance: newBalance });
   }
 
   async getHoldingAmount(symbol) {
@@ -436,9 +440,14 @@ class App extends React.Component {
 
             <Routes>
               <Route exact path="/" element={<Portfolio user={this.state.userInfo}/>} />
-              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
+              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} availBalance={this.state.availBalance} getUserInfo={this.getUserInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
-              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
+              <Route path="/transferForm" element={<TransferForm
+                userInfo={this.state.userInfo}
+                availBalance={this.state.availBalance}
+                getUserInfo={this.getUserInfo}
+                getAvailBalance={this.getAvailBalance.bind(this)}
+                updateBalance={this.updateBalance.bind(this)}/>} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>

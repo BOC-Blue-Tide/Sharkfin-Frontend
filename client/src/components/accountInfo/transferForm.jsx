@@ -21,13 +21,6 @@ import BankSearch from './bankSearch.jsx';
 import axios from 'axios';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-// let userInfo = {
-//     firstName: 'Daniel',
-//     lastName: 'Halper',
-//     userName: 'Dhalper',
-//     email: 'Dhalper@test.org',
-// };
-
 const style = {
     gridCard: {
         width: '100%',
@@ -105,12 +98,12 @@ function TransferForm(props) {
         }
         axios.post(`http://${SERVER_URL}/finances`, data)
         .then((result) => {
-            console.log(result);
+            props.updateBalance(transferAmount + props.availBalance);
+            props.getAvailBalance(props.userInfo.user_id);
         })
         .catch((err) => {
             console.log(err);
         })
-        console.log( 'Transfer Amount', transferAmount);
         setPage(page + 1)
     };
 

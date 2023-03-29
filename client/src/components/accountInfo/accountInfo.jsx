@@ -11,11 +11,9 @@ const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 function AccountInfo(props) {
 
    const [edit, setEdit] = useState(false);
-   const [avail_balance, setBalance] = useState(0);
-   let remainingFunds = 400;
 
    const [userInfo, setUserInfo] = useState({
-      user_id: props.userInfo.user_id,
+      user_id: JSON.parse(localStorage.getItem(['googleInfo'])).id,
       firstname: props.userInfo.firstname,
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
@@ -122,7 +120,7 @@ function AccountInfo(props) {
             <h1>Account Information</h1>
 
             {userInfo.account_number ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
-               <Typography sx={style.headerText} variant="body1">You have ${remainingFunds} available funds for trading.</Typography>
+               <Typography sx={style.headerText} variant="body1">You have ${props.availBalance} available funds for trading.</Typography>
 
                <Link state={{ page: -1 }} to="/transferForm">
                   <Button variant="contained" color="primary">

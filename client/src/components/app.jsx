@@ -161,10 +161,10 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.userInfo.email !== this.state.userInfo.email) {
-      (async () => {
-        await this.getAvailBalance(this.state.userInfo.user_id)
-      })()
+    if ((prevState.userInfo) && (this.state.userInfo) && (prevState.userInfo.email !== this.state.userInfo.email)) {
+      // (async () => {
+      //   await this.getAvailBalance(this.state.userInfo.user_id)
+      // })()
     }
   }
 

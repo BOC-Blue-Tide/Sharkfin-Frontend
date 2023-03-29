@@ -32,7 +32,7 @@ router.post('/login', (req, res) => {
   // console.log(req.body);
   controllers.login.verify(req.body.credential)
   .then((resp)=>{
-    // console.log('verify success', resp);
+    console.log('verify success', resp);
   })
   .catch((err)=> {
     console.log('verify failed', err);

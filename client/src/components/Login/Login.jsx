@@ -1,18 +1,53 @@
 import React from "react";
-import { Button } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Typography,
+  IconButton,
+  Grid,
+  Box,
+  Slider,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  Radio,
+} from '@mui/material';
+import Logo from '../../../dist/logo-dark.png';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import jwt_decode from "jwt-decode";
 import { GoogleLogin, googleLogout } from '@react-oauth/google';
 const axios = require('axios').default;
 import { useNavigate } from 'react-router-dom';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Graphic from '../../../dist/sharkfin-graphic.png';
 
+const style = {
+  gridCard: {
+      width: '100%',
+      height: '100%',
+      borderRadius: '30px',
+      padding: '5% 10% 10% 10%',
+  },
+  parentGrid: {
+      height: '100vh',
+  },
+  headerText: {
+      color: 'primary',
+      margin: '20px 0px',
+  },
+  background: {
+      height: '100vh',
+      background: 'linear-gradient(180deg, #FFD300 0%, #FFE879 100%)',
+  },
+};
 
 
 const Login = (props) => {
   const navigate = useNavigate()
 
   const responseMessage = (response) => {
+    console.log('responseMessage');
     var decoded = jwt_decode(response.credential);
     //console.log('success', response, decoded);
     axios.post('/login', {
@@ -32,11 +67,16 @@ const Login = (props) => {
       props.updateEmail(googleInfo.email);
       console.log('login succeeds', res.data);
       localStorage.setItem("googleInfo", JSON.stringify(googleInfo));
-      props.getUser();
-      if (res.data.newUser) {
+      props.getUser()
+      .then(()=> {
+        if (res.data.newUser) {
+          navigate(`/transferForm`);
+        }
+      })
+      .catch((err)=> {
+        console.log("getUser error", err);
         navigate(`/transferForm`);
-      }
-
+      })
     })
     .catch((error) => {
       console.log('fail', error);
@@ -62,22 +102,41 @@ const logout = () => {
 
 
 
-    return (
-      <div>
-        <h1>  Welcome to Shark Fin </h1>
-        <div> The gamified stock market experience</div>
+return (
+<div>
+  <Box sx={style.parentGrid}>
+    <Grid container spacing={2}>
+      <Grid item xs={6} sm={6}>
+        <div>
+          <h1>  Welcome to Shark Fin </h1>
+          <div> The gamified stock market experience</div>
 
-        {!props.user ?
-        (<div>
-          <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-        </div>)
-        :  <button onClick={logout}>Log out</button>
+          {!props.user ?
+          (<div>
+            <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
+          </div>)
+          :  <button onClick={logout}>Log out</button>
 
-        }
-      </div>
-    )
+          }
+        </div>
+      </Grid>
 
-      }
+      <Grid sx={style.background} item xs={6} sm={6}>
+        <Grid sx={{ float: "right" }} item xs={6} sm={6}>
+          <img src={Logo} alt="SharkFin Trading" height="50" />
+        </Grid>
+        <Grid item xs={6} sm={6}>
+        </Grid>
+        <Box sx={{ width:'100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
+        </Box>
+      </Grid>
+    </Grid>
+
+  </Box>
+</div>
+
+)}
 
 export default Login;
 

@@ -67,7 +67,9 @@ const Order = (props) => {
           coinMeta={props.coinMeta}
           coinBarData={props.coinBarData}
           coinToday={props.coinToday}
-          coinPrevious={props.coinPrevious} />
+          coinPrevious={props.coinPrevious}
+          assetData={props.assetData}
+          userid={props.userid} />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <OrderCard
@@ -79,7 +81,9 @@ const Order = (props) => {
           coinMeta={props.coinMeta}
           coinBarData={props.coinBarData}
           coinToday={props.coinToday}
-          coinPrevious={props.coinPrevious} />
+          coinPrevious={props.coinPrevious}
+          assetData={props.assetData}
+          userid={props.userid} />
       </TabPanel>
     </Box>
   );

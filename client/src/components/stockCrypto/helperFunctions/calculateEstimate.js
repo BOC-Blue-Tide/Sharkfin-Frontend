@@ -1,7 +1,7 @@
 const helpers = {
-  calculateEstimate: async (orderIn, OrderType, amount, price) => {
+  calculateEstimate: async (orderIn, amount, price) => {
 
-    console.log(orderIn, OrderType, amount, price)
+    //console.log(orderIn, amount, price)
     // 0 = buy
     //1 = sell
     var estimate;
@@ -14,6 +14,7 @@ const helpers = {
     else if (orderIn === 'coins') {
       estimate = Number(amount) * price
     }
+    console.log(estimate)
     return estimate
 
   }

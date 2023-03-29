@@ -152,8 +152,6 @@ class App extends React.Component {
 
 
   componentDidMount() {
-    console.log('pp', process.env.REACT_APP_ALPACA_KEY1)
-    console.log('dd', API_KEY)
     this.checkLoginState();
     this.getUserInfo();
     this.getTransactionData();
@@ -184,13 +182,13 @@ class App extends React.Component {
       let assetData = this.state.assetData
       var availBalance = await axios.get('http://localhost:8080/getAvailBalance', { params: { userid: userid } })
         .then(availBalance => {
-          console.log(availBalance.data[0])
+          // console.log(availBalance.data[0])
           if (assetData === null) {
             assetData = {}
-            assetData.availBalance = availBalance.data[0]
+            assetData.availBalance = availBalance.data[0].avail_balance
             this.setState({ assetData: assetData })
           } else {
-            assetData.availBalance = availBalance.data[0]
+            assetData.availBalance = availBalance.data[0].avail_balance
             this.setState({ assetData: assetData })
           }
         })
@@ -200,21 +198,33 @@ class App extends React.Component {
     }
   }
 
-  async getHoldingAmount(symbol) {
+  async getHoldingAmount(symbolInput) {
     try {
-      console.log('trigger')
+
       let assetData = this.state.assetData
       let userid = this.state.userInfo.user_id
+      let symbol = symbolInput.toUpperCase()
+      //console.log(symbol)
       var holding = await axios.get('http://localhost:8080/getHoldingAmount', { params: { userid: userid, symbol: symbol } })
         .then(holding => {
-          console.log('check', holding.data[0])
           if (assetData === null) {
             assetData = {}
-            assetData.holding = holding.data[0]
-            this.setState({ assetData: assetData })
-          } else {
-            assetData.holding = holding.data[0]
-            this.setState({ assetData: assetData })
+            if (holding.data.length > 0) {
+              assetData.holding = holding.data[0].qty
+              this.setState({ assetData: assetData })
+            } else if (holding.data.length === 0) {
+              assetData.holding === 0
+              this.setState({ assetData: assetData })
+            }
+
+          } else if (assetData !== null) {
+            if (holding.data.length > 0) {
+              assetData.holding = holding.data[0].qty
+              this.setState({ assetData: assetData })
+            } else if (holding.data.length === 0) {
+              assetData.holding === 0
+              this.setState({ assetData: assetData })
+            }
           }
         })
     }
@@ -457,7 +467,9 @@ class App extends React.Component {
                           <Order pageType={'stock'}
                             handleOrderClick={this.handleOrderClick.bind(this)}
                             stockObj={this.state.stockObj}
-                            barData={this.state.barData} />
+                            barData={this.state.barData}
+                            assetData={this.state.assetData}
+                            userid={this.state.userInfo.user_id} />
                         </Grid>
                       </Grid>
                     </div> : null}
@@ -487,7 +499,10 @@ class App extends React.Component {
                             coinMeta={this.state.coinMeta}
                             coinBarData={this.state.coinBarData}
                             coinToday={this.state.coinToday}
-                            coinPrevious={this.state.coinPrevious} />
+                            coinPrevious={this.state.coinPrevious}
+                            assetData={this.state.assetData}
+                            userid={this.state.userInfo.user_id}
+                          />
                         </Grid>
                       </Grid>
                     </div>

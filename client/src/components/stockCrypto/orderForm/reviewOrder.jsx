@@ -24,6 +24,10 @@ const reviewOrder = (props) => {
   const [orderType, setOrderType] = useState('')
   const [estimate, setEstimate] = useState('')
   const [equity, setEquity] = useState({})
+  const [availBalance, setAvailBalance] = useState('')
+  const [userid, setUserid] = useState(null)
+
+
 
   useEffect(() => {
     if (props.value === 0) {
@@ -34,31 +38,43 @@ const reviewOrder = (props) => {
   }, [props.value])
 
   useEffect(() => {
+    if (props.userid && props.userid !== 0) {
+      setUserid(props.userid)
+    }
+  }, [props.userid])
+
+  useEffect(() => {
+    if (props.assetData.availBalance) {
+      setAvailBalance(props.assetData.availBalance)
+    }
+  }, [props.assetData.availBalance])
+
+  useEffect(() => {
     (async () => {
       const obj = {}
-      let estimate = await helpers.calculateEstimate(props.orderIn, props.value, props.orderInput.amount, props.barData[props.barData.length - 1].c)
+      let estimate = await helpers.calculateEstimate(props.orderIn, props.orderInput.amount, props.barData[props.barData.length - 1].c)
       if (props.value === 0 && props.orderIn === 'dollars') {
         // a reduction to user buying power
         // an addition to user's equity
-        obj.buyingPower = Number(props.orderInput.amount) * -1
-        obj.holding = estimate
+        obj.buyingPower = parseFloat(Number(props.orderInput.amount) * -1).toFixed(2)
+        obj.holding = parseFloat(estimate).toFixed(2)
         setEquity(obj)
       } else if (props.value === 1 && props.orderIn === 'dollars') {
         //sell
-        obj.buyingPower = Number(props.orderInput.amount)
-        obj.holding = estimate * -1
+        obj.buyingPower = parseFloat(Number(props.orderInput.amount)).toFixed(2)
+        obj.holding = parseFloat(estimate * -1).toFixed(2)
         setEquity(obj)
       }
       else if (props.value === 0 && props.orderIn === 'shares') {
         //buy
-        obj.buyingPower = estimate * -1
-        obj.holding = Number(props.orderInput.amount)
+        obj.buyingPower = parseFloat(estimate * -1).toFixed(2)
+        obj.holding = parseFloat(Number(props.orderInput.amount)).toFixed(2)
         setEquity(obj)
       }
       else if (props.value === 1 && props.orderIn === 'shares') {
         //sell
-        obj.buyingPower = estimate
-        obj.holding = Number(props.orderInput.amount) * -1
+        obj.buyingPower = parseFloat(estimate).toFixed(2)
+        obj.holding = parseFloat(Number(props.orderInput.amount) * -1).toFixed(2)
         setEquity(obj)
       }
       setEstimate(estimate)
@@ -76,7 +92,7 @@ const reviewOrder = (props) => {
   const handleSubmit = () => {
     const orderObj = props.orderInput
     orderObj.orderType = orderType
-    orderObj.account = '12345678'
+    orderObj.account = userid
     orderObj.symbol = stockObj.Symbol
     orderObj.company = stockObj.Name
     orderObj.orderIn = props.orderInput.orderIn
@@ -101,6 +117,10 @@ const reviewOrder = (props) => {
           Review Order
         </Typography>
         <Stack spacing={2}>
+          <Stack direction="row" spacing={1}>
+            <span>Available Fund: </span>
+            <span>{`$${availBalance}`}</span>
+          </Stack>
           <Stack direction="row" spacing={1}>
             <span>Symbol: </span>
             <span>{stockObj.Symbol}</span>

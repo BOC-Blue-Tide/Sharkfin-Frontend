@@ -101,6 +101,11 @@ main {
   font-weight: bold;
 }
 
+.orderMsg {
+  font-size: small;
+  color: #844545;
+}
+
 /*Stock & Crypto page*/
 
 .transaction {

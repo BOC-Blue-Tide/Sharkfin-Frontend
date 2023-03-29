@@ -135,7 +135,7 @@ class App extends React.Component {
       orderObj: null,
       assetData: null,
       userInfo: {
-        user_id: 0,
+        user_id: 1,
         firstname: '',
         lastname: '',
         username: '',

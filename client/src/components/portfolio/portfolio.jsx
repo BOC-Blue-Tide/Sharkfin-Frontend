@@ -10,7 +10,7 @@ import Axios from 'axios';
 
 
 const Portfolio = (props) => {
-  const [userID, setUserID] = useState(1);
+  const userID = props.user.user_id;
   const [timeWindow, setTimeWindow] = useState('1W');
   const [chartData, setChartData] = useState({});
   const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbols: [], ratios: []}});
@@ -30,7 +30,7 @@ const Portfolio = (props) => {
         })
     };
     fetchChartData();
-  }, [timeWindow]);
+  }, [timeWindow, userID]);
 
   useEffect(() => {
     var paramsAP = {
@@ -47,7 +47,7 @@ const Portfolio = (props) => {
         })
     };
     fetchAlloPosData();
-  }, [])
+  }, [userID])
 
   const handleTimeWindowClick = (timewindow) => {
     setTimeWindow(timewindow);

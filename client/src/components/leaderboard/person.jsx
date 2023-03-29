@@ -4,6 +4,8 @@ const Person = (props) => {
   var selfLine = ""
   if (Number(props.selfPlacement.performance_percentage) > 0) {
     selfLine = `<th><img src="arrow-up.png" alt="arrow up" width="20"></th><th><h6 style="color:green;">${props.selfPlacement.performance_percentage}%</h6></th>`
+  } else if (props.selfPlacement.placement === undefined) {
+    selfLine = `<th></th><th><h6 style="color:green;">0%</h6></th>`
   } else {
     selfLine = `<th><img src="arrow-down.png" alt="arrow down" width="20"></th><th><h6 style="color:red;">${props.selfPlacement.performance_percentage}%</h6></th>`
   }

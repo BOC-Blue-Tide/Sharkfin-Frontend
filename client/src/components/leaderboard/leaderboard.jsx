@@ -29,7 +29,7 @@ const LeaderBoard = (props) => {
       </div>
       <div className="leaderboard-main-container">
         <div className="sidebar-container">
-          <SideBar/>
+          <SideBar user={props.user}/>
         </div>
         <div className="info-container">
           <Portfolio user={props.user} leaderBoardPage={true}/>

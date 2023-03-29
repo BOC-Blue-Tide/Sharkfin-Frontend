@@ -102,12 +102,20 @@ function AccountInfo(props) {
    };
 
    const handleImageChange = async (event) => {
+      setUserInfo({...userInfo, profilePic: event.target.files[0]})
       const formData = new FormData();
       formData.append('image', event.target.files[0]);
       formData.append('key', imagebb_key);
-      const response = await axios.post('https://api.imgbb.com/1/upload', formData);
-      setImageUrl(response.data.data.display_url)
-      setUserInfo({...userInfo, profilepic_url: e.target.files[0]});
+      //formData.append('name', event.target.files[0].name);
+      console.log(formData, "formData")
+      await axios.post('https://api.imgbb.com/1/upload', formData)
+      .then((response) => {
+         setImageUrl(response.data.data.display_url)
+         setUserInfo({...userInfo, profilepic_url: response.data.data.display_url});
+      })
+      .catch((err) => {
+         console.log(err)
+      })
    }
 
    const accountNumberTrimmer = (number) => {
@@ -241,7 +249,7 @@ function AccountInfo(props) {
                      disabled = {!edit}
                      InputLabelProps={{ shrink: true }}
                      sx={{
-                        width: '40%'
+                        width: '40%',
                      }}
                   />
                </Box>

@@ -1,18 +1,18 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Person from './person.jsx'
-import Axios from 'axios';
-import {Pagination} from '@mui/material';
+import { Button, Pagination } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import { Button } from '@mui/material';
+import Axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+
+import AddFriends from '../Friends/AddFriends.jsx';
+import ViewRequests from '../Friends/ViewRequests.jsx';
+import Person from './person.jsx';
 
 //Mengna
-import AddFriends from '../Friends/AddFriends.jsx'
-import ViewRequests from '../Friends/ViewRequests.jsx'
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-const SideBar = () => {
-  // const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
-  const [userId, setuserId] = useState(1)
+const SideBar = (props) => {
+  const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setuserId] = useState(1)
   const [friendRequestNum, setFriendRequestNum] = useState(0)
   const [friendBoard, setFriendBoard] = useState([])
   const [globalBoard, setGlobalBoard] = useState([])
@@ -103,30 +103,34 @@ const SideBar = () => {
 
   //check self placement
   const checkFriendPlacement = (id) => {
+    let newFriendBoard = {}
     for (var x = 0; x < friendBoard.length; x ++) {
-      let newFriendBoard = JSON.parse(JSON.stringify(friendBoard[x]));
       if (friendBoard[x].id == id) {
+        newFriendBoard = JSON.parse(JSON.stringify(friendBoard[x]));
         newFriendBoard.placement = x + 1
-        setSelfFriendPlacement(newFriendBoard)
         break
       } else {
         newFriendBoard.placement = undefined
-        setSelfFriendPlacement(newFriendBoard)
+        newFriendBoard.profilepic_url = props.user.profilepic_url
+        newFriendBoard.firstname = props.user.firstname
       }
     }
+    setSelfFriendPlacement(newFriendBoard)
   }
   const checkGlobalPlacement = (id) => {
+    let newGlobalBoard = {}
     for (var x = 0; x < globalBoard.length; x ++) {
-      let newGlobalBoard = JSON.parse(JSON.stringify(globalBoard[x]));
       if (globalBoard[x].id == id) {
+        newGlobalBoard = JSON.parse(JSON.stringify(globalBoard[x]));
         newGlobalBoard.placement = x + 1
-        setSelfGlobalPlacement(newGlobalBoard)
         break
       } else {
         newGlobalBoard.placement = undefined
-        setSelfGlobalPlacement(newGlobalBoard)
+        newGlobalBoard.profilepic_url = props.user.profilepic_url
+        newGlobalBoard.firstname = props.user.firstname
       }
     }
+    setSelfGlobalPlacement(newGlobalBoard)
   }
 
   //switch from friend and global view
@@ -176,7 +180,11 @@ const SideBar = () => {
        {friend &&
           <>{friendBoard.length === 0 ? (
             <>
-            <div className="empty-sidebar">Add more friend!</div>
+
+            <div className="empty-sidebar">
+              <img src={'fake.jpg'} alt="fakeData"></img>
+              <div className="empty-text">Add more friend!</div>
+            </div>
             <div className="leader-table" dangerouslySetInnerHTML={{__html: noFriendTable}} />
             <div className="selective-bar"><Pagination count={10} disabled /></div>
             </>

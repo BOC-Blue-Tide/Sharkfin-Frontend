@@ -1,8 +1,5 @@
-import { Button } from '@mui/material';
-import Modal from '@mui/material/Modal';
 import Axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
@@ -10,8 +7,8 @@ import Topfive from './topfive.jsx';
 const Placement = (props) => {
   // console.log(props);
   const [friendBoard, setFriendBoard] = useState([])
-  // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
-  const [userId, setUserId] = useState(1)
+  const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setUserId] = useState(1)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(565)
@@ -112,18 +109,20 @@ const Placement = (props) => {
         <div className="mainpage-leaderboard">
           <h3>Leaderboard</h3>
           <div className="top-five-board">
-            <div className="tf-box">
-              <div className="leaderboard-profile">
-                  <div className="leaderboard-relative-box">
-                    <span><h6>-</h6></span>
-                  </div>
-                  <div className="leaderboard-profile-box">
-                    <img src={profilePic}></img>
-                  </div>
-              </div>
-              <div className="leaderboard-details">
-                <div className="leaderboard-first_name">{userInfo.first_name}</div>
-                <div> No data yet! </div>
+            <div className="mainpage-tf">
+              <div className="tf-box">
+                <div className="leaderboard-profile">
+                    <div className="leaderboard-relative-box">
+                      <span><h6>-</h6></span>
+                    </div>
+                    <div className="leaderboard-profile-box">
+                      <img src={profilePic}></img>
+                    </div>
+                </div>
+                <div className="leaderboard-details">
+                  <div className="leaderboard-first_name">{userInfo.first_name}</div>
+                  <div> No data yet! </div>
+                </div>
               </div>
             </div>
           </div>

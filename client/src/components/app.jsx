@@ -173,8 +173,9 @@ class App extends React.Component {
   //Axios get request in componentdidmountto get this information
   async getUserInfo() {
     var id = JSON.parse(localStorage.googleInfo).id;
-    console.log(id);
-    const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
+    // console.log(id);
+    // const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
+    const response = await axios.get(`http://${SERVER_URL}/users/1`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
   }
@@ -228,7 +229,7 @@ class App extends React.Component {
     this.setState({ orderObj: orderObj });
     axios({
       method: 'post',
-      url: `http://${REACT_APP_SERVER_URL}/transactions`,
+      url: `http://${SERVER_URL}/transactions`,
       data: orderObj,
     });
   }
@@ -432,10 +433,10 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo}/>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} assetData={this.state.assetData}/>} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
-              <Route path="/leaderboard" element={<LeaderBoard />} />
-              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
+              <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo}/>} />
+              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>

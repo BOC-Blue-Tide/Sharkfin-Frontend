@@ -133,7 +133,7 @@ class App extends React.Component {
       coinToday: null,
       coinPrevious: null,
       orderObj: null,
-      assetData: null,
+      assetData: {availBalance: 0},
       availFunds: {
         avail_balance: 0,
         net_deposits: 0
@@ -442,7 +442,7 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo}/>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} assetData={this.state.assetData}/>} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} availFunds={this.state.availFunds} getUserInfo={this.getUserInfo}/>} />
               <Route path="/leaderboard" element={<LeaderBoard />} />
               <Route path="/transferForm" element={<TransferForm

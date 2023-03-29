@@ -10,13 +10,13 @@ import Topfive from './topfive.jsx';
 const Placement = (props) => {
   console.log(props);
   const [friendBoard, setFriendBoard] = useState([])
-  const [userId, setUserId] = useState(props.user.user_id)
-  // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setUserId] = useState(props.user.user_id)
+  const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(540)
   const [remaining, setRemaining] = useState(460)
-  const [profilePic, setProfilePic] = useState(props.user.profilepic_url)
+  const [profilePic, setProfilePic] = useState('')
   // from app.jsx
   const [userInfo, setUserInfo] = useState({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
 

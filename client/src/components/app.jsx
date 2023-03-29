@@ -175,6 +175,7 @@ class App extends React.Component {
       return;
     }
     var id = JSON.parse(localStorage.googleInfo).id;
+    console.log(id);
     const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })

@@ -13,6 +13,7 @@ module.exports = {
     };
     await axios.get(`http://${SERVER_URL}/pchart`, {params: paramsC})
       .then((result) => {
+        console.log(result.data);
         res.status(200).send(result.data);
       })
       .catch((err) => {

@@ -11,7 +11,8 @@ import ViewRequests from '../Friends/ViewRequests.jsx'
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const SideBar = () => {
-  const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  const [userId, setuserId] = useState(1)
   const [friendRequestNum, setFriendRequestNum] = useState(0)
   const [friendBoard, setFriendBoard] = useState([])
   const [globalBoard, setGlobalBoard] = useState([])

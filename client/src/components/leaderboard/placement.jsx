@@ -8,32 +8,40 @@ import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
 const Placement = (props) => {
-  console.log(props);
+  // console.log(props);
   const [friendBoard, setFriendBoard] = useState([])
-  // const [userId, setUserId] = useState(1)
-  const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  const [userId, setUserId] = useState(1)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
-  const [invested, setInvested] = useState(540)
+  const [invested, setInvested] = useState(565)
   const [remaining, setRemaining] = useState(460)
   // const [profilePic, setProfilePic] = useState(props.user.profilepic_url)
   const [profilePic, setProfilePic] = useState(JSON.parse(localStorage.getItem("googleInfo")).picture)
   // from app.jsx
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState(props.user)
+  const [performance, setPerformance] = useState(0)
 
 
 
   useEffect(() => {
     getFriendBoardData(userId)
-    getSelfInfo(userId)
+    getSelfPerformance(userId)
     setQuarterLeft(daysUntilNextQuarter())
   }, [])
 
   useEffect(() => {
     addSelfPlacement(userId)
-    checkProfilePic()
   }, [friendBoard])
 
+  useEffect(() => {
+    checkProfilePic()
+    // console.log(props.user)
+  }, [props.user])
+
+  // useEffect(() => {
+  //   console.log(props.assetData)
+  // }, [props.assetData])
 
 
   const addSelfPlacement = (id) => {
@@ -54,12 +62,12 @@ const Placement = (props) => {
     }
   }
 
-  const getSelfInfo = async (id) => {
+  const getSelfPerformance = async (id) => {
     await Axios.get('/getuserdetail', {params: {"id": id}})
     .then((response) => {
-      console.log(response.data, 'userinfo')
+      // console.log(response.data, 'userinfo')
       var data = response.data
-      setUserInfo(data)
+      setPerformance(data)
     })
   }
 
@@ -73,8 +81,8 @@ const Placement = (props) => {
   }
 
   const checkProfilePic = () => {
-    if (profilePic !== undefined) {
-      setProfilePic(userInfo.profilepic_url)
+    if (props.user.profilepic_url !== "") {
+      setProfilePic(props.user.profilepic_url)
     }
   }
 
@@ -88,7 +96,7 @@ const Placement = (props) => {
             <div className="profile-box">
 
               {/* <img src={ profilePic }></img> */}
-              <img src={profilePic}></img>
+              <img src={profilePic || JSON.parse(localStorage.getItem("googleInfo")).picture}></img>
             </div>
 
           </div>
@@ -125,23 +133,23 @@ const Placement = (props) => {
   } else {
     return (
       <div className="mainpage-greeting-leaderboard">
-        <div className="greeting-title"><h1>Good Afternoon, {userInfo.first_name}</h1></div>
+        <div className="greeting-title"><h1>Good Afternoon, {props.user.firstname}</h1></div>
         <div className="profilePic-greeting-container">
           <div className="profilePic">
             {/* BG -> IMG */}
             <div className="profile-box">
 
               {/* <img src={ profilePic }></img> */}
-              <img src={profilePic}></img>
+              <img src={profilePic || JSON.parse(localStorage.getItem("googleInfo")).picture}></img>
             </div>
 
           </div>
           <div className="greeting">
             <div>
-              <h2><span className="color-lightblue">{userInfo.performance_percentage}% growth </span>this quarter</h2>
+              <h2><span className="color-lightblue">{performance.performance_percentage}% growth </span>this quarter</h2>
               <h3><span className="color-gold">{selfPlacement} place </span>out of {friendBoard.length} friends</h3>
               <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
-              <h3><span className="color-lightblue">${invested} </span>invested, <span className="color-lightblue">${remaining} </span>remaining funds</h3>
+              <h3><span className="color-lightblue">${props.assetData.availBalance} </span>invested, <span className="color-lightblue">${remaining} </span>remaining funds</h3>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ import Axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 
 const Topfive = (props) => {
-  const [friendBoard, setFriendBoard] = useState([{"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5},{"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5},{"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5}])
+  const [friendBoard, setFriendBoard] = useState([])
   const [tfDivHTML, setTfDivHTML] = useState(`<p>Rendering</p>`)
 
 
@@ -12,6 +12,7 @@ const Topfive = (props) => {
 
   useEffect(() => {
     setTfDiv()
+    console.log(props.friendBoard)
   }, [friendBoard])
 
 
@@ -21,7 +22,7 @@ const Topfive = (props) => {
       for (var x = 0; x < friendBoard.length; x ++) {
         var box = `<div class="tf-box">`
         var place = x + 1
-        var first_name =friendBoard[x].first_name
+        var first_name =friendBoard[x].firstname
         var number = Number(friendBoard[x].performance_percentage)
         var arrow = null
         var performance_percentage = null
@@ -56,7 +57,7 @@ const Topfive = (props) => {
       for (var x = 0; x < 3; x ++) {
         var box = `<div class="tf-box">`
         var place = x + 1
-        var first_name =friendBoard[x].first_name
+        var first_name =friendBoard[x].firstname
         var number = Number(friendBoard[x].performance_percentage)
         var arrow = null
         var performance_percentage = null

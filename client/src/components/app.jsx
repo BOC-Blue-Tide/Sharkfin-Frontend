@@ -173,9 +173,8 @@ class App extends React.Component {
   //Axios get request in componentdidmountto get this information
   async getUserInfo() {
     var id = JSON.parse(localStorage.googleInfo).id;
-    // console.log(id);
-    // const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
-    const response = await axios.get(`http://${SERVER_URL}/users/1`);
+    const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
+    // const response = await axios.get(`http://${SERVER_URL}/users/1`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
   }

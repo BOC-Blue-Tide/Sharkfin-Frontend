@@ -32,7 +32,7 @@ const LeaderBoard = (props) => {
           <SideBar user={props.user}/>
         </div>
         <div className="info-container">
-          <Portfolio user={props.user} leaderBoardPage={true}/>
+          <Portfolio user={props.user} leaderBoardPage={true} assetData={props.assetData}/>
         </div>
       </div>
     </>

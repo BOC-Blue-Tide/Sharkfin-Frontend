@@ -133,7 +133,7 @@ class App extends React.Component {
       coinToday: null,
       coinPrevious: null,
       orderObj: null,
-      assetData: {availBalance: 0},
+      assetData: { availBalance: 0 },
       availFunds: {
         avail_balance: 0,
         net_deposits: 0
@@ -196,12 +196,8 @@ class App extends React.Component {
               net_deposits: 0
             }});
           } else {
-            this.setState({ availFunds: availBalance.data[0]})
-            if (assetData === null) {
-              assetData = {}
-              assetData.availBalance = availBalance.data[0].avail_balance
-              this.setState({ assetData: assetData })
-            } else {
+            this.setState({ availFunds: availBalance.data[0] })
+            if (assetData) {
               assetData.availBalance = availBalance.data[0].avail_balance
               this.setState({ assetData: assetData })
             }
@@ -217,21 +213,17 @@ class App extends React.Component {
     this.setState({ availFunds: newBalance });
   }
 
-  async getHoldingAmount(symbol) {
+  async getHoldingAmount(symbolInput) {
     try {
-      console.log('trigger')
       let assetData = this.state.assetData
       let userid = this.state.userInfo.user_id
+      let symbol = symbolInput.toUpperCase()
       var holding = await axios.get(`http://${SERVER_URL}/getHoldingAmount`, { params: { userid: userid, symbol: symbol } })
         .then(holding => {
-          console.log('check', holding.data[0])
-          if (assetData === null) {
-            assetData = {}
-            assetData.holding = holding.data[0]
+          if (assetData) {
+            assetData.holding = holding.data[0].qty
             this.setState({ assetData: assetData })
-          } else {
-            assetData.holding = holding.data[0]
-            this.setState({ assetData: assetData })
+            //console.log(assetData)
           }
         })
     }
@@ -241,10 +233,17 @@ class App extends React.Component {
   }
 
   handleOrderClick(orderObj) {
+    console.log('data to DB', orderObj)
     this.setState({ orderObj: orderObj });
     axios({
       method: 'post',
       url: `http://${SERVER_URL}/transactions`,
+      data: orderObj,
+    });
+
+    axios({
+      method: 'post',
+      url: `http://${SERVER_URL}/updatePortfolioinstant`,
       data: orderObj,
     });
   }
@@ -273,7 +272,7 @@ class App extends React.Component {
 
   async getData(input, selectedScope) {
     var symbol = input.toUpperCase();
-    console.log(symbol);
+    //console.log(symbol);
     var scope = selectedScope.toLowerCase()
     try {
       this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
@@ -458,7 +457,7 @@ class App extends React.Component {
                 getUserInfo={this.getUserInfo}
                 getAvailBalance={this.getAvailBalance.bind(this)}
                 updateBalance={this.updateBalance.bind(this)}
-                />} />
+              />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>
@@ -482,7 +481,9 @@ class App extends React.Component {
                           <Order pageType={'stock'}
                             handleOrderClick={this.handleOrderClick.bind(this)}
                             stockObj={this.state.stockObj}
-                            barData={this.state.barData} />
+                            barData={this.state.barData}
+                            assetData={this.state.assetData}
+                            userid={this.state.userInfo.user_id} />
                         </Grid>
                       </Grid>
                     </div> : null}
@@ -503,6 +504,8 @@ class App extends React.Component {
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                             handleOrderClick={this.handleOrderClick.bind(this)}
+                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
 
                           />
                         </Grid>
@@ -512,7 +515,10 @@ class App extends React.Component {
                             coinMeta={this.state.coinMeta}
                             coinBarData={this.state.coinBarData}
                             coinToday={this.state.coinToday}
-                            coinPrevious={this.state.coinPrevious} />
+                            coinPrevious={this.state.coinPrevious}
+                            assetData={this.state.assetData}
+                            userid={this.state.userInfo.user_id}
+                          />
                         </Grid>
                       </Grid>
                     </div>

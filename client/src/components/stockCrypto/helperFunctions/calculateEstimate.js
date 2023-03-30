@@ -1,7 +1,7 @@
 const helpers = {
-  calculateEstimate: async (orderIn, OrderType, amount, price) => {
+  calculateEstimate: async (orderIn, amount, price) => {
 
-    console.log(orderIn, OrderType, amount, price)
+    //console.log(orderIn, amount, price)
     // 0 = buy
     //1 = sell
     var estimate;
@@ -14,8 +14,34 @@ const helpers = {
     else if (orderIn === 'coins') {
       estimate = Number(amount) * price
     }
+    //console.log(estimate)
     return estimate
 
+  },
+  calculateRemaining: async (orderIn, amount, availBalance, estimate, orderType, holding) => {
+    //console.log(orderIn, amount, availBalance, estimate, orderType, holding)
+    var remaining = {};
+    //buy
+    if (orderType === 'buy') {
+      if (orderIn === 'shares' || orderIn === 'coins') {
+        remaining.buyPower = availBalance - estimate
+        remaining.holding = holding + amount
+      } else {
+        remaining.buyPower = availBalance - amount
+        remaining.holding = holding + estimate
+      }
+
+    }
+    else { // sell
+      if (orderIn === 'shares' || orderIn === 'coins') {
+        remaining.buyPower = availBalance + estimate
+        remaining.holding = holding - amount
+      } else {
+        remaining.buyPower = availBalance + amount
+        remaining.holding = holding + estimate
+      }
+    }
+    return remaining
   }
 
 }

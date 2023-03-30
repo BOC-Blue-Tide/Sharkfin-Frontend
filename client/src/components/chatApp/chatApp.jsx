@@ -23,6 +23,7 @@ const chatApp = function() {
   const [friendData, setFriendData] = useState([]);
   const [currentChat, setCurrentChat] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(0);
+  const [inChat, setInChat] = useState(false);
 
 
   const handleClick = function(input) {
@@ -66,18 +67,10 @@ const chatApp = function() {
 
   return (
     <>
-    <Grid container spacing={2}>
-      <Grid xs={4}>
-        <Item>
-          <FriendListChat friends={friendData} handleClick={handleClick}/>
-        </Item>
-      </Grid>
-      <Grid xs={8}>
-        <Item>
-          <ChatList messages={currentChat} handleFormSubmit={handleFormSubmit} currentFriend={currentFriend}/>
-        </Item>
-      </Grid>
-    </Grid>
+      {inChat? <ChatList messages={currentChat} handleFormSubmit={handleFormSubmit} currentFriend={currentFriend}/>:
+                <FriendListChat friends={friendData} handleClick={handleClick}/>
+              }
+       
     </>
   )
 }

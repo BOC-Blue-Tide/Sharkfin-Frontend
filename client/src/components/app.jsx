@@ -189,15 +189,19 @@ class App extends React.Component {
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          console.log('available', availBalance.data[0]);
-          this.setState({ availFunds: availBalance.data[0]})
-          if (assetData === null) {
-            assetData = {}
-            assetData.availBalance = availBalance.data[0].avail_balance
-            this.setState({ assetData: assetData })
+          console.log('available', availBalance.data);
+          if (availableBalance.data.length === 0) {
+            return;
           } else {
-            assetData.availBalance = availBalance.data[0].avail_balance
-            this.setState({ assetData: assetData })
+            this.setState({ availFunds: availBalance.data[0]})
+            if (assetData === null) {
+              assetData = {}
+              assetData.availBalance = availBalance.data[0].avail_balance
+              this.setState({ assetData: assetData })
+            } else {
+              assetData.availBalance = availBalance.data[0].avail_balance
+              this.setState({ assetData: assetData })
+            }
           }
         })
     }

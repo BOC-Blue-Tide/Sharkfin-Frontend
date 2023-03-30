@@ -12,10 +12,8 @@ function AccountInfo(props) {
 
    const [edit, setEdit] = useState(false);
 
-   let remainingFunds = 400;
-
    const [userInfo, setUserInfo] = useState({
-      user_id: props.userInfo.user_id,
+      user_id: JSON.parse(localStorage.getItem(['googleInfo'])).id,
       firstname: props.userInfo.firstname,
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
@@ -29,6 +27,7 @@ function AccountInfo(props) {
     const [imageUrl, setImageUrl] = useState(userInfo.profilepic_url);
     //update state when get the upload photo url
     useEffect(() => {
+
       setUserInfo({
          ...userInfo,
          profilepic_url: imageUrl
@@ -129,8 +128,8 @@ function AccountInfo(props) {
          <Box>
             <h1>Account Information</h1>
 
-            {userInfo.accountNumber ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
-               <Typography sx={style.headerText} variant="body1">You have ${remainingFunds} available funds for trading.</Typography>
+            {userInfo.account_number ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
+               <Typography sx={style.headerText} variant="body1">You have ${props.availFunds.avail_balance} available funds for trading.</Typography>
 
                <Link state={{ page: -1 }} to="/transferForm">
                   <Button variant="contained" color="primary">

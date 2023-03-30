@@ -190,8 +190,11 @@ class App extends React.Component {
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
           console.log('available', availBalance.data);
-          if (availableBalance.data.length === 0) {
-            return;
+          if (availBalance.data.length === 0) {
+            this.setState({ availFunds: {
+              avail_balance: 0,
+              net_deposits: 0
+            }});
           } else {
             this.setState({ availFunds: availBalance.data[0]})
             if (assetData === null) {
@@ -448,7 +451,7 @@ class App extends React.Component {
             <Routes>
               <Route exact path="/" element={<Portfolio user={this.state.userInfo} assetData={this.state.assetData}/>} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} availFunds={this.state.availFunds} getUserInfo={this.getUserInfo}/>} />
-              <Route path="/leaderboard" element={<LeaderBoard />} />
+              <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo}/>} />
               <Route path="/transferForm" element={<TransferForm
                 userInfo={this.state.userInfo}
                 availFunds={this.state.availFunds}

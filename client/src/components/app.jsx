@@ -189,8 +189,8 @@ class App extends React.Component {
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          //console.log('available', availBalance.data[0]);
-          if (availableBalance.data.length === 0) {
+          console.log('available', availBalance.data[0]);
+          if (availBalance.data.length === 0) {
             return;
           } else {
             this.setState({ availFunds: availBalance.data[0] })
@@ -218,8 +218,14 @@ class App extends React.Component {
       var holding = await axios.get(`http://${SERVER_URL}/getHoldingAmount`, { params: { userid: userid, symbol: symbol } })
         .then(holding => {
           if (assetData) {
-            assetData.holding = holding.data[0].qty
-            this.setState({ assetData: assetData })
+            if (holding.data.length === 0) {
+              assetData.holding = 0
+              this.setState({ assetData: assetData })
+            } else {
+              assetData.holding = holding.data[0].qty
+              this.setState({ assetData: assetData })
+            }
+
             //console.log(assetData)
           }
         })

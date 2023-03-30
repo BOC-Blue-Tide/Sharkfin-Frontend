@@ -189,16 +189,15 @@ class App extends React.Component {
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          //console.log('available', availBalance.data);
+          //console.log('available', availBalance.data[0]);
           if (availableBalance.data.length === 0) {
             return;
           } else {
-            this.setState({ availFunds: availBalance.data[0]})
+            this.setState({ availFunds: availBalance.data[0] })
             if (assetData) {
-            assetData.availBalance = availBalance.data[0].avail_balance
-            this.setState({ assetData: assetData })
+              assetData.availBalance = availBalance.data[0].avail_balance
+              this.setState({ assetData: assetData })
             }
-
           }
         })
     }
@@ -241,7 +240,7 @@ class App extends React.Component {
 
     axios({
       method: 'post',
-      url: `http://${SERVER_URL}/getHoldingAmount`,
+      url: `http://${SERVER_URL}/updatePortfolioinstant`,
       data: orderObj,
     });
   }

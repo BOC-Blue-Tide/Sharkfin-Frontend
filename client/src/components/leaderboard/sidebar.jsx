@@ -28,7 +28,7 @@ const SideBar = (props) => {
   useEffect(() => {
     getFriendBoardData(userId)
     getGlobalBoardData()
-    // getFriendRequestNum(userId)
+    getFriendRequestNum(userId)
   }, [])
 
   useEffect(() => {
@@ -233,7 +233,7 @@ const SideBar = (props) => {
       </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">
-          <ViewRequests/>
+          <ViewRequests getFriendRequestNum = {getFriendRequestNum}/>
         </div>
       </Modal>
       </div>

@@ -19,6 +19,11 @@ const ViewRequests = (props) => {
     .catch(err => console.log('getFriendRequestsByID', err));
   }, []);
 
+  //when post addfriends and the friendsList updated, sidebar request number rerender
+  useEffect(() => {
+    props.getFriendRequestNum()
+  }, [friendsList])
+
 
   const handleRequest = (e) => {
     let relationshipId = e.target.id

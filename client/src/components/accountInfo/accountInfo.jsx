@@ -5,28 +5,29 @@ import { Link } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import ProfilePic from '../../../dist/mockProfile.png';
 import axios from 'axios';
-const imagebb_key = process.env.IMAGEBB_KEY;
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 
 function AccountInfo(props) {
+
    const [edit, setEdit] = useState(false);
 
-   let remainingFunds = 400;
-
    const [userInfo, setUserInfo] = useState({
-      user_id: props.userInfo.user_id,
+      user_id: JSON.parse(localStorage.getItem(['googleInfo'])).id,
       firstname: props.userInfo.firstname,
       lastname: props.userInfo.lastname,
       email: props.userInfo.email,
       username: props.userInfo.username,
-      profilepic_url: JSON.parse(localStorage.getItem("googleInfo")).picture,
+      profilepic_url: props.userInfo.profilepic_url,
       bank: props.userInfo.bank,
       account_number: props.userInfo.account_number
     });
 
     //image upload state
-    const [imageUrl, setImageUrl] = useState('');
+    const [imageUrl, setImageUrl] = useState(userInfo.profilepic_url);
     //update state when get the upload photo url
     useEffect(() => {
+
       setUserInfo({
          ...userInfo,
          profilepic_url: imageUrl
@@ -73,7 +74,7 @@ function AccountInfo(props) {
 
       if (!edit) {
          console.log(userInfo);
-         axios.post(`http://localhost:8080/users/${userInfo.user_id}/update`, userInfo)
+         axios.post(`http://${SERVER_URL}/users/${userInfo.user_id}/update`, userInfo)
          .then((result) => {
             console.log(result);
             props.getUserInfo();
@@ -90,9 +91,9 @@ function AccountInfo(props) {
     };
 
    //  handle the file input change event
-   const handleFileInputChange = (e) => {
-      setUserInfo({...userInfo, profilePic: e.target.files[0]});
-   };
+   // const handleFileInputChange = (e) => {
+   //    setUserInfo({...userInfo, profilePic: e.target.files[0]});
+   // };
 
    //  handle the click event on the Avatar
    const handleAvatarClick = () => {
@@ -100,11 +101,20 @@ function AccountInfo(props) {
    };
 
    const handleImageChange = async (event) => {
+      setUserInfo({...userInfo, profilePic: event.target.files[0]})
       const formData = new FormData();
       formData.append('image', event.target.files[0]);
       formData.append('key', imagebb_key);
-      const response = await axios.post('https://api.imgbb.com/1/upload', formData);
-      setImageUrl(response.data.data.display_url);
+      //formData.append('name', event.target.files[0].name);
+      console.log(formData, "formData")
+      await axios.post('https://api.imgbb.com/1/upload', formData)
+      .then((response) => {
+         setImageUrl(response.data.data.display_url)
+         setUserInfo({...userInfo, profilepic_url: response.data.data.display_url});
+      })
+      .catch((err) => {
+         console.log(err)
+      })
    }
 
    const accountNumberTrimmer = (number) => {
@@ -118,8 +128,8 @@ function AccountInfo(props) {
          <Box>
             <h1>Account Information</h1>
 
-            {userInfo.accountNumber ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
-               <Typography sx={style.headerText} variant="body1">You have ${remainingFunds} available funds for trading.</Typography>
+            {userInfo.account_number ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
+               <Typography sx={style.headerText} variant="body1">You have ${props.availFunds.avail_balance} available funds for trading.</Typography>
 
                <Link state={{ page: -1 }} to="/transferForm">
                   <Button variant="contained" color="primary">
@@ -168,7 +178,7 @@ function AccountInfo(props) {
                      {/* Add onClick event to the Avatar */}
                      <div sx={style.profilePicContainer} onClick={edit? handleAvatarClick: null}>
                         {/* change src if there is updated */}
-                        <Avatar sx={style.profilePic} alt="Profile picture" src={imageUrl || userInfo.profilepic_url} />
+                        <Avatar sx={style.profilePic} alt="Profile picture" src={imageUrl || JSON.parse(localStorage.getItem("googleInfo")).picture} />
                      </div>
                   </Tooltip>
                   {/* Add hidden input for file selection */}
@@ -238,7 +248,7 @@ function AccountInfo(props) {
                      disabled = {!edit}
                      InputLabelProps={{ shrink: true }}
                      sx={{
-                        width: '40%'
+                        width: '40%',
                      }}
                   />
                </Box>

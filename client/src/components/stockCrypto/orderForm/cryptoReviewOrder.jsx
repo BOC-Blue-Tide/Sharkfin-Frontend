@@ -103,6 +103,8 @@ const cryptoReviewOrder = (props) => {
   }
 
   const handleSubmit = () => {
+    let datetime = new Date
+    datetime = datetime.toUTCString()
     const orderObj = props.orderInput
     orderObj.orderType = orderType
     orderObj.account = userid
@@ -111,6 +113,7 @@ const cryptoReviewOrder = (props) => {
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount
     orderObj.price = props.coinBarData[props.coinBarData.length - 1].c
+    orderObj.datetime = datetime
     orderObj.equity = equity
     orderObj.newRemaining = remaining
     console.log(orderObj)

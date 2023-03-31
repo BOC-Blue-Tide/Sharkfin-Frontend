@@ -10,6 +10,7 @@ const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 
 function AccountInfo(props) {
 
+   console.log(props);
    const [edit, setEdit] = useState(false);
 
    const [userInfo, setUserInfo] = useState({
@@ -104,13 +105,13 @@ function AccountInfo(props) {
       setUserInfo({...userInfo, profilePic: event.target.files[0]})
       const formData = new FormData();
       formData.append('image', event.target.files[0]);
-      formData.append('key', imagebb_key);
+      // formData.append('key', imagebb_key);
       //formData.append('name', event.target.files[0].name);
       console.log(formData, "formData")
-      await axios.post('https://api.imgbb.com/1/upload', formData)
+      await axios.post(`https://api.imgbb.com/1/upload?key=${imagebb_key}`, formData)
       .then((response) => {
-         setImageUrl(response.data.data.display_url)
-         setUserInfo({...userInfo, profilepic_url: response.data.data.display_url});
+         setImageUrl(response.data.data.url)
+         setUserInfo({...userInfo, profilepic_url: response.data.data.url});
       })
       .catch((err) => {
          console.log(err)
@@ -196,7 +197,7 @@ function AccountInfo(props) {
                      id="first-name-input-1"
                      label="First Name"
                      name='firstname'
-                     defaultValue={userInfo.firstname}
+                     defaultValue={props.userInfo.firstname}
                      onChange={handleInputChange}
                      variant="standard"
                      disabled = {!edit}
@@ -211,7 +212,7 @@ function AccountInfo(props) {
                      id="last-name-input-2"
                      label="Last Name"
                      name='lastname'
-                     defaultValue={userInfo.lastname}
+                     defaultValue={props.userInfo.lastname}
                      onChange={handleInputChange}
                      variant="standard"
                      disabled = {!edit}
@@ -227,7 +228,7 @@ function AccountInfo(props) {
                   <TextField
                      id="email-input"
                      label="Email"
-                     defaultValue={userInfo.email}
+                     defaultValue={props.userInfo.email}
                      variant="standard"
                      wrap='nowrap'
                      disabled
@@ -241,7 +242,7 @@ function AccountInfo(props) {
                      id="username-input-4"
                      label="Username"
                      name='username'
-                     defaultValue={userInfo.username}
+                     defaultValue={props.userInfo.username}
                      onChange={handleInputChange}
                      variant="standard"
                      wrap='nowrap'

@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { Button } from '@mui/material';
+import { Button, Grid} from '@mui/material';
 import {friends, searchResults} from  '../../../../mockData_friends.js';
 import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
@@ -10,6 +10,7 @@ const ViewRequests = (props) => {
   const [friendsList, setFriendsList] = useState([]);
 
   useEffect(() => {
+    // let userId = 1
     let userId = JSON.parse(localStorage.getItem("googleInfo")).id;
     axios.get(`http://${SERVER_URL}/getFriendRequestsByID`, {params: {user_id: userId}})
     .then((response) => {
@@ -18,6 +19,11 @@ const ViewRequests = (props) => {
     })
     .catch(err => console.log('getFriendRequestsByID', err));
   }, []);
+
+  //when post addfriends and the friendsList updated, sidebar request number rerender
+  // useEffect(() => {
+  //   props.getFriendRequestNum()
+  // }, [friendsList])
 
 
   const handleRequest = (e) => {
@@ -42,19 +48,30 @@ const ViewRequests = (props) => {
 
     return (
       <div className = 'popup-content'>
-      <div>Friend Requests</div>
+      <div style={{color:"#FFD300", fontSize: "large", fontWeight: "bold", marginBottom: "20px"}}>Friend Requests</div>
       <div>
         {friendsList.map((friend) => {
           return (
-            <div key={friend.id}>
-            <label>{friend.username}</label>
-            {friend.added ? (
-              <Button color="primary" id={friend.id}>added</Button>
-            ) : (
-              <Button color="primary" id={friend.id} onClick={handleRequest}>Accept Request</Button>
-            )}
 
-          </div>
+            <div key={friend.id} style={{"display": "flex", "flexDirection": "row","justifyContent": "space-between"}}>
+
+              <div style={{"display": "flex", "flexDirection": "row","justifyContent": "flex-start", "paddingLeft": "20%"}}>
+                <div >
+                  <img src={friend.profilepic_url} alt="Image" style={{width: "25px", height: "25px"}}/>
+                </div>
+                <div style={{paddingLeft: "10px"}}>{friend.username}</div>
+              </div>
+
+              <div style={{"display": "flex", "flexDirection": "row","justifyContent": "flex-end", paddingRight: "20%"}}>
+                {friend.added ? (
+                  <Button color="primary" id={friend.id} sx={{ color: 'text.secondary' }}>added</Button>
+                ) : (
+                  <Button color="primary" id={friend.id} onClick={handleRequest}>Accept Request</Button>
+                )}
+              </div>
+
+            </div>
+
           )
         })}
       </div>

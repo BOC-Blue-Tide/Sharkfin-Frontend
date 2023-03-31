@@ -1,6 +1,6 @@
 import { Button, Pagination } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import Axios from 'axios';
+import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 
 import AddFriends from '../Friends/AddFriends.jsx';
@@ -11,6 +11,7 @@ import Person from './person.jsx';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const SideBar = (props) => {
+  console.log(props);
   const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   // const [userId, setuserId] = useState(1)
   const [friendRequestNum, setFriendRequestNum] = useState(0)
@@ -45,7 +46,7 @@ const SideBar = (props) => {
   }
 
   const getFriendBoardData = async (userID) => {
-    await Axios.get('/friendBoard', {params: {"id" : userID}})
+    await axios.get('/friendBoard', {params: {"id" : userID}})
     .then((response) => {
       var data = response.data
       setFriendBoard(data)
@@ -65,7 +66,7 @@ const SideBar = (props) => {
   }
 
   const getGlobalBoardData = async () => {
-    await Axios.get('/globalBoard')
+    await axios.get('/globalBoard')
     .then((response) => {
       var data = response.data
       setGlobalBoard(data)

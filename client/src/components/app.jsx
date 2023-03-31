@@ -225,9 +225,11 @@ class App extends React.Component {
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          console.log('available', availBalance.data);
-          if (availableBalance.data.length === 0) {
-            return;
+          if (availBalance.data.length === 0) {
+            this.setState({ availFunds: {
+              avail_balance: 0,
+              net_deposits: 0
+            }});
           } else {
             this.setState({ availFunds: availBalance.data[0]})
             if (assetData === null) {
@@ -448,8 +450,7 @@ class App extends React.Component {
     if (!this.state.isReady) {
       <div></div>
     }
-
-    if (!this.state.logged_email) {
+    if ((!this.state.logged_email) || (!this.state.userInfo) || (this.state.userInfo.user_id === 0)) {
       return (
         <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo} />
       )
@@ -580,7 +581,7 @@ class App extends React.Component {
                     : null}
                 </>
               } />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo}/>} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

@@ -40,7 +40,7 @@ const SideBar = (props) => {
   const getFriendRequestNum = async (id) => {
     axios.get(`http://${SERVER_URL}/getFriendRequestsByID`, {params: {user_id: id}})
     .then((response) => {
-      friendRequestNum(response.data.rows.length);
+      setFriendRequestNum(response.data.rows.length);
     })
     .catch(err => console.log('getFriendRequestsByID', err));
   }
@@ -234,7 +234,7 @@ const SideBar = (props) => {
       </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">
-          <ViewRequests getFriendRequestNum = {getFriendRequestNum}/>
+          <ViewRequests getFriendRequestNum = {getFriendRequestNum} getFriendBoardData = {getFriendBoardData}/>
         </div>
       </Modal>
       </div>

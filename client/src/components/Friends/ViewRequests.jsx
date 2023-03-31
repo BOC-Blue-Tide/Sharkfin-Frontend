@@ -10,6 +10,7 @@ const ViewRequests = (props) => {
   const [friendsList, setFriendsList] = useState([]);
 
   useEffect(() => {
+    // let userId = 1
     let userId = JSON.parse(localStorage.getItem("googleInfo")).id;
     axios.get(`http://${SERVER_URL}/getFriendRequestsByID`, {params: {user_id: userId}})
     .then((response) => {
@@ -20,9 +21,9 @@ const ViewRequests = (props) => {
   }, []);
 
   //when post addfriends and the friendsList updated, sidebar request number rerender
-  useEffect(() => {
-    props.getFriendRequestNum()
-  }, [friendsList])
+  // useEffect(() => {
+  //   props.getFriendRequestNum()
+  // }, [friendsList])
 
 
   const handleRequest = (e) => {

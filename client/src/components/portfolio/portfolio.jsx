@@ -7,12 +7,13 @@ import TimeRangeP from './timeRangeP.jsx';
 import Placement from '../leaderboard/placement.jsx'
 import PaidIcon from '@mui/icons-material/Paid';
 import Axios from 'axios';
+import moment from 'moment';
 
 
 const Portfolio = (props) => {
   const userID = props.user.user_id;
-  const [timeWindow, setTimeWindow] = useState('1W');
-  const [chartData, setChartData] = useState({});
+  const [timeWindow, setTimeWindow] = useState('1D');
+  const [chartData, setChartData] = useState({time : [], net: []});
   const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbols: [], ratios: []}});
 
   useEffect(() => {
@@ -62,7 +63,7 @@ const Portfolio = (props) => {
         <div className='portfolio-my-net-worth-chart'>
           <h2>My Net Worth</h2>
           <h2>${alloPosData.totalNetWorth}</h2>
-          <PortfolioChart data={chartData}/>
+          <PortfolioChart data={chartData} latest={{net: alloPosData.totalNetWorth, time: moment().format()}}/>
           <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
         </div>
       </div>

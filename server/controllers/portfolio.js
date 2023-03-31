@@ -11,9 +11,8 @@ module.exports = {
       'user_id' : user_id,
       'timeWindow' : timeWindow
     };
-    await axios.get(`http://${REACT_APP_SERVER_URL}/pchart`, {params: paramsC})
+    await axios.get(`http://${SERVER_URL}/pchart`, {params: paramsC})
       .then((result) => {
-        console.log(result.data);
         res.status(200).send(result.data);
       })
       .catch((err) => {
@@ -25,7 +24,7 @@ module.exports = {
     var paramsAP = {
       'user_id' : user_id
     };
-    await axios.get(`http://${REACT_APP_SERVER_URL}/pallocation`, {params: paramsAP})
+    await axios.get(`http://${SERVER_URL}/pallocation`, {params: paramsAP})
       .then((result) => {
         res.status(200).send(result.data);
       })

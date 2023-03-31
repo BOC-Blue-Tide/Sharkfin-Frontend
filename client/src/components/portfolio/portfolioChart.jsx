@@ -5,6 +5,7 @@ import { Line } from "react-chartjs-2";
 const NetWorthChart = (props) => {
   var timeData = props.data.time;
   var netData = props.data.net;
+
   const data = {
     labels: timeData,
     datasets: [

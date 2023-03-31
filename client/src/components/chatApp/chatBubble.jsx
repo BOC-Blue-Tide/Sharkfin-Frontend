@@ -57,6 +57,7 @@ const ChatBubble = function (props) {
             marginBottom: "8px",
             maxWidth: "70%",
             wordBreak: "break-word",
+            boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.2)",
           }}
         >
           {props.message.message}

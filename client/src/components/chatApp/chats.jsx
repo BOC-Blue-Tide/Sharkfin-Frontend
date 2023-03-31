@@ -4,6 +4,8 @@ import ChatForm from "./chatForm.jsx";
 import IconButton from "@mui/material/IconButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
+import { Divider } from '@mui/material';
+
 
 const ChatList = function (props) {
   console.log('current', props.currentFriend.friend_id);
@@ -18,7 +20,7 @@ const ChatList = function (props) {
 
   return (
     <>
-      <Box sx={{ display: "flex", alignItems: "center", marginBottom: "16px" }}>
+      <Box sx={{ display: "flex", alignItems: "center", background: "##FBFBFB", borderRadius: "10px 10px 0px 0px" }}>
         <IconButton
           color="primary"
           onClick={props.handleBackClick}
@@ -34,6 +36,7 @@ const ChatList = function (props) {
         {`${props.currentFriend.firstname} ${props.currentFriend.lastname}`}
         </Box>
       </Box>
+      <Divider sx={{marginTop: "7px"}}/>
       <Box
         sx={{
           display: "flex",
@@ -41,7 +44,7 @@ const ChatList = function (props) {
           alignItems: "center",
           overflowY: "auto",
           marginBottom: "16px",
-          maxHeight: "calc(100vh - 150px)",
+          maxHeight: "400px",
         }}
       >
         {messageList}

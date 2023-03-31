@@ -1,7 +1,8 @@
 // ChatForm.jsx
 import React, { useState } from "react";
 import { Button, TextField, Box } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+import IconButton from '@mui/material/IconButton';
+import SendIcon from '@mui/icons-material/Send';
 
 const ChatForm = function (props) {
   const [formData, setFormData] = useState("");
@@ -25,6 +26,7 @@ const ChatForm = function (props) {
         background: "#fff",
         padding: "8px",
         borderTop: "1px solid #ddd",
+        borderRadius: "0px 0px 10px 10px" 
       }}
       onSubmit={(e) => {
         e.preventDefault();
@@ -41,9 +43,9 @@ const ChatForm = function (props) {
         variant="outlined"
         size="small"
       />
-      <Button type="submit" endIcon={<SendIcon />}>
-        Send
-      </Button>
+<IconButton type="submit" color="primary" aria-label="Send message">
+  <SendIcon />
+</IconButton>
     </Box>
   );
 };

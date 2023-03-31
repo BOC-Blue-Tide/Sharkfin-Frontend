@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-
-import Grid from '@mui/material/Unstable_Grid2';
-import TransactionList from '../transactions/TransactionList.jsx';
-import mockData from '../../../../mockData.js';
 import ChatList from './chats.jsx';
 import FriendListChat from './friendlist.jsx';
 import axios from 'axios';
@@ -23,89 +17,37 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const chatApp = function () {
-  const [chatData, setChatData] = useState([
-    {
-      "sent_from": 1,
-      "sent_to": 2,
-      "message": "Hello",
-      "datetime": "Sat, 25 Mar 2023 01:20:56 GMT"
-    },
-    {
-      "sent_from": 1,
-      "sent_to": 2,
-      "message": "How are you doing today?",
-      "datetime": "Sat, 25 Mar 2023 01:21:56 GMT"
-    },
-    {
-      "sent_from": 2,
-      "sent_to": 1,
-      "message": "Im doing well! I just bought some bitcoin",
-      "datetime": "Sat, 25 Mar 2023 01:22:56 GMT"
-    }]);
-  const [friendData, setFriendData] = useState([
-    {
-      "friend_id": 2,
-      "username": "B_Sal",
-      "firstname": "Brian",
-      "lastname": "Salinger",
-      "profilepic_url": "https://cdn-icons-png.flaticon.com/128/4872/4872603.png"
-    },
-    {
-      "friend_id": 3,
-      "username": "theRealKarlM",
-      "firstname": "Karl",
-      "lastname": "Mulroney",
-      "profilepic_url": "https://cdn-icons-png.flaticon.com/128/4872/4872537.png"
-    }
-  ]);
+  const [chatData, setChatData] = useState([]);
+  const [friendData, setFriendData] = useState([]);
   const [currentChat, setCurrentChat] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(0);
   const [inChat, setInChat] = useState(false);
-  const [currentFriendName, setCurrentFriendName] = useState('');
 
-
-
-  //friends list
-
-  let friends = [
-    {
-      id: 1,
-      username: 'Rachel'
-    },
-    {
-      id: 2,
-      username: 'Monica'
-    },
-    {
-      id: 3,
-      username: 'Phoebe'
-    },
-    {
-      id: 4,
-      username: 'Chandler'
-    },
-    {
-      id: 5,
-      username: 'Joey'
-    },
-    {
-      id: 6,
-      username: 'Ross'
-    }
-  ];
-
-
-  let searchResults = [
-    {
-      id: 1,
-      username: 'Rachel'
-    }
-  ];
 
   const handleBackClick = () => {
     setInChat(false);
   };
 
+  const getMostRecentMessages = (chatData) => {
+    const recentMessages = {};
+
+    chatData.forEach((message) => {
+      const friend_id = message.sent_from === 1 ? message.sent_to : message.sent_from;
+
+      if (
+        !recentMessages[friend_id] ||
+        new Date(recentMessages[friend_id].datetime) < new Date(message.datetime)
+      ) {
+        const truncatedMessage =
+          message.message.length > 36
+            ? message.message.slice(0, 33) + '...'
+            : message.message;
+        recentMessages[friend_id] = { ...message, message: truncatedMessage };
+      }
+    });
+
+    return recentMessages;
+  };
 
 
   const handleClick = function (input) {
@@ -116,7 +58,7 @@ const chatApp = function () {
     setInChat(true);
     console.log('inchat', inChat)
     console.log(currentChat, currentFriend)
-    
+
   }
 
   const handleFormSubmit = function (message) {
@@ -138,19 +80,23 @@ const chatApp = function () {
       })
   }
 
-  // useEffect(() => {
-  //   let getChatLog = axios.get(`http://${SERVER_URL}/chat`, {'sent_from' = });
-  //   let getFriendList = axios.get(`http://${SERVER_URL}/chat/friends`);
+  useEffect(() => {
+    // let user_id = JSON.parse(localStorage.getItem(['googleInfo'])).id
+    let getChatLog = axios.get(`http://${SERVER_URL}/chat`);
+    let getFriendList = axios.get(`http://${SERVER_URL}/chat/friends`);
 
-  //   Promise.all([getChatLog, getFriendList])
-  //   .then(([response1, response2]) => {
-  //     setChatData(response1.data);
-  //     setFriendData(response2.data);
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   })
-  // }, []);
+    Promise.all([getChatLog, getFriendList])
+      .then(([response1, response2]) => {
+        setChatData(response1.data);
+        setFriendData(response2.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+  }, []);
+
+  const recentMessages = getMostRecentMessages(chatData);
+
 
   return (
     <>
@@ -161,14 +107,15 @@ const chatApp = function () {
             handleFormSubmit={handleFormSubmit}
             currentFriend={currentFriend}
             handleBackClick={handleBackClick}
+            sx={{
+              overflowY: "none",
+            }}
           />
         </>
       ) : (
         <>
-        <Box component="span" sx={{ fontWeight: "bold", margin: "20px" }}>
-          Messages
-        </Box>
-        <FriendListChat friends={friendData} handleClick={handleClick} />
+          <FriendListChat recentMessages={recentMessages}
+            friends={friendData} handleClick={handleClick} />
         </>
       )}
     </>

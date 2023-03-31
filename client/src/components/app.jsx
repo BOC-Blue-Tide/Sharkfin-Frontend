@@ -463,7 +463,8 @@ class App extends React.Component {
                   position: 'fixed',
                   bottom: '16px',
                   right: '16px',
-                  background: theme.palette.primary.main
+                  background: theme.palette.primary.main,
+                  color: "white"
                 }}
               >
                 <ChatIcon />
@@ -475,9 +476,10 @@ class App extends React.Component {
                 onClose={this.handleCloseChat}
                 style={{
                   zIndex: 1500,
+                  marginBottom: '20px'
                 }}
               >
-                <Paper sx={{height: "520px", width: "320px", marginBottom: "20px"}}>
+                <Paper sx={{height: "520px", width: "320px", borderRadius: "10px"}}>
                   <ChatPage/>
                 </Paper>
               </Popper>

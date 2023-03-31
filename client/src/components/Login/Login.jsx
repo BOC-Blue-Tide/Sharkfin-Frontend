@@ -39,6 +39,7 @@ const Login = (props) => {
 
     })
     .catch((error) => {
+      navigate(`/transferForm`);
       console.log('fail', error);
     });
 

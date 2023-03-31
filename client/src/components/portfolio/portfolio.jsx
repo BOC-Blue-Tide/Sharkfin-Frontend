@@ -71,13 +71,15 @@ const Portfolio = (props) => {
             <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
           </div>
         </div>
-        <div className='portfolio-my-asset-allocation'>
-          <h2>My Asset Allocation</h2>
-          <AllocationChart data={alloPosData}/>
-        </div>
-        <div className='portolio-my-position'>
-        <h2>My Positions</h2>
-          <PositionTable data={alloPosData}/>
+        <div className='position-allocation'>
+          <div className='portolio-my-position'>
+          <h2>My Positions</h2>
+            <PositionTable data={alloPosData}/>
+          </div>
+          <div className='portfolio-my-asset-allocation'>
+            <h2>My Asset Allocation</h2>
+            <AllocationChart data={alloPosData}/>
+          </div>
         </div>
         <div className='portfolio-signature'>
           Powered By APEX DIGITAL INVESTMENTS
@@ -87,21 +89,21 @@ const Portfolio = (props) => {
   } else {
     return (
       <>
-        <div className='portfolio-my-net-worth-chart'>
+        <div className='portfolio-my-net-worth-chart-leaderboard'>
           <h2>My Net Worth</h2>
           <h2>${alloPosData.totalNetWorth}</h2>
           <PortfolioChart data={chartData}/>
           <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
         </div>
-        <div className='portfolio-my-asset-allocation'>
-          <h2>My Asset Allocation</h2>
-          <AllocationChart data={alloPosData}/>
-        </div>
-        <div className='portolio-my-position'>
+        <div className='portolio-my-position-leaderboard'>
         <h2>My Positions</h2>
           <PositionTable data={alloPosData}/>
         </div>
-        <div className='portfolio-signature'>
+        <div className='portfolio-my-asset-allocation-leaderboard'>
+          <h2>My Asset Allocation</h2>
+          <AllocationChart data={alloPosData}/>
+        </div>
+        <div className='portfolio-signature-leaderboard'>
           Powered By APEX DIGITAL INVESTMENTS
         </div>
       </>

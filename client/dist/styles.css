@@ -461,6 +461,27 @@ input[type="number"] {
 
 .portfolio-my-net-worth-chart {
   width: 50%;
+  padding: 20px;
+}
+
+.position-allocation {
+  padding: 20px;
+  display: flex;
+  background-color: #8AEADF;
+}
+
+.portfolio-my-asset-allocation {
+  width: 30%;
+  margin-left: 20px;
+}
+
+.portolio-my-position {
+  width: 70%;
+}
+
+.portfolio-signature {
+  background-color: #EDC400;
+  padding: 20px;
 }
 
 .mainpage-greeting-leaderboard {
@@ -630,6 +651,29 @@ input[type="number"] {
   font-size: 0.5em;
 }
 
+.portfolio-my-net-worth-chart-leaderboard {
+  width: 100%;
+  padding: 2%;
+}
+
+.portfolio-my-asset-allocation-leaderboard {
+  width: 100%;
+  background-color: #8AEADF;
+  padding: 2%;
+}
+
+.portolio-my-position-leaderboard {
+  width: 100%;
+  background-color:#EDC400;
+  padding: 2%;
+}
+
+.portfolio-signature-leaderboard {
+  width: 100%;
+  background-color: white;
+  padding: 2%;
+}
+
 /* Viewport */
 @media screen and (max-width: 830px) {
   main {
@@ -706,6 +750,31 @@ input[type="number"] {
     width: 90%;
     margin: 0 auto;
   }
+
+  .info-container {
+    width: 100%;
+  }
+
+  .position-allocation {
+    padding: 20px;
+    display: block;
+    background-color: #8AEADF;
+  }
+
+  .portfolio-my-asset-allocation {
+    margin-left: 0px;
+    width: 100%
+  }
+
+  .position-allocation {
+    padding-top: 20px;
+    width: 100%;
+  }
+
+  .portfolio-my-net-worth-chart {
+    width: 100%
+  }
+
 }
 
 /*LeaderBoard page*/

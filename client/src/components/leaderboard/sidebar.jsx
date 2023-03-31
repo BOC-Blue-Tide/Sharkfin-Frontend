@@ -233,7 +233,7 @@ const SideBar = (props) => {
       </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">
-          <ViewRequests getFriendRequestNum = {getFriendRequestNum}/>
+          <ViewRequests getFriendRequestNum = {getFriendRequestNum} getFriendBoardData = {getFriendBoardData}/>
         </div>
       </Modal>
       </div>

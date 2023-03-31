@@ -22,6 +22,7 @@ const ViewRequests = (props) => {
   //when post addfriends and the friendsList updated, sidebar request number rerender
   useEffect(() => {
     props.getFriendRequestNum()
+    props.getFriendBoardData()
   }, [friendsList])
 
 

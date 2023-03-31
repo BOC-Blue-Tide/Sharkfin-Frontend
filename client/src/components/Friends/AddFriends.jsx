@@ -1,10 +1,11 @@
 import React, { useState,useEffect } from 'react';
-import { Button } from '@mui/material';
+import { Button, Grid} from '@mui/material';
 import {friends, searchResults} from  '../../../../mockData_friends.js';
 import Input from '@mui/material/Input';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+
 
 const AddFriends = (props) => {
   const [searchInput, setSearchInput] = useState('');
@@ -76,49 +77,80 @@ const AddFriends = (props) => {
 
     return (
       <div className = 'popup-content'>
-        <div>Let's Make Friends!</div>
+        <div style={{color:"#FFD300", fontSize: "large", fontWeight: "bold", marginBottom: "10px"}}>Let's Make Friends!</div>
 
         {/* <SearchBar /> */}
         <div className="searchBar-container">
           <form onSubmit={handleSubmit}>
-            <SearchIcon />
+            <SearchIcon className="search-icon" />
             <input type="text" onInput={handleInput} />
-            <Button variant="contained" type="submit" >Search</Button>
+            <Button type="submit" >Search</Button>
           </form>
         </div >
 
         {/* <FriendsList /> */}
         {showList?
-        ( <div>People you may like:</div> ) :
-        ( <div>Search result:</div> )
+        ( <Grid container padding={2} sx={{ paddingLeft: '120px', color: 'text.secondary'}}>
+            <div>People you may like:</div>
+          </Grid>
+        ) :
+        ( <Grid container padding={2} sx={{ paddingLeft: '120px', color: 'text.secondary'}}>
+            <div>Search result:</div>
+          </Grid>
+        )
         }
 
-            {friendsList.map((friend) => {
-              return (
-                <div key={friend.id}>
-                  {/* <label>
-                    <img src={friend.profilepic_url}/>
-                  </label> */}
-                  <label>{friend.username}</label>
-                  {/* <button>ADD Friend</button> */}
-                  {friend.requested ? (
-                    // <label>  requested</label>
-                    <Button color="primary" id={friend.id}>requested</Button>
-                  ) : (
-                  <Button color="primary" id={friend.id} onClick={handleRequest}>Add Friend</Button>
-                  )}
 
+        {friendsList.map((friend) => {
+          return (
+            <div style={{"display": "flex", "flex-direction": "row","justify-content": "space-between"}}>
+
+              <div style={{"display": "flex", "flex-direction": "row","justify-content": "flex-start", "padding-left": "20%"}}>
+                <div >
+                  <img src={friend.profilepic_url} alt="Image" style={{width: "25px", height: "25px"}}/>
                 </div>
-              )
-            })}
+                <div style={{paddingLeft: "10px"}}>{friend.username}</div>
+              </div>
+
+              <div style={{"display": "flex", "flex-direction": "row","justify-content": "flex-end", paddingRight: "20%"}}>
+                {friend.requested ? (
+                  <Button color="primary" id={friend.id} sx={{ color: 'text.secondary' }}>Requested</Button>
+                ) : (
+                  <Button color="primary" id={friend.id} onClick={handleRequest}>Add Friend</Button>
+                )}
+              </div>
+
+            </div>
+
+          );
+        })}
 
 
-
-        {/* {showSearchResult? <SearchResult />: null} */}
       </div>
     )
 
 }
 
 export default AddFriends;
+
+
+
+{/* <Grid container key={friend.id} textAlign="left" sx={{ paddingLeft: '120px'}}>
+
+<Grid item xs textAlign="left" sx={{ paddingRight: '0px' }}>
+  <img src={friend.profilepic_url} alt="Image" style={{width: "25px", height: "25px"}}/>
+</Grid>
+
+<Grid item xs textAlign="left">
+  <label>{friend.username}</label>
+</Grid>
+
+<Grid item textAlign="right" sx={{ paddingRight: '120px' }}>
+  {friend.requested ? (
+    <Button color="primary" id={friend.id} sx={{ color: 'text.secondary' }}>Requested</Button>
+  ) : (
+    <Button color="primary" id={friend.id} onClick={handleRequest}>Add Friend</Button>
+  )}
+</Grid>
+</Grid> */}
 

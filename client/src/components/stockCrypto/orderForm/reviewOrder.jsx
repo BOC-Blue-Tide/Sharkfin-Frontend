@@ -108,6 +108,7 @@ const reviewOrder = (props) => {
     const orderObj = props.orderInput
     orderObj.orderType = orderType
     orderObj.account = userid
+    orderObj.purchaseType = 'stock'
     orderObj.symbol = stockObj.Symbol
     orderObj.company = stockObj.Name
     orderObj.orderIn = props.orderInput.orderIn
@@ -116,7 +117,6 @@ const reviewOrder = (props) => {
     orderObj.datetime = datetime
     orderObj.equity = equity
     orderObj.newRemaining = remaining
-    console.log(orderObj)
     props.handleOrderClick(orderObj)
   }
 

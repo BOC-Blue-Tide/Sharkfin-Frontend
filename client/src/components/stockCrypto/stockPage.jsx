@@ -94,8 +94,8 @@ const stockPage = (props) => {
       {props.stockObj && props.barData && props.qouteData ? (
         <>
           <Stack direction="row" spacing={1}>
-            <Chip label={`${stockObj.Sector}`} variant="outlined" />
-            <Chip label={`${stockObj.Industry}`} variant="outlined" />
+            <Chip label={`${stockObj.Sector}`} />
+            <Chip label={`${stockObj.Industry}`} />
           </Stack>
           <div className="stock-name">{stockObj.Name}</div>
           <LivePriceDisplay liveData={liveData} />

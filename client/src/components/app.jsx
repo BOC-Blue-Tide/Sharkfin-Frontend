@@ -238,17 +238,26 @@ class App extends React.Component {
   handleOrderClick(orderObj) {
     console.log('data to DB', orderObj)
     this.setState({ orderObj: orderObj });
-    axios({
+    var postTransaction = axios({
       method: 'post',
       url: `http://${SERVER_URL}/transactions`,
       data: orderObj,
     });
 
-    axios({
-      method: 'post',
+    var updatePortfolioInstant = axios({
+      method: 'put',
       url: `http://${SERVER_URL}/updatePortfolioinstant`,
       data: orderObj,
     });
+
+    Promise.all([postTransaction, updatePortfolioInstant])
+      .then(() => {
+        // Both requests have completed successfully
+        this.getAvailBalance(this.state.userInfo.user_id)
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
   }
 
   async getTransactionData() {

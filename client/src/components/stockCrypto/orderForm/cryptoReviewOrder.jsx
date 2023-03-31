@@ -106,6 +106,7 @@ const cryptoReviewOrder = (props) => {
     let datetime = new Date
     datetime = datetime.toUTCString()
     const orderObj = props.orderInput
+    orderObj.purchaseType = 'crypto'
     orderObj.orderType = orderType
     orderObj.account = userid
     orderObj.symbol = coinMeta[0].symbol

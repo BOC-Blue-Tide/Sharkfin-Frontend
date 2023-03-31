@@ -15,7 +15,7 @@ const Portfolio = (props) => {
   const [timeWindow, setTimeWindow] = useState('1D');
   const [chartData, setChartData] = useState({time : [], net: []});
   const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbols: [], ratios: []}});
-
+  const [leaderBoardPage, setLeaderBoardPage] = useState(props.leaderBoardPage || false);
   useEffect(() => {
     var paramsC = {
       user_id : userID,
@@ -54,32 +54,58 @@ const Portfolio = (props) => {
     setTimeWindow(timewindow);
   };
 
-  return (
-    <div className='portfolio-container'>
-      <div className='greeting-net-worth-chart'>
-        <div className="greeting-leaderboard">
-          <Placement user={props.user}/>
+  //if it's home page no Placement component
+
+  if (!leaderBoardPage) {
+    return (
+      <div className='portfolio-container'>
+        <div className='greeting-net-worth-chart'>
+          <div className="greeting-leaderboard">
+            <Placement user = {props.user} assetData={props.assetData} availFunds={props.availFunds}/>
+          </div>
+          <div className='portfolio-my-net-worth-chart'>
+            <h2>My Net Worth</h2>
+            <h2>${alloPosData.totalNetWorth}</h2>
+            <PortfolioChart data={chartData}/>
+            <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
+          </div>
         </div>
+        <div className='portfolio-my-asset-allocation'>
+          <h2>My Asset Allocation</h2>
+          <AllocationChart data={alloPosData}/>
+        </div>
+        <div className='portolio-my-position'>
+        <h2>My Positions</h2>
+          <PositionTable data={alloPosData}/>
+        </div>
+        <div className='portfolio-signature'>
+          Powered By APEX DIGITAL INVESTMENTS
+        </div>
+      </div>
+    )
+  } else {
+    return (
+      <>
         <div className='portfolio-my-net-worth-chart'>
           <h2>My Net Worth</h2>
           <h2>${alloPosData.totalNetWorth}</h2>
           <PortfolioChart data={chartData} latest={{net: alloPosData.totalNetWorth, time: moment().format()}}/>
           <TimeRangeP handleTimeWindowClick={handleTimeWindowClick}/>
         </div>
-      </div>
-      <div className='portfolio-my-asset-allocation'>
-        <h2>My Asset Allocation</h2>
-        <AllocationChart data={alloPosData}/>
-      </div>
-      <div className='portolio-my-position'>
-      <h2>My Positions</h2>
-        <PositionTable data={alloPosData}/>
-      </div>
-      <div className='portfolio-signature'>
-        Powered By APEX DIGITAL INVESTMENTS
-      </div>
-    </div>
-  )
+        <div className='portfolio-my-asset-allocation'>
+          <h2>My Asset Allocation</h2>
+          <AllocationChart data={alloPosData}/>
+        </div>
+        <div className='portolio-my-position'>
+        <h2>My Positions</h2>
+          <PositionTable data={alloPosData}/>
+        </div>
+        <div className='portfolio-signature'>
+          Powered By APEX DIGITAL INVESTMENTS
+        </div>
+      </>
+    )
+  }
 
 }
 

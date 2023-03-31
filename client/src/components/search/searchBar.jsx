@@ -22,7 +22,7 @@ const searchBar = (props) => {
 
 
   useEffect(() => {
-    if (searchScope === 'stock') {
+    if (searchScope === 'Stock') {
       const searchStock = () => {
         Axios.get('https://www.alphavantage.co/query', {
           params: {
@@ -50,9 +50,12 @@ const searchBar = (props) => {
   }, [searchInput])
 
   const handleOptionClick = (e) => {
-    if (e.target.innerText.length > 0) {
-      setSearchInput(e.target.innerText)
+    if (e.target.innerText) {
+      if (e.target.innerText.length > 0) {
+        setSearchInput(e.target.innerText)
+      }
     }
+
 
   }
 
@@ -73,8 +76,8 @@ const searchBar = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    //console.log(searchInput.length, searchScope)
     if (searchInput.length > 0 && searchScope === 'Stock') {
-      //console.log(searchInput)
       props.getHoldingAmount(searchInput)
       props.getData(searchInput, searchScope)
       e.target.reset()
@@ -93,8 +96,8 @@ const searchBar = (props) => {
       <form onSubmit={handleSubmit}>
         <Stack direction="row" spacing={0.5}>
           {/* <SearchIcon /> */}
-          <input className='searchInput' type="text" onChange={handleInput} placeholder="Search by symbol" />
-          {/* <Autocomplete
+          {/* <input className='searchInput' type="text" onChange={handleInput} placeholder="Search by symbol" /> */}
+          <Autocomplete
             id="searchInput"
             freeSolo
             options={suggestionList.map((suggestion) => suggestion['1. symbol'])}
@@ -102,7 +105,7 @@ const searchBar = (props) => {
             renderInput={(params) => <TextField {...params} label="Search by symbol"
               onChange={handleInput} style={{ width: '250px' }}
             />}
-          /> */}
+          />
           <Button variant="contained" onClick={handleClick}>
             {`${searchScope}`}
           </Button>

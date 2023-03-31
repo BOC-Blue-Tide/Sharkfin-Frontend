@@ -133,7 +133,11 @@ class App extends React.Component {
       coinToday: null,
       coinPrevious: null,
       orderObj: null,
-      assetData: null,
+      assetData: { availBalance: 0 },
+      availFunds: {
+        avail_balance: 0,
+        net_deposits: 0
+      },
       userInfo: {
         user_id: 0,
         firstname: '',
@@ -149,7 +153,6 @@ class App extends React.Component {
     }
     this.getTransactionData = this.getTransactionData.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
-    console.log('STATE:', this.state.userInfo);
   }
 
 
@@ -163,18 +166,20 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.userInfo.email !== this.state.userInfo.email) {
+    if ((prevState.userInfo) && (this.state.userInfo) && (prevState.userInfo.email !== this.state.userInfo.email)) {
       (async () => {
         await this.getAvailBalance(this.state.userInfo.user_id)
       })()
     }
   }
 
-  //Axios get request in componentdidmountto get this information
   async getUserInfo() {
-    var id = JSON.parse(localStorage.googleInfo).id;
-    console.log(id);
+    if (!localStorage.googleInfo) {
+      return;
+    }
+    var id = JSON.parse(localStorage.getItem(['googleInfo'])).id;
     const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
+    //const response = await axios.get(`http://${SERVER_URL}/users/1`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
   }
@@ -183,16 +188,19 @@ class App extends React.Component {
     try {
       // send userid to backend
       let assetData = this.state.assetData
-      var availBalance = await axios.get(`http://${SERVER_URL}/getAvailBalance`, { params: { userid: userid } })
+      var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          console.log(availBalance.data[0])
-          if (assetData === null) {
-            assetData = {}
-            assetData.availBalance = availBalance.data[0]
-            this.setState({ assetData: assetData })
+          if (availBalance.data.length === 0) {
+            this.setState({ availFunds: {
+              avail_balance: 0,
+              net_deposits: 0
+            }});
           } else {
-            assetData.availBalance = availBalance.data[0]
-            this.setState({ assetData: assetData })
+            this.setState({ availFunds: availBalance.data[0] })
+            if (assetData) {
+              assetData.availBalance = availBalance.data[0].avail_balance
+              this.setState({ assetData: assetData })
+            }
           }
         })
     }
@@ -201,21 +209,27 @@ class App extends React.Component {
     }
   }
 
-  async getHoldingAmount(symbol) {
+  updateBalance(newBalance) {
+    this.setState({ availFunds: newBalance });
+  }
+
+  async getHoldingAmount(symbolInput) {
     try {
-      console.log('trigger')
       let assetData = this.state.assetData
       let userid = this.state.userInfo.user_id
+      let symbol = symbolInput.toUpperCase()
       var holding = await axios.get(`http://${SERVER_URL}/getHoldingAmount`, { params: { userid: userid, symbol: symbol } })
         .then(holding => {
-          console.log('check', holding.data[0])
-          if (assetData === null) {
-            assetData = {}
-            assetData.holding = holding.data[0]
-            this.setState({ assetData: assetData })
-          } else {
-            assetData.holding = holding.data[0]
-            this.setState({ assetData: assetData })
+          if (assetData) {
+            if (holding.data.length === 0) {
+              assetData.holding = 0
+              this.setState({ assetData: assetData })
+            } else {
+              assetData.holding = holding.data[0].qty
+              this.setState({ assetData: assetData })
+            }
+
+            //console.log(assetData)
           }
         })
     }
@@ -225,17 +239,25 @@ class App extends React.Component {
   }
 
   handleOrderClick(orderObj) {
+    console.log('data to DB', orderObj)
     this.setState({ orderObj: orderObj });
     axios({
       method: 'post',
-      url: `http://${REACT_APP_SERVER_URL}/transactions`,
+      url: `http://${SERVER_URL}/transactions`,
+      data: orderObj,
+    });
+
+    axios({
+      method: 'post',
+      url: `http://${SERVER_URL}/updatePortfolioinstant`,
       data: orderObj,
     });
   }
 
   async getTransactionData() {
     try {
-      const response = await axios.get(`http://${SERVER_URL}/transactions`);
+      var id = JSON.parse(localStorage.googleInfo).id;
+      const response = await axios.get(`http://${SERVER_URL}/transactions/${id}`);
       this.setState({ transactionData: response.data });
     } catch (err) {
       console.log(err);
@@ -256,7 +278,7 @@ class App extends React.Component {
 
   async getData(input, selectedScope) {
     var symbol = input.toUpperCase();
-    console.log(symbol);
+    //console.log(symbol);
     var scope = selectedScope.toLowerCase()
     try {
       this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
@@ -432,10 +454,16 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo}/>} />
-              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} getUserInfo={this.getUserInfo}/>} />
-              <Route path="/leaderboard" element={<LeaderBoard />} />
-              <Route path="/transferForm" element={<TransferForm userInfo={this.state.userInfo} getUserInfo={this.getUserInfo} />} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} assetData={this.state.assetData} availFunds={this.state.availFunds}/>} />
+              <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} availFunds={this.state.availFunds} getUserInfo={this.getUserInfo} />} />
+              <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo} assetData={this.state.assetData}/>} />
+              <Route path="/transferForm" element={<TransferForm
+                userInfo={this.state.userInfo}
+                availFunds={this.state.availFunds}
+                getUserInfo={this.getUserInfo}
+                getAvailBalance={this.getAvailBalance.bind(this)}
+                updateBalance={this.updateBalance.bind(this)}
+              />} />
               <Route path="/transactionList" element={<TransactionList data={this.state.transactionData} />} />
               <Route path="/stockContent" element={
                 <>
@@ -459,7 +487,9 @@ class App extends React.Component {
                           <Order pageType={'stock'}
                             handleOrderClick={this.handleOrderClick.bind(this)}
                             stockObj={this.state.stockObj}
-                            barData={this.state.barData} />
+                            barData={this.state.barData}
+                            assetData={this.state.assetData}
+                            userid={this.state.userInfo.user_id} />
                         </Grid>
                       </Grid>
                     </div> : null}
@@ -480,6 +510,8 @@ class App extends React.Component {
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                             handleOrderClick={this.handleOrderClick.bind(this)}
+                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
+                            handleOrderClick={this.handleOrderClick.bind(this)}
 
                           />
                         </Grid>
@@ -489,14 +521,17 @@ class App extends React.Component {
                             coinMeta={this.state.coinMeta}
                             coinBarData={this.state.coinBarData}
                             coinToday={this.state.coinToday}
-                            coinPrevious={this.state.coinPrevious} />
+                            coinPrevious={this.state.coinPrevious}
+                            assetData={this.state.assetData}
+                            userid={this.state.userInfo.user_id}
+                          />
                         </Grid>
                       </Grid>
                     </div>
                     : null}
                 </>
               } />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo}/>} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

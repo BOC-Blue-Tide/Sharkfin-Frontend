@@ -21,13 +21,6 @@ import BankSearch from './bankSearch.jsx';
 import axios from 'axios';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-// let userInfo = {
-//     firstName: 'Daniel',
-//     lastName: 'Halper',
-//     userName: 'Dhalper',
-//     email: 'Dhalper@test.org',
-// };
-
 const style = {
     gridCard: {
         width: '100%',
@@ -54,11 +47,11 @@ function TransferForm(props) {
     const location = useLocation();
     const propsData = location.state || {};
     const [page, setPage] = useState(propsData.page || 1);
-    const [accountNumber, setAccountNumber] = useState(0);
+    const [accountNumber, setAccountNumber] = useState(props.userInfo.account_number);
     const [routingNumber, setRoutingNumber] = useState(0);
     const [swiftCode, setSwiftCode] = useState("");
     const [bank, setBank] = useState("");
-    const [transferAmount, setTransferAmount] = useState(1000);
+    const [transferAmount, setTransferAmount] = useState(1000 - props.availFunds.net_deposits);
     const [errors, setErrors] = useState({
         accountNumber: false,
         routingNumber: false,
@@ -98,8 +91,23 @@ function TransferForm(props) {
     };
 
     const handleTransferSubmit = () => {
-        //Post request here to user's table
-        console.log( 'Transfer Amount', transferAmount);
+        let data = {
+            user_id: props.userInfo.user_id,
+            amount: transferAmount,
+            transaction_type: 'bank'
+        }
+        axios.post(`http://${SERVER_URL}/finances`, data)
+        .then((result) => {
+            let newAvailFunds = {
+                avail_balance: props.availFunds.avail_balance + transferAmount,
+                net_deposits: props.availFunds.net_deposits + transferAmount
+            }
+            props.updateBalance(newAvailFunds);
+            props.getAvailBalance(props.userInfo.user_id);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
         setPage(page + 1)
     };
 
@@ -328,29 +336,35 @@ const OnboardingSlide = () => {
                 )}
             </Box>
             <Slider
-                defaultValue={1000}
+                defaultValue={1000 - props.availFunds.net_deposits}
                 value={transferAmount}
                 aria-label="Default"
                 valueLabelDisplay="auto"
-                min={100}
+                min={0}
                 step={10}
-                max={1000}
+                max={1000 - props.availFunds.net_deposits}
                 onChangeCommitted={(_, newValue) => setTransferAmount(newValue)}
             />
-            <Button
+            {transferAmount !== 0 ? (
+                <Button
                 onClick={() => setPage(page + 1)}
                 variant="contained"
                 color="primary"
             >
                 Next
             </Button>
+            ) : (
+                <Typography variant="h4" sx={style.headerText}>
+                You've already transferred the max amount!
+            </Typography>
+            )}
         </Box>
     );
 
     const ThirdPage = () => (
         <Box display="flex" flexDirection="column" sx={style.gridCard}>
             <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
-            <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer()}</Box>. Are you sure you want to proceed?</Typography>
+            <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer(accountNumber)}</Box>. Are you sure you want to proceed?</Typography>
             <Box display="flex" flexDirection="row">
             <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
                 <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} variant="outlined" color="primary">Confirm</Button></Link>

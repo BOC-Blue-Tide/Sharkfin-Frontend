@@ -25,6 +25,10 @@ const cryptoReviewOrder = (props) => {
   const [orderType, setOrderType] = useState('')
   const [estimate, setEstimate] = useState('')
   const [equity, setEquity] = useState({})
+  const [availBalance, setAvailBalance] = useState('')
+  const [userid, setUserid] = useState(null)
+  const [remaining, setRemaining] = useState(null)
+  const [holding, setHolding] = useState(null)
 
   useEffect(() => {
     if (props.value === 0) {
@@ -36,8 +40,32 @@ const cryptoReviewOrder = (props) => {
 
   useEffect(() => {
     (async () => {
+      if (typeof estimate !== 'string' && orderType.length > 0) {
+        let remaining = await helpers.calculateRemaining(props.orderIn, props.orderInput.amount, availBalance, estimate, orderType, holding)
+        setRemaining(remaining)
+      }
+    })()
+
+  }, [estimate, orderType])
+
+
+  useEffect(() => {
+    if (props.userid && props.userid !== 0) {
+      setUserid(props.userid)
+    }
+  }, [props.userid])
+
+
+  useEffect(() => {
+    if (props.assetData.availBalance) {
+      setAvailBalance(props.assetData.availBalance)
+    }
+  }, [props.assetData.availBalance])
+
+  useEffect(() => {
+    (async () => {
       const obj = {}
-      let estimate = await helpers.calculateEstimate(props.orderIn, props.value, props.orderInput.amount, props.coinBarData[props.coinBarData.length - 1].c)
+      let estimate = await helpers.calculateEstimate(props.orderIn, props.orderInput.amount, props.coinBarData[props.coinBarData.length - 1].c)
       if (props.value === 0 && props.orderIn === 'dollars') {
         // a reduction to user buying power
         // an addition to user's equity
@@ -77,13 +105,15 @@ const cryptoReviewOrder = (props) => {
   const handleSubmit = () => {
     const orderObj = props.orderInput
     orderObj.orderType = orderType
-    orderObj.account = '12345678'
+    orderObj.account = userid
     orderObj.symbol = coinMeta[0].symbol
     orderObj.company = coinMeta[0].name
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount
     orderObj.price = props.coinBarData[props.coinBarData.length - 1].c
     orderObj.equity = equity
+    orderObj.newRemaining = remaining
+    console.log(orderObj)
     props.handleOrderClick(orderObj)
   }
   return (
@@ -99,6 +129,14 @@ const cryptoReviewOrder = (props) => {
           Review Order
         </Typography>
         <Stack spacing={2}>
+          <Stack direction="row" spacing={1}>
+            <span>Available Fund: </span>
+            <span>{`$${availBalance}`}</span>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <span>Current Holding: </span>
+            <span>{`${holding} shares`}</span>
+          </Stack>
           <Stack direction="row" spacing={1}>
             <span>Symbol: </span>
             <span>{coinMeta[0].symbol}</span>
@@ -132,13 +170,17 @@ const cryptoReviewOrder = (props) => {
               <>
                 {props.value === 0 ? <span>Estimated amount of coin buying:  </span> : <span>Estimated amount of coin selling:  </span>}
 
-                <span>{`${estimate} coins`}</span>
+                <span>{`${parseFloat(estimate).toFixed(3)} coins`}</span>
               </> : null}
           </Stack>
 
           <Stack direction="row" spacing={1}>
-            <span>Remaining Buying Power:  </span>
-            <span>$1</span>
+            {remaining !== null ?
+              <>
+                <span>New Buying Power:  </span>
+                <span>{`$${parseFloat(remaining.buyPower).toFixed(2)}`}</span>
+                <span>New Holding:  </span>
+                <span>{`${parseFloat(remaining.holding).toFixed(3)}`}</span> </> : null}
           </Stack>
 
         </Stack>

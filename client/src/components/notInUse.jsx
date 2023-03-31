@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import helpers from './helperFunctions/requestHelpers.js'
+import helpers from './stockCrypto/helperFunctions/requestHelpers.js'
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';

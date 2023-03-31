@@ -1,16 +1,19 @@
-import React, { useRef, useState, useEffect } from 'react';
-import Person from './person.jsx'
-import Axios from 'axios';
-import {Pagination} from '@mui/material';
+import { Button, Pagination } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import { Button } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+
+import AddFriends from '../Friends/AddFriends.jsx';
+import ViewRequests from '../Friends/ViewRequests.jsx';
+import Person from './person.jsx';
 
 //Mengna
-import AddFriends from '../Friends/AddFriends.jsx'
-import ViewRequests from '../Friends/ViewRequests.jsx'
+const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
-const SideBar = () => {
+const SideBar = (props) => {
+  console.log(props);
   const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  // const [userId, setuserId] = useState(1)
   const [friendRequestNum, setFriendRequestNum] = useState(0)
   const [friendBoard, setFriendBoard] = useState([])
   const [globalBoard, setGlobalBoard] = useState([])
@@ -20,13 +23,13 @@ const SideBar = () => {
   const [global, setGlobal] = useState(false)
   const [friendPage, setFriendPage] = useState(1)
   const [globalPage, setGlobalPage] = useState(1)
-  const [selfFriendPlacement, setSelfFriendPlacement] = useState({placement: null, name: null, gain: null})
-  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({placement: null, name: null, gain: null})
+  const [selfFriendPlacement, setSelfFriendPlacement] = useState({})
+  const [selfGlobalPlacement, setSelfGlobalPlacement] = useState({})
 
   useEffect(() => {
-    getFriendBoardData()
+    getFriendBoardData(userId)
     getGlobalBoardData()
-    // getFriendRequestNum(userId)
+    getFriendRequestNum(userId)
   }, [])
 
   useEffect(() => {
@@ -35,15 +38,15 @@ const SideBar = () => {
   }, [friendBoard, globalBoard])
 
   const getFriendRequestNum = async (id) => {
-    axios.get('http://localhost:8080/getFriendRequestsByID', {params: {user_id: id}})
+    axios.get(`http://${SERVER_URL}/getFriendRequestsByID`, {params: {user_id: id}})
     .then((response) => {
       friendRequestNum(response.data.rows.length);
     })
     .catch(err => console.log('getFriendRequestsByID', err));
   }
 
-  const getFriendBoardData = async () => {
-    await Axios.get('/friendBoard')
+  const getFriendBoardData = async (userID) => {
+    await axios.get('/friendBoard', {params: {"id" : userID}})
     .then((response) => {
       var data = response.data
       setFriendBoard(data)
@@ -63,7 +66,7 @@ const SideBar = () => {
   }
 
   const getGlobalBoardData = async () => {
-    await Axios.get('/globalBoard')
+    await axios.get('/globalBoard')
     .then((response) => {
       var data = response.data
       setGlobalBoard(data)
@@ -101,26 +104,34 @@ const SideBar = () => {
 
   //check self placement
   const checkFriendPlacement = (id) => {
+    let newFriendBoard = {}
     for (var x = 0; x < friendBoard.length; x ++) {
       if (friendBoard[x].id == id) {
-        friendBoard[x].placement = x + 1
-        setSelfFriendPlacement(friendBoard[x])
+        newFriendBoard = JSON.parse(JSON.stringify(friendBoard[x]));
+        newFriendBoard.placement = x + 1
+        break
       } else {
-        //update User info
-        setSelfFriendPlacement({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
+        newFriendBoard.placement = undefined
+        newFriendBoard.profilepic_url = props.user.profilepic_url
+        newFriendBoard.firstname = props.user.firstname
       }
     }
+    setSelfFriendPlacement(newFriendBoard)
   }
   const checkGlobalPlacement = (id) => {
+    let newGlobalBoard = {}
     for (var x = 0; x < globalBoard.length; x ++) {
       if (globalBoard[x].id == id) {
-        globalBoard[x].placement = x + 1
-        setSelfGlobalPlacement(globalBoard[x])
+        newGlobalBoard = JSON.parse(JSON.stringify(globalBoard[x]));
+        newGlobalBoard.placement = x + 1
+        break
       } else {
-         //update User info
-        setSelfGlobalPlacement({"id":1,"first_name":"Fanchon","profilepic_url":"http://dummyimage.com/112x132.png/dddddd/000000","performance_percentage":-38.5})
+        newGlobalBoard.placement = undefined
+        newGlobalBoard.profilepic_url = props.user.profilepic_url
+        newGlobalBoard.firstname = props.user.firstname
       }
     }
+    setSelfGlobalPlacement(newGlobalBoard)
   }
 
   //switch from friend and global view
@@ -153,7 +164,12 @@ const SideBar = () => {
   };
 
 
-
+  var noFriendTable = `<table class="fg-table"><tr class="self-tr">
+  <th><h6>-</h6></th>
+  <th><div class = "small-profile-box"><img src=${props.user.profilepic_url}></img></div></th>
+  <th><h6>${props.user.firstname}</h6></th>
+  <th></th><th><h6 style="color:green;">0%</h6></th>
+  </tr></table>`
 
   return (
     <div className = "main-wrapper">
@@ -164,8 +180,15 @@ const SideBar = () => {
       <div>
        {friend &&
           <>{friendBoard.length === 0 ? (
-            <> <div className="empty-sidebar">No data available</div>
-            <div className="selective-bar"><Pagination count={10} disabled /></div></>
+            <>
+
+            <div className="empty-sidebar">
+              {/* <img src={'fake.jpg'} alt="fakeData"></img> */}
+              <div className="empty-text">Add more friend!</div>
+            </div>
+            <div className="leader-table" dangerouslySetInnerHTML={{__html: noFriendTable}} />
+            <div className="selective-bar"><Pagination count={10} disabled /></div>
+            </>
           ) : (
           <div>
             <div className="board-table">
@@ -185,7 +208,7 @@ const SideBar = () => {
         }
         {global &&
           <>{globalBoard.length === 0 ? (
-            <> <div className="empty-sidebar">No data available</div>
+            <> <div className="empty-sidebar">Start Adding Friends!</div>
             <div className="selective-bar"><Pagination count={10} disabled /></div></>
             ) : (
             <div>
@@ -211,7 +234,7 @@ const SideBar = () => {
       </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">
-          <ViewRequests/>
+          <ViewRequests getFriendRequestNum = {getFriendRequestNum}/>
         </div>
       </Modal>
       </div>

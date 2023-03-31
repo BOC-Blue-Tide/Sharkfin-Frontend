@@ -4,14 +4,19 @@ import SendIcon from '@mui/icons-material/Send';
 
 const ChatForm = function(props) {
   const [formData, setFormData] = useState('');
+  const [sentData, setSentData] = useState('');
 
   const handleChange = function(e) {
-    setFormData(e.target.value);
+    let inputText = e.target.value;
+    let escapedText = inputText.replaceAll("'", "''");
+
+    setFormData(inputText);
+    setSentData(escapedText);
   }
 
   return <form onSubmit={(e) => {
     e.preventDefault();
-    props.handleFormSubmit(formData);
+    props.handleFormSubmit(sentData);
     setFormData('');
     }}>
   <input className='chatform' type='text' value={formData} onChange={handleChange}></input>

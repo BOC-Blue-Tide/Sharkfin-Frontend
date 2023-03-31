@@ -29,7 +29,7 @@ const SideBar = (props) => {
   useEffect(() => {
     getFriendBoardData(userId)
     getGlobalBoardData()
-    // getFriendRequestNum(userId)
+    getFriendRequestNum(userId)
   }, [])
 
   useEffect(() => {
@@ -166,8 +166,8 @@ const SideBar = (props) => {
 
   var noFriendTable = `<table class="fg-table"><tr class="self-tr">
   <th><h6>-</h6></th>
-  <th><div class = "small-profile-box"><img src=${JSON.parse(localStorage.getItem("googleInfo")).picture}></img></div></th>
-  <th><h6>${JSON.parse(localStorage.getItem("googleInfo")).firstname}</h6></th>
+  <th><div class = "small-profile-box"><img src=${props.user.profilepic_url}></img></div></th>
+  <th><h6>${props.user.firstname}</h6></th>
   <th></th><th><h6 style="color:green;">0%</h6></th>
   </tr></table>`
 
@@ -183,7 +183,7 @@ const SideBar = (props) => {
             <>
 
             <div className="empty-sidebar">
-              <img src={'fake.jpg'} alt="fakeData"></img>
+              {/* <img src={'fake.jpg'} alt="fakeData"></img> */}
               <div className="empty-text">Add more friend!</div>
             </div>
             <div className="leader-table" dangerouslySetInnerHTML={{__html: noFriendTable}} />
@@ -234,7 +234,7 @@ const SideBar = (props) => {
       </span></Button>
       <Modal open={friendRequest} onClose={closeFriendRequestModal}>
         <div className = "friend-popup">
-          <ViewRequests/>
+          <ViewRequests getFriendRequestNum = {getFriendRequestNum}/>
         </div>
       </Modal>
       </div>

@@ -4,19 +4,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { daysUntilNextQuarter } from '../helper/leaderboardHelper.js';
 import Topfive from './topfive.jsx';
 
-const Placement = (props) => {
-  // console.log(props);
+const Placement = (props) => {;
   const [friendBoard, setFriendBoard] = useState([])
   // const [userId, setUserId] = useState(props.user.user_id)
   const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(565)
-  const [remaining, setRemaining] = useState(460)
+  const [remaining, setRemaining] = useState(props.availFunds.avail_balance)
+  const [greeting, setGreeting] = useState('')
   // const [profilePic, setProfilePic] = useState(props.user.profilepic_url)
   const [profilePic, setProfilePic] = useState(JSON.parse(localStorage.getItem("googleInfo")).picture)
   // from app.jsx
-  const [userInfo, setUserInfo] = useState(props.user)
   const [performance, setPerformance] = useState(0)
 
 
@@ -25,6 +24,7 @@ const Placement = (props) => {
     getFriendBoardData(userId)
     getSelfPerformance(userId)
     setQuarterLeft(daysUntilNextQuarter())
+    getGreeting()
   }, [])
 
   useEffect(() => {
@@ -40,6 +40,19 @@ const Placement = (props) => {
   //   console.log(props.assetData)
   // }, [props.assetData])
 
+
+  function getGreeting() {
+    const now = new Date();
+    const hour = now.getHours();
+
+    if (hour >= 5 && hour < 12) {
+      setGreeting('Good Morning, ') ;
+    } else if (hour >= 12 && hour < 18) {
+      setGreeting('Good Afternoon, ');
+    } else {
+      setGreeting('Good Evening, ');
+    }
+  }
 
   const addSelfPlacement = (id) => {
     if (friendBoard.length > 0) {
@@ -86,7 +99,7 @@ const Placement = (props) => {
   if (friendBoard.length === 0) {
     return (
       <div className="mainpage-greeting-leaderboard">
-        <div className="greeting-title"><h1>Good Afternoon, {userInfo.first_name}</h1></div>
+        <div className="greeting-title"><h1>{greeting}{props.user.firstname}</h1></div>
         <div className="profilePic-greeting-container">
           <div className="profilePic">
             {/* BG -> IMG */}
@@ -99,7 +112,7 @@ const Placement = (props) => {
           </div>
           <div className="greeting">
             <div>
-              <h2><span className="color-lightblue">0% growth </span>this quarter</h2>
+              <h2><span className="color-lightblue">{remaining || '0'}% growth </span>this quarter</h2>
               <h3><span className="color-gold">You didn't follow any friend yet</span></h3>
               <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
               <h3><span className="color-lightblue">$0 </span>invested, <span className="color-lightblue">$0 </span>remaining funds</h3>
@@ -120,7 +133,7 @@ const Placement = (props) => {
                     </div>
                 </div>
                 <div className="leaderboard-details">
-                  <div className="leaderboard-first_name">{userInfo.first_name}</div>
+                  <div className="leaderboard-first_name">{props.user.firstname}</div>
                   <div> No data yet! </div>
                 </div>
               </div>
@@ -132,7 +145,7 @@ const Placement = (props) => {
   } else {
     return (
       <div className="mainpage-greeting-leaderboard">
-        <div className="greeting-title"><h1>Good Afternoon, {props.user.firstname}</h1></div>
+        <div className="greeting-title"><h1>{greeting}{props.user.firstname}</h1></div>
         <div className="profilePic-greeting-container">
           <div className="profilePic">
             {/* BG -> IMG */}
@@ -148,7 +161,7 @@ const Placement = (props) => {
               <h2><span className="color-lightblue">{performance.performance_percentage}% growth </span>this quarter</h2>
               <h3><span className="color-gold">{selfPlacement} place </span>out of {friendBoard.length} friends</h3>
               <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
-              <h3><span className="color-lightblue">${props.assetData.availBalance} </span>invested, <span className="color-lightblue">${remaining} </span>remaining funds</h3>
+              <h3><span className="color-lightblue">${props.assetData.availBalance} </span>invested, <span className="color-lightblue">${remaining || '0'}</span>remaining funds</h3>
             </div>
           </div>
         </div>

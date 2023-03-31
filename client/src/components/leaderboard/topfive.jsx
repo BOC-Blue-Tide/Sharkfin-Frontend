@@ -12,7 +12,6 @@ const Topfive = (props) => {
 
   useEffect(() => {
     setTfDiv()
-    console.log(props.friendBoard)
   }, [friendBoard])
 
 

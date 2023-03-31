@@ -6,7 +6,7 @@ import Topfive from './topfive.jsx';
 
 const Placement = (props) => {;
   const [friendBoard, setFriendBoard] = useState([])
-  // const [userId, setUserId] = useState(props.user.user_id)
+  // const [userId, setUserId] = useState(1)
   const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
@@ -27,6 +27,7 @@ const Placement = (props) => {;
     getGreeting()
   }, [])
 
+
   useEffect(() => {
     addSelfPlacement(userId)
   }, [friendBoard])
@@ -36,9 +37,10 @@ const Placement = (props) => {;
     // console.log(props.user)
   }, [props.user])
 
-  // useEffect(() => {
-  //   console.log(props.assetData)
-  // }, [props.assetData])
+  useEffect(() => {
+    console.log(props.assetData, 'assetData')
+    console.log(props.availFunds, 'props.availFunds')
+  }, [props.assetData])
 
 
   function getGreeting() {
@@ -115,7 +117,7 @@ const Placement = (props) => {;
               <h2><span className="color-lightblue">{remaining || '0'}% growth </span>this quarter</h2>
               <h3><span className="color-gold">You didn't follow any friend yet</span></h3>
               <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
-              <h3><span className="color-lightblue">$0 </span>invested, <span className="color-lightblue">$0 </span>remaining funds</h3>
+              <h3><span className="color-lightblue">$0 </span>remaining funds</h3>
             </div>
           </div>
         </div>
@@ -134,7 +136,7 @@ const Placement = (props) => {;
                 </div>
                 <div className="leaderboard-details">
                   <div className="leaderboard-first_name">{props.user.firstname}</div>
-                  <div> No data yet! </div>
+                  <div> {props.user.performance_percentage || 'No data yet!'} </div>
                 </div>
               </div>
             </div>
@@ -161,7 +163,8 @@ const Placement = (props) => {;
               <h2><span className="color-lightblue">{performance.performance_percentage}% growth </span>this quarter</h2>
               <h3><span className="color-gold">{selfPlacement} place </span>out of {friendBoard.length} friends</h3>
               <h3><span className="color-lightred">{QuarterLeft} more days </span>in the quarter</h3>
-              <h3><span className="color-lightblue">${props.assetData.availBalance} </span>invested, <span className="color-lightblue">${remaining || '0'}</span>remaining funds</h3>
+              <h3><span className="color-lightblue">${remaining || '0'}</span> remaining funds</h3>
+              {/* <h3><span className="color-lightblue">${props.assetData.availBalance} </span>invested, <span className="color-lightblue">${remaining || '0'}</span> remaining funds</h3> */}
             </div>
           </div>
         </div>

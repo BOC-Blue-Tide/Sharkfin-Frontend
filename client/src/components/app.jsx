@@ -179,7 +179,7 @@ class App extends React.Component {
     }
     var id = JSON.parse(localStorage.getItem(['googleInfo'])).id;
     const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
-    //const response = await axios.get(`http://${SERVER_URL}/users/1`);
+    // const response = await axios.get(`http://${SERVER_URL}/users/1`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
   }
@@ -189,7 +189,7 @@ class App extends React.Component {
       // send userid to backend
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
-        .then(availBalance => {
+        .then(availableBalance => {
           //console.log('available', availBalance.data[0]);
           if (availableBalance.data.length === 0) {
             return;

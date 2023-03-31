@@ -8,6 +8,7 @@ import Description from './description.jsx'
 import Stats from './stats.jsx'
 import Order from './orderForm/orderTab.jsx'
 import LivePriceDisplay from './livePriceDisplay.jsx'
+const token = process.env.REACT_APP_FINNHUB
 
 
 const stockPage = (props) => {
@@ -48,7 +49,7 @@ const stockPage = (props) => {
 
 
   const getLiveData = (symbol) => {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
+    const socket = new WebSocket('wss://ws.finnhub.io?token=' + token);
 
     console.info('1. New websocket created.');
 

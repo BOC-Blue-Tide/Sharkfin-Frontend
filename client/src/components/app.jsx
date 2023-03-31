@@ -254,6 +254,7 @@ class App extends React.Component {
       .then(() => {
         // Both requests have completed successfully
         this.getAvailBalance(this.state.userInfo.user_id)
+        this.getHoldingAmount(this.state.currentSymbol)
       })
       .catch((err) => {
         console.log('err', err);

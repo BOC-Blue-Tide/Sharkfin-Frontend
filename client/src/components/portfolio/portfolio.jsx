@@ -10,8 +10,8 @@ import Axios from 'axios';
 
 
 const Portfolio = (props) => {
-  const userID = 1;
-  // const userID = props.user.user_id;
+  // const userID = 1;
+  const userID = props.user.user_id;
   const [timeWindow, setTimeWindow] = useState('1W');
   const [chartData, setChartData] = useState({});
   const [alloPosData, setAlloPosData] = useState({totalNetWorth: 0, position: [], allocation : {symbol: [], ratios: []}});

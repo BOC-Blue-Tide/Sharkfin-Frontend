@@ -189,10 +189,12 @@ class App extends React.Component {
       // send userid to backend
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
-        .then(availableBalance => {
-          //console.log('available', availBalance.data[0]);
-          if (availableBalance.data.length === 0) {
-            return;
+        .then(availBalance => {
+          if (availBalance.data.length === 0) {
+            this.setState({ availFunds: {
+              avail_balance: 0,
+              net_deposits: 0
+            }});
           } else {
             this.setState({ availFunds: availBalance.data[0] })
             if (assetData) {
@@ -219,8 +221,14 @@ class App extends React.Component {
       var holding = await axios.get(`http://${SERVER_URL}/getHoldingAmount`, { params: { userid: userid, symbol: symbol } })
         .then(holding => {
           if (assetData) {
-            assetData.holding = holding.data[0].qty
-            this.setState({ assetData: assetData })
+            if (holding.data.length === 0) {
+              assetData.holding = 0
+              this.setState({ assetData: assetData })
+            } else {
+              assetData.holding = holding.data[0].qty
+              this.setState({ assetData: assetData })
+            }
+
             //console.log(assetData)
           }
         })
@@ -412,8 +420,7 @@ class App extends React.Component {
     if (!this.state.isReady) {
       <div></div>
     }
-
-    if (!this.state.logged_email) {
+    if ((!this.state.logged_email) || (!this.state.userInfo) || (this.state.userInfo.user_id === 0)) {
       return (
         <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo} />
       )
@@ -523,7 +530,7 @@ class App extends React.Component {
                     : null}
                 </>
               } />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo}/>} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

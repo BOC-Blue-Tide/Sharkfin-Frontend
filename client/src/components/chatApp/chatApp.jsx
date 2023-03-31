@@ -18,7 +18,8 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-const chatApp = function() {
+const chatApp = function(props) {
+  console.log(props);
   const [chatData, setChatData] = useState([]);
   const [friendData, setFriendData] = useState([]);
   const [currentChat, setCurrentChat] = useState([]);
@@ -51,11 +52,13 @@ const chatApp = function() {
   }
 
   useEffect(() => {
-    let getChatLog = axios.get(`http://${SERVER_URL}/chat`);
-    let getFriendList = axios.get(`http://${SERVER_URL}/chat/friends`);
+    let getChatLog = axios.get(`http://${SERVER_URL}/chat/${props.userInfo.user_id}`);
+    let getFriendList = axios.get(`http://${SERVER_URL}/chat/${props.userInfo.user_id}/friends`);
 
     Promise.all([getChatLog, getFriendList])
     .then(([response1, response2]) => {
+      console.log(response1);
+      console.log(response2);
       setChatData(response1.data);
       setFriendData(response2.data);
     })

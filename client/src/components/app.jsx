@@ -190,7 +190,6 @@ class App extends React.Component {
       let assetData = this.state.assetData
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
-          console.log('available', availBalance.data);
           if (availBalance.data.length === 0) {
             this.setState({ availFunds: {
               avail_balance: 0,
@@ -532,7 +531,7 @@ class App extends React.Component {
                     : null}
                 </>
               } />
-              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo}/>} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

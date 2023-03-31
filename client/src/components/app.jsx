@@ -420,8 +420,7 @@ class App extends React.Component {
     if (!this.state.isReady) {
       <div></div>
     }
-
-    if ((!this.state.logged_email) || (!this.state.userInfo) || (this.state.userInfo.id === 0)) {
+    if ((!this.state.logged_email) || (!this.state.userInfo) || (this.state.userInfo.user_id === 0)) {
       return (
         <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo} />
       )

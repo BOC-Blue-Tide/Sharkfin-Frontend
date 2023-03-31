@@ -179,7 +179,7 @@ class App extends React.Component {
     }
     var id = JSON.parse(localStorage.getItem(['googleInfo'])).id;
     const response = await axios.get(`http://${SERVER_URL}/users/${id}`);
-    //const response = await axios.get(`http://${SERVER_URL}/users/1`);
+    // const response = await axios.get(`http://${SERVER_URL}/users/1`);
     console.log('GET USER INFO CALLED:', response.data[0]);
     this.setState({ userInfo: response.data[0] })
   }
@@ -420,8 +420,7 @@ class App extends React.Component {
     if (!this.state.isReady) {
       <div></div>
     }
-
-    if (!this.state.logged_email) {
+    if ((!this.state.logged_email) || (!this.state.userInfo) || (this.state.userInfo.user_id === 0)) {
       return (
         <Login updateEmail={this.updateEmail} user={this.state.logged_email} getUser={this.getUserInfo} />
       )

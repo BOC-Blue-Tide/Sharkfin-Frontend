@@ -52,16 +52,16 @@ const ViewRequests = (props) => {
         {friendsList.map((friend) => {
           return (
 
-            <div style={{"display": "flex", "flex-direction": "row","justify-content": "space-between"}}>
+            <div key={friend.id} style={{"display": "flex", "flexDirection": "row","justifyContent": "space-between"}}>
 
-              <div style={{"display": "flex", "flex-direction": "row","justify-content": "flex-start", "padding-left": "20%"}}>
+              <div style={{"display": "flex", "flexDirection": "row","justifyContent": "flex-start", "paddingLeft": "20%"}}>
                 <div >
                   <img src={friend.profilepic_url} alt="Image" style={{width: "25px", height: "25px"}}/>
                 </div>
                 <div style={{paddingLeft: "10px"}}>{friend.username}</div>
               </div>
 
-              <div style={{"display": "flex", "flex-direction": "row","justify-content": "flex-end", paddingRight: "20%"}}>
+              <div style={{"display": "flex", "flexDirection": "row","justifyContent": "flex-end", paddingRight: "20%"}}>
                 {friend.added ? (
                   <Button color="primary" id={friend.id} sx={{ color: 'text.secondary' }}>added</Button>
                 ) : (

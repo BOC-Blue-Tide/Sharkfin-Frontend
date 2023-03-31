@@ -478,9 +478,6 @@ class App extends React.Component {
                 }}
               >
                 <Paper sx={{height: "520px", width: "320px", marginBottom: "20px"}}>
-                  <Typography variant="h5" component="div">
-                    Chat
-                  </Typography>
                   <ChatPage/>
                 </Paper>
               </Popper>

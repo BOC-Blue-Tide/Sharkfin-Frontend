@@ -575,9 +575,7 @@ class App extends React.Component {
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                             handleOrderClick={this.handleOrderClick.bind(this)}
-                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                            handleOrderClick={this.handleOrderClick.bind(this)}
-
+                        
                           />
                         </Grid>
                         <Grid item xs={4}>

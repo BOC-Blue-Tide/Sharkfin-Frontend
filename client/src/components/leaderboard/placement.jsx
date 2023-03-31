@@ -6,8 +6,8 @@ import Topfive from './topfive.jsx';
 
 const Placement = (props) => {;
   const [friendBoard, setFriendBoard] = useState([])
-  // const [userId, setUserId] = useState(1)
-  const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
+  const [userId, setUserId] = useState(1)
+  // const [userId, setUserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   const [selfPlacement, setSelfPlacement] = useState ("loading")
   const [QuarterLeft, setQuarterLeft] = useState(0)
   const [invested, setInvested] = useState(565)

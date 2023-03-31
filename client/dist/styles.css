@@ -497,7 +497,7 @@ input[type="number"] {
 }
 
 .popup-content {
-  height: 400px;
+  height: auto;
   width: 700px;
   background-color: white;
   padding: 40px;

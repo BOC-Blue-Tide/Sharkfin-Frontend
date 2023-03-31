@@ -34,6 +34,49 @@ const cryptoPage = (props) => {
     setErrMsg(props.errorMsg)
   }, [props.errorMsg])
 
+
+  // const getLiveCryptoData = (symbol) => {
+  //   const socket = new WebSocket('wss://ws.finnhub.io?token=');
+
+  //   console.info('1. New websocket created.');
+
+  //   // Connection opened -> Subscribe
+  //   socket.onopen = (event) => {
+  //     socket.send(JSON.stringify({ 'type': 'subscribe', 'symbol': `${symbol}` }))
+
+  //     console.info('2. Subscribing to symbols...');
+
+  //   };
+
+  //   // Listen for messages from the websocket stream...
+  //   socket.onmessage = (event) => {
+
+  //     // console.clear();
+  //     // console.info('1. New websocket created.');
+  //     // console.info('2. Subscribing to symbols...');
+  //     // console.info('3. Websocket streaming.');
+
+  //     // stream response...
+  //     let response = JSON.parse(event.data);
+
+  //     if (response.type === 'ping') {
+  //       console.warn('Occasional server', response.type + '.');
+  //       let pong = { "type": "pong" }
+  //       socket.send(JSON.stringify(pong))
+  //     } else {
+  //       var data = response.data || null
+  //       console.log(data)
+  //       setLiveData(data)
+  //     }
+
+  //   };
+
+  //   // Unsubscribe
+  //   var unsubscribe = function (symbol) {
+  //     socket.send(JSON.stringify({ 'type': 'unsubscribe', 'symbol': symbol }))
+  //   }
+  // }
+
   return (
     <>
       {props.coinMeta && props.coinBarData ? (

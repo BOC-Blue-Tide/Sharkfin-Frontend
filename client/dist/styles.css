@@ -67,9 +67,11 @@ a {
 }
 
 main {
-  padding: 5px 7% 5px 7%;
+  /* padding: 5px 7% 5px 7%; */
   margin: auto;
-  box-sizing: content-box;
+  box-sizing:content-box;
+  /* background: transparent;  */
+
 }
 
 #root {

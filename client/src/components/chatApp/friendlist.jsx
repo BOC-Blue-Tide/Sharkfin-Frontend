@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Typography } from '@mui/material';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -22,14 +23,16 @@ const FriendListChat = function(props) {
       '& > :not(style)': {
         m: 1,
         width: '100%',
-        height: 128,
+        height: 60,
       },
     }}
   >
   <Item>
       <div className='chatfriendtile' onClick={() => props.handleClick(element.friend_id)}>
-      <img src={element.profilepic_url} height='100px' className='chatfriendpic'/>
-      {`${element.username} ${element.firstname} ${element.lastname}`}
+      <img src={element.profilepic_url} height='50px' className='chatfriendpic'/>
+      <Typography variant='body2'>
+      {`${element.firstname} ${element.lastname}`}
+      </Typography>
     </div>
       </Item>
   </Box>

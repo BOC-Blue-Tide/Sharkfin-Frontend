@@ -8,7 +8,6 @@ import Description from './description.jsx'
 import Stats from './stats.jsx'
 import Order from './orderForm/orderTab.jsx'
 import LivePriceDisplay from './livePriceDisplay.jsx'
-const token = process.env.REACT_APP_FINNHUB
 
 
 const stockPage = (props) => {
@@ -49,7 +48,7 @@ const stockPage = (props) => {
 
 
   const getLiveData = (symbol) => {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=' + token);
+    const socket = new WebSocket('wss://ws.finnhub.io?token=cgjjrr1r01qt0jk13m7gcgjjrr1r01qt0jk13m80');
 
     console.info('1. New websocket created.');
 
@@ -102,7 +101,7 @@ const stockPage = (props) => {
           <LivePriceDisplay liveData={liveData} />
           <div className="today-change">{change} (${parseFloat(qouteData['10. change percent']).toFixed(2)}%) Today</div>
 
-          <Graph barData={props.barData} liveData={liveData} />
+          <Graph barData={props.barData} liveData={liveData} pageType={'stock'} />
           <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
           <Description stockObj={stockObj} />
           <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />

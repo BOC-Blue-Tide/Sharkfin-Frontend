@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import helpers from '../stockCrypto/helperFunctions/requestHelpers.js'
 import SearchIcon from '@mui/icons-material/Search';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 import { useNavigate } from 'react-router-dom';
 import Axios from 'axios'
 
@@ -59,16 +61,16 @@ const searchBar = (props) => {
 
   }
 
-  const handleInput = (e) => {
-    setSearchInput(e.target.value)
-  }
+  const handleInput = (value) => {
+    setSearchInput(value);
+  };
 
   const handleClick = (e) => {
     setAnchorEl(e.currentTarget);
   }
 
   const handleClose = (e) => {
-    const scope = e.target.innerText
+    const scope = e.target.value
     setSearchScope(scope)
     setAnchorEl(null)
   }
@@ -90,44 +92,45 @@ const searchBar = (props) => {
     }
 
   }
-
   return (
     <div className="searchBar-container">
       <form onSubmit={handleSubmit}>
         <Stack direction="row" spacing={0.5}>
-          {/* <SearchIcon /> */}
-          {/* <input className='searchInput' type="text" onChange={handleInput} placeholder="Search by symbol" /> */}
-          <Autocomplete
-            id="searchInput"
-            freeSolo
-            options={suggestionList.map((suggestion) => suggestion['1. symbol'])}
-            onChange={handleOptionClick}
-            renderInput={(params) => <TextField {...params} label="Search by symbol"
-              onChange={handleInput} style={{ width: '250px' }}
-            />}
-          />
-          <Button variant="contained" onClick={handleClick}>
-            {`${searchScope}`}
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
+          <Select
+            value={searchScope}
+            onChange={handleClose}
+            variant="outlined"
           >
-            <MenuItem data-scope={'stock'} onClick={handleClose}>Stock</MenuItem>
-            <MenuItem data-scope={'crypto'} onClick={handleClose}>Crypto</MenuItem>
-          </Menu>
+            <MenuItem value={'Stock'}>Stock</MenuItem>
+            <MenuItem value={'Crypto'}>Crypto</MenuItem>
+          </Select>
+          <Autocomplete
+  id="searchInput"
+  freeSolo
+  options={suggestionList.map((suggestion) => suggestion['1. symbol'])}
+  onInputChange={(event, value) => handleInput(value)}
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      label="Search by symbol"
+      style={{ width: '250px' }}
+      InputProps={{
+        ...params.InputProps,
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton edge="end" onClick={handleSubmit}>
+              <SearchIcon />
+            </IconButton>
+          </InputAdornment>
+        ),
+      }}
+    />
+  )}
+/>
         </Stack>
-
       </form>
     </div >
   )
 }
 
 export default searchBar
-
-

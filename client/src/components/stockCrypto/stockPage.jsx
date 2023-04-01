@@ -48,7 +48,7 @@ const stockPage = (props) => {
 
 
   const getLiveData = (symbol) => {
-    const socket = new WebSocket('wss://ws.finnhub.io?token=cga100pr01qqlesgbg5gcga100pr01qqlesgbg60');
+    const socket = new WebSocket('wss://ws.finnhub.io?token=cgjjrr1r01qt0jk13m7gcgjjrr1r01qt0jk13m80');
 
     console.info('1. New websocket created.');
 
@@ -94,14 +94,14 @@ const stockPage = (props) => {
       {props.stockObj && props.barData && props.qouteData ? (
         <>
           <Stack direction="row" spacing={1}>
-            <Chip label={`${stockObj.Sector}`} variant="outlined" />
-            <Chip label={`${stockObj.Industry}`} variant="outlined" />
+            <Chip label={`${stockObj.Sector}`} />
+            <Chip label={`${stockObj.Industry}`} />
           </Stack>
           <div className="stock-name">{stockObj.Name}</div>
           <LivePriceDisplay liveData={liveData} />
           <div className="today-change">{change} (${parseFloat(qouteData['10. change percent']).toFixed(2)}%) Today</div>
 
-          <Graph barData={props.barData} liveData={liveData} />
+          <Graph barData={props.barData} liveData={liveData} pageType={'stock'} />
           <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />
           <Description stockObj={stockObj} />
           <Stats stockObj={stockObj} barData={props.barData} qouteData={props.qouteData} />

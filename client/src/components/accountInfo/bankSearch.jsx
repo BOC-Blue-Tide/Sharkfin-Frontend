@@ -59,33 +59,55 @@ const BankSearch = (props) => {
             searchInstitutions(searchQuery);
         }
     };
-
     return (
-        <div>
-            <form onSubmit={handleSearch}>
-                <TextField
-                    label="Bank &#x1F50E;"
-                    variant="outlined"
-                    className="text"
-                    placeholder="Search for banks"
-                    value={searchQuery}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                    sx={{width:"100%"}}
-                    error={error}
-                    helperText={error && "Please select a bank"}
-                />
-            </form>
-            <Card className="search">
-                {showSearch &&
-                    bankList.map((bank, index) => (
-                        <Typography key={index} variant="body2" onClick={() => {setSearchQuery(bank.data.NAME); props.handleBankInput(bank.data.NAME)}} component="div">
-                            {bank.data.NAME} ({bank.data.ID})
-                        </Typography>
-                    ))}
-            </Card>
+        <div >
+          <form onSubmit={handleSearch}>
+            <TextField 
+              label="Bank &#x1F50E;"
+              variant="outlined"
+              className="text"
+              placeholder="Search for banks"
+              value={searchQuery}
+              onChange={handleInputChange}
+              onBlur={handleBlur}
+              sx={{ width: '100%', marginBottom: '8px' }}
+              error={error}
+              helperText={error && 'Please select a bank'}
+            />
+          </form>
+          <Card className="search" sx={{
+            position: 'absolute',
+            zIndex: 2,
+            width: '34%',
+            marginTop: 1,
+            maxHeight: 200,
+            overflowY: 'auto',
+            '& .searchResult': {
+              padding: '0.5rem 1rem',
+              cursor: 'pointer',
+              '&:hover': {
+                backgroundColor: 'rgba(0,0,0,0.04)',
+              },
+            },
+          }}>
+            {showSearch &&
+              bankList.map((bank, index) => (
+                <Typography
+                  key={index}
+                  variant="body2"
+                  onClick={() => {
+                    setSearchQuery(bank.data.NAME);
+                    props.handleBankInput(bank.data.NAME);
+                  }}
+                  component="div"
+                  className="searchResult"
+                >
+                  {bank.data.NAME} ({bank.data.ID})
+                </Typography>
+              ))}
+          </Card>
         </div>
-    );
-};
-
-export default BankSearch;
+      );
+    };
+    
+    export default BankSearch;

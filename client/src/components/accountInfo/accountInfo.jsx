@@ -51,6 +51,8 @@ function AccountInfo(props) {
          display: 'grid',
          gridTemplateColumns: '1fr 1fr',
          gap: 2,
+         padding: '0% 7%',
+
       },
       headerText: {
          color: "primary",

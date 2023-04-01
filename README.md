@@ -14,7 +14,7 @@ SharkFin is a stock-trading application designed for entry-level traders. Our ap
 ## SharkFin Features
 
 ### Portfolio
-On the home page, users can see a comprehensive view of their portfolio's performance, including its overall value, how it has changed over different time periods (1 day, 7 days, 1 week, 1 month, 6 months, and 1 year), and how much of it is invested in each stock.
+On the home page, users can see a comprehensive view of their portfolio's performance, including its overall value, how it has changed over different time periods (1 day, 1 week, 1 month, 3 months, 1 year, and 5 year), and how much of it is invested in each stock.
 
 The asset distribution chart provides a visual representation of the user's portfolio allocation, making it easy to see which stocks are driving the portfolio's performance.
 

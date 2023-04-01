@@ -29,13 +29,8 @@ const Graph = (props) => {
     (async () => {
       if (graphData.length > 0 && props.liveData) {
         let graphDataArr = graphData
-        if (props.pageType === "stock") {
-          var newGraphData = await helper.addNewDataToGraph(graphDataArr, props.liveData)
-        } else {
-          var newGraphData = await helper.addNewCryptoDataToGraph(graphDataArr, props.liveData)
-        }
-
-        console.log('newGraphData', newGraphData)
+        var newGraphData = await helper.addNewDataToGraph(graphDataArr, props.liveData)
+        // console.log('newGraphData', newGraphData)
         setGraphData(newGraphData)
       }
     })()

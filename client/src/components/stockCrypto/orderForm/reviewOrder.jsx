@@ -103,20 +103,17 @@ const reviewOrder = (props) => {
   }
 
   const handleSubmit = () => {
-    let datetime = new Date()
-    datetime = datetime.toUTCString()
     const orderObj = props.orderInput
     orderObj.orderType = orderType
     orderObj.account = userid
-    orderObj.purchaseType = 'stock'
     orderObj.symbol = stockObj.Symbol
     orderObj.company = stockObj.Name
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount
     orderObj.price = props.barData[props.barData.length - 1].c
-    orderObj.datetime = datetime
     orderObj.equity = equity
     orderObj.newRemaining = remaining
+    console.log(orderObj)
     props.handleOrderClick(orderObj)
   }
 

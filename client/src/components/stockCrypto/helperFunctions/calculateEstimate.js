@@ -18,10 +18,9 @@ const helpers = {
     return estimate
 
   },
-  calculateRemaining: async (orderIn, amountInput, availBalance, estimate, orderType, holding) => {
-    //console.log(orderIn, amountInput, availBalance, estimate, orderType, holding)
+  calculateRemaining: async (orderIn, amount, availBalance, estimate, orderType, holding) => {
+    //console.log(orderIn, amount, availBalance, estimate, orderType, holding)
     var remaining = {};
-    var amount = parseFloat(amountInput)
     //buy
     if (orderType === 'buy') {
       if (orderIn === 'shares' || orderIn === 'coins') {

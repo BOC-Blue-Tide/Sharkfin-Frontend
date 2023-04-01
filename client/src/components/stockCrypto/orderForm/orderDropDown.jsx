@@ -16,7 +16,7 @@ const dropDown = (props) => {
   return (
     <>
       {props.pageType === 'stock' ?
-        <FormControl variant="standard" sx={{ m: 0 }} style={{ minWidth: 150 }}>
+        <FormControl variant="standard" sx={{ m: 0 }} style={{ minWidth: 100 }}>
           {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
           <Select
             labelId="orderIn"
@@ -32,7 +32,7 @@ const dropDown = (props) => {
           </Select>
         </FormControl>
         :
-        <FormControl variant="standard" sx={{ m: 0 }} style={{ minWidth: 150 }}>
+        <FormControl variant="standard" sx={{ m: 0 }}>
           {/* <InputLabel id="demo-simple-select-standard-label">Age</InputLabel> */}
           <Select
             labelId="orderIn"

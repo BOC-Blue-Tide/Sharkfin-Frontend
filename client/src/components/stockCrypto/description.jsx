@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography';
 
 const description = (props) => {
   const textLengthLimit = 50
@@ -53,13 +52,10 @@ const description = (props) => {
       <div className="description-title">{title}</div>
       {showAll ?
         <div className="description">
-          <div className="full-text">
-            <Typography variant="body1" style={{ p: 5 }}>{`${full}`}</Typography>
-          </div>
+          <div className="full-text">{`${full}`}</div>
 
-          {<Chip label={"Show less"} onClick={showMoreOrLess} style={{ m: 6 }} />}</div> :
-        <div className="partial-text" >{partial} <div className="showMoreSpan">{<Chip label={"Show more"} onClick={showMoreOrLess} style={{ m: 6 }} />}</div>
-        </div>
+          {<Chip label={"Show less"} onClick={showMoreOrLess} />}</div> :
+        <div className="partial-text" >{partial} <div className="showMoreSpan">{<Chip label={"Show more"} onClick={showMoreOrLess} />}</div></div>
       }
     </>
   )

@@ -13,6 +13,7 @@ const styles = {
     backgroundColor: 'white',
     boxShadow: 'none',
     '@media (min-width: 960px)': { maxWidth: 'none' },
+    padding: '8px 0', 
   },
   link: (isActive) => ({
     margin: '0  20px',
@@ -44,6 +45,11 @@ const styles = {
     width: '100%',
     '@media (min-width: 600px)': {
       width: '20ch',
+    },
+  },
+  logo: {
+    '&:hover': {
+      filter: 'brightness(120%)', // Make the logo slightly lighter on hover
     },
   },
 };
@@ -82,7 +88,7 @@ const Header = (props) => {
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">
-              <img src={Logo} alt="SharkFin Trading" height="50" />
+            <img className={styles.logo} src={window.innerWidth >= 900 ? Logo : SmallLogo} alt="SharkFin Trading" height="50" />
             </Link>
           </Typography>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

@@ -17,6 +17,7 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 const chatApp = function(props) {
+  console.log(props);
   const [chatData, setChatData] = useState([]);
   const [friendData, setFriendData] = useState([]);
   const [currentChat, setCurrentChat] = useState([]);
@@ -64,34 +65,30 @@ const chatApp = function(props) {
   const handleFormSubmit = function (message) {
     let date = new Date();
     let data = {
-      sent_to: currentFriend.friend_id,
-      sent_from: JSON.parse(localStorage.getItem(['googleInfo'])).id,
+      sent_to: currentFriend,
+      sent_from: 1,
       message: message,
       datetime: date.toUTCString()
     }
-    let unescapedData = {
-      sent_to: currentFriend.friend_id,
-      sent_from: JSON.parse(localStorage.getItem(['googleInfo'])).id,
-      message: message.replaceAll("''", "'"),
-      datetime: date.toUTCString()
-    }
     axios.post(`http://${SERVER_URL}/chat`, data)
-    .then((response) => {
-      setChatData([...chatData, data]);
-      setCurrentChat([...currentChat, unescapedData]);
-    })
-    .catch(err => {
-      console.log(err);
-    })
+      .then((response) => {
+        console.log(response);
+        setChatData([...chatData, data]);
+        setCurrentChat([...currentChat, data]);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   }
 
   useEffect(() => {
-    let id = JSON.parse(localStorage.getItem(['googleInfo'])).id
-    let getChatLog = axios.get(`http://${SERVER_URL}/chat/${id}`);
-    let getFriendList = axios.get(`http://${SERVER_URL}/chat/${id}/friends`);
+    let getChatLog = axios.get(`http://${SERVER_URL}/chat/${props.userInfo.user_id}`);
+    let getFriendList = axios.get(`http://${SERVER_URL}/chat/${props.userInfo.user_id}/friends`);
 
     Promise.all([getChatLog, getFriendList])
     .then(([response1, response2]) => {
+      console.log(response1);
+      console.log(response2);
       setChatData(response1.data);
       setFriendData(response2.data);
     })

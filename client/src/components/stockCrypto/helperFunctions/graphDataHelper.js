@@ -14,12 +14,6 @@ const helpers = {
     let date = new Date(liveData[0].t)
     graphDataArr.push({ 'x': date, 'y': liveData[0].p })
     return graphDataArr
-  },
-  addNewCryptoDataToGraph: async (graphDataArr, liveData) => {
-    // filter out weeekend date here?
-    let date = new Date(liveData[0].t)
-    graphDataArr.push({ 'x': date, 'y': liveData[0].c })
-    return graphDataArr
   }
 
 

@@ -5,7 +5,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import helpers from './helperFunctions/statsFormatter.js'
 
-
 const stats = (props) => {
   var stockObj = props.stockObj
   var qouteData = props.qouteData
@@ -39,10 +38,9 @@ const stats = (props) => {
   }, [props.qouteData])
 
   return (
-    <div className="stats-container">
+    <>
       <div className="stats-title">Stats</div>
       {stockObj && qouteData ?
-
         <Stack direction="row" spacing={1}>
           <List dense={true}>
             <ListItem>
@@ -103,7 +101,7 @@ const stats = (props) => {
             </ListItem>
           </List>
         </Stack> : fallback}
-    </div>
+    </>
   )
 
 }

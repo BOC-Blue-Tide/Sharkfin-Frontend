@@ -8,7 +8,7 @@ const livePriceDisplay = (props) => {
     let liveData = props.liveData
     if (liveData) {
       if (liveData.length > 0) {
-        setLivePrice(`$${parseFloat(liveData[0].c).toFixed(2)}`)
+        setLivePrice(`$${parseFloat(liveData[0].p).toFixed(2)}`)
       }
     }
   }, [props.liveData])

@@ -24,14 +24,11 @@ const orderCard = (props) => {
   const [holding, setHolding] = useState(0)
   const [showHolding, setShowHolding] = useState(false)
   const [orderMsg, setOrderMsg] = useState('')
-  const [displayAvailBalance, setDisplayAvailBalance] = useState(0)
 
 
   useEffect(() => {
     if (props.assetData.availBalance) {
-      let formattedAvailBalance = parseFloat(props.assetData.availBalance).toFixed(2)
       setAvailBalance(props.assetData.availBalance)
-      setDisplayAvailBalance(formattedAvailBalance)
     }
   }, [props.assetData.availBalance])
 
@@ -40,16 +37,15 @@ const orderCard = (props) => {
       var newholding = parseFloat(props.assetData.holding.toFixed(2))
       setHolding(newholding)
     }
-  }, [props.assetData.holding, orderIn])
+  }, [props.assetData.holding])
 
   useEffect(() => {
     if (orderIn === 'shares' || orderIn === 'coins') {
-
       setShowHolding(true)
     } else {
       setShowHolding(false)
     }
-  }, [orderIn])
+  }, [props.value])
 
 
 
@@ -101,22 +97,22 @@ const orderCard = (props) => {
 
   return (
     <>
-      <CardContent >
-        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }}>
+      <CardContent>
+        <Typography variant="subtitle1" component="div">
           {props.value === 0 ? <Grid container spacing={1}>
-            <Grid item xs={8} >
+            <Grid item xs={8}>
               {`Available Fund: `}
             </Grid>
             <Grid item xs={4}>
-              {displayAvailBalance}
+              {availBalance}
             </Grid>
           </Grid> : null}
         </Typography>
 
-        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }}>
+        <Typography variant="subtitle1" component="div">
           {showHolding ? <Grid container spacing={1}>
             <Grid item xs={8}>
-              {`Current Holding: `}
+              {`Holding: `}
             </Grid>
             <Grid item xs={4}>
               {holding}
@@ -124,16 +120,16 @@ const orderCard = (props) => {
           </Grid> : null}
         </Typography>
 
-        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }}>
+        <Typography variant="subtitle1" component="div">
           {props.value === 0 ? <Grid container spacing={1}>
-            <Grid item xs={6} style={{ padding: 20 }} >
+            <Grid item xs={6}>
               {`Buy in `}
             </Grid>
             <Grid item xs={6}>
               <Dropdown handleOrderIn={handleOrderIn} pageType={props.pageType} />
             </Grid>
           </Grid> : <Grid container spacing={1}>
-            <Grid item xs={6} style={{ padding: 20 }} >
+            <Grid item xs={6}>
               {`Sell in `}
             </Grid>
             <Grid item xs={6}>
@@ -141,17 +137,17 @@ const orderCard = (props) => {
             </Grid>
           </Grid>}
         </Typography>
-        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }} >
+        <Typography variant="subtitle1" component="div">
           <Grid container spacing={1}>
-            <Grid style={{ padding: 20 }} item xs={6}>
+            <Grid item xs={6}>
               {`Amount `}
             </Grid>
             <Grid item xs={6}>
               {props.value === 0 ?
-                <TextField style={{ maxWidth: 150 }} type="number" helperText={errMsg} InputProps={{
+                <TextField type="number" helperText={errMsg} InputProps={{
                   inputProps: { min: 0 }
                 }} type="number" variant="standard" onInput={handleAmount} /> :
-                <TextField style={{ maxWidth: 150 }} InputProps={{
+                <TextField style={{ minWidth: 120 }} InputProps={{
                   inputProps: { min: 0 }
                 }} type="number" helperText={errMsg} variant="standard" onInput={handleAmount} />
               }
@@ -162,8 +158,8 @@ const orderCard = (props) => {
       </CardContent>
       <div className="orderMsg">{orderMsg}</div>
       <Divider />
-      <CardActions sx={{ justifyContent: "center" }}>
-        <Button size="small" onClick={handleReviewClick} style={{}}>Review Order</Button>
+      <CardActions>
+        <Button size="small" onClick={handleReviewClick}>Review Order</Button>
 
       </CardActions>
 

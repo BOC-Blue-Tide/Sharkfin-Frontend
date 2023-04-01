@@ -4,7 +4,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
+
 import OrderCard from './orderCard.jsx'
 
 
@@ -50,7 +50,7 @@ const Order = (props) => {
   };
 
   return (
-    <Card sx={{ width: '100%', border: 1, p: 5, mt: 8 }}>
+    <Box sx={{ width: '100%', border: 1, p: 2 }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="BUY" {...a11yProps(0)} />
@@ -85,7 +85,7 @@ const Order = (props) => {
           assetData={props.assetData}
           userid={props.userid} />
       </TabPanel>
-    </Card>
+    </Box>
   );
 
 }

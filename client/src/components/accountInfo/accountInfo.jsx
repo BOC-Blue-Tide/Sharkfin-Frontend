@@ -10,6 +10,7 @@ const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 
 function AccountInfo(props) {
 
+   console.log(props);
    const [edit, setEdit] = useState(false);
 
    const [userInfo, setUserInfo] = useState({
@@ -45,11 +46,13 @@ function AccountInfo(props) {
       },
       parentGrid: {
          minHeight: "600px",
-         margin: "40px 40px 40px 0px",
+         // margin: "40px 40px 40px 0px",
          height: "600px",
          display: 'grid',
          gridTemplateColumns: '1fr 1fr',
          gap: 2,
+         padding: '0% 7%',
+
       },
       headerText: {
          color: "primary",
@@ -130,12 +133,6 @@ function AccountInfo(props) {
 
             {userInfo.account_number ? <><Typography sx={style.headerText} variant="h4">Your account is funded! Woo hoo! 🎉</Typography>
                <Typography sx={style.headerText} variant="body1">You have ${props.availFunds.avail_balance} available funds for trading.</Typography>
-
-               <Link state={{ page: -1 }} to="/transferForm">
-                  <Button variant="contained" color="primary">
-                     Demo
-                  </Button>
-               </Link>
                <Link state={{ page: 2 }} to="/transferForm">
                   <Button variant="contained" color="primary">
                      Transfer to Sharkfin

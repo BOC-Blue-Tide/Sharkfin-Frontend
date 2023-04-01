@@ -4,12 +4,17 @@ import { Button, TextField, Box } from "@mui/material";
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
-const ChatForm = function (props) {
-  const [formData, setFormData] = useState("");
+const ChatForm = function(props) {
+  const [formData, setFormData] = useState('');
+  const [sentData, setSentData] = useState('');
 
-  const handleChange = function (e) {
-    setFormData(e.target.value);
-  };
+  const handleChange = function(e) {
+    let inputText = e.target.value;
+    let escapedText = inputText.replaceAll("'", "''");
+
+    setFormData(inputText);
+    setSentData(escapedText);
+  }
 
   return (
     <Box
@@ -30,7 +35,7 @@ const ChatForm = function (props) {
       }}
       onSubmit={(e) => {
         e.preventDefault();
-        props.handleFormSubmit(formData);
+        props.handleFormSubmit(sentData);
         setFormData("");
       }}
     >

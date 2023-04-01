@@ -44,7 +44,7 @@ import Login from './Login/Login.jsx';
 import AddFriends from './Friends/AddFriends.jsx';
 import ViewRequests from './Friends/ViewRequests.jsx';
 
- console.log(SERVER_URL)
+console.log(SERVER_URL)
 const theme = createTheme({
   palette: {
     primary: {
@@ -119,6 +119,8 @@ const theme = createTheme({
     },
   }
 });
+
+
 
 
 class App extends React.Component {
@@ -328,7 +330,7 @@ class App extends React.Component {
 
   async getData(input, selectedScope) {
     var symbol = input.toUpperCase();
-    //console.log(symbol);
+    // console.log(symbol);
     var scope = selectedScope.toLowerCase()
     try {
       this.setState({ currentSymbol: symbol, searchScope: selectedScope }, async () => {
@@ -466,6 +468,8 @@ class App extends React.Component {
       });
   }
 
+
+
   render() {
     if (!this.state.isReady) {
       <div></div>
@@ -569,7 +573,7 @@ class App extends React.Component {
                             userid={this.state.userInfo.user_id} />
                         </Grid>
                       </Grid>
-                    </div> : null}
+                    </div> : <>{this.state.errorMsg}</>}
                 </>
               } />
               <Route path="/cryptoContent" element={
@@ -604,7 +608,7 @@ class App extends React.Component {
                         </Grid>
                       </Grid>
                     </div>
-                    : null}
+                    : <>{this.state.errorMsg}</>}
                 </>
               } />
               <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo} />} />

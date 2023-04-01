@@ -80,14 +80,14 @@ function TransferForm(props) {
             account_number: accountNumber
         }
         axios.post(`http://${SERVER_URL}/users/${props.userInfo.user_id}/update/bank`, bankInfo)
-        .then((result) => {
-            console.log(result);
-            props.getUserInfo();
-            setPage(page + 1);
-        })
-        .catch((err) => {
-            console.log('Something went wrong...', err);
-        })
+            .then((result) => {
+                console.log(result);
+                props.getUserInfo();
+                setPage(page + 1);
+            })
+            .catch((err) => {
+                console.log('Something went wrong...', err);
+            })
     };
 
     const handleTransferSubmit = () => {
@@ -97,17 +97,17 @@ function TransferForm(props) {
             transaction_type: 'bank'
         }
         axios.post(`http://${SERVER_URL}/finances`, data)
-        .then((result) => {
-            let newAvailFunds = {
-                avail_balance: props.availFunds.avail_balance + transferAmount,
-                net_deposits: props.availFunds.net_deposits + transferAmount
-            }
-            props.updateBalance(newAvailFunds);
-            props.getAvailBalance(props.userInfo.user_id);
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+            .then((result) => {
+                let newAvailFunds = {
+                    avail_balance: props.availFunds.avail_balance + transferAmount,
+                    net_deposits: props.availFunds.net_deposits + transferAmount
+                }
+                props.updateBalance(newAvailFunds);
+                props.getAvailBalance(props.userInfo.user_id);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
         setPage(page + 1)
     };
 
@@ -186,67 +186,67 @@ function TransferForm(props) {
         }
     }
 
-const OnboardingSlide = () => {
-  const [displayStep, setDisplayStep] = useState(0);
+    const OnboardingSlide = () => {
+        const [displayStep, setDisplayStep] = useState(0);
 
-  useEffect(() => {
-    const timer1 = setTimeout(() => setDisplayStep(1), 1000);
-    const timer2 = setTimeout(() => setDisplayStep(2), 2000);
-    const timer3 = setTimeout(() => setDisplayStep(3), 3000);
+        useEffect(() => {
+            const timer1 = setTimeout(() => setDisplayStep(1), 800);
+            const timer2 = setTimeout(() => setDisplayStep(2), 1600);
+            const timer3 = setTimeout(() => setDisplayStep(3), 2400);
 
-    return () => {
-      clearTimeout(timer1);
-      clearTimeout(timer2);
-      clearTimeout(timer3);
+            return () => {
+                clearTimeout(timer1);
+                clearTimeout(timer2);
+                clearTimeout(timer3);
+            };
+        }, []);
+
+        const stepStyle = {
+            // background: 'linear-gradient(to right, #FFE879 0%, #FFD300 100%)',
+            borderRadius: '5px',
+            padding: '5px',
+            marginBottom: '8px',
+            fontWeight: 'light',
+            // boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
+        };
+
+        return (
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'start',
+                    justifyContent: 'center',
+                    height: '100%',
+                    textAlign: 'left',
+                    padding: 2,
+                }}
+            >
+                <Typography variant="h2" component="h2" gutterBottom>
+                    You're in!
+                </Typography>
+                <Typography variant="h4" component="p" gutterBottom>
+                    Now, let's go over some ground rules...
+                </Typography>
+                {displayStep >= 1 && (
+                    <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+                        1. Invest up to $1,000 of real cash into the stock market!
+                    </Typography>
+                )}
+                {displayStep >= 2 && (
+                    <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+                        2. Compete for the highest quarterly returns against other players.
+                    </Typography>
+                )}
+                {displayStep >= 3 && (
+                    <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
+                        3. Cash out your gains at the end of the competition.
+                    </Typography>
+                )}
+                <Button disabled={displayStep >= 3 ? false : true} variant="contained" onClick={() => setPage(1)}>Get started</Button>
+            </Box>
+        );
     };
-  }, []);
-
-  const stepStyle = {
-    // background: 'linear-gradient(to right, #FFE879 0%, #FFD300 100%)',
-    borderRadius: '5px',
-    padding: '5px',
-    marginBottom: '8px',
-    fontWeight: 'light',
-    // boxShadow: '0 3px 5px rgba(0, 0, 0, 0.2)',
-  };
-
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'start',
-        justifyContent: 'center',
-        height: '100%',
-        textAlign: 'left',
-        padding: 2,
-      }}
-    >
-      <Typography variant="h2" component="h2" gutterBottom>
-        You're in!
-      </Typography>
-      <Typography variant="h4" component="p" gutterBottom>
-        Now, let's go over some ground rules...
-      </Typography>
-      {displayStep >= 1 && (
-        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          1. Invest up to $1,000 of real cash into the stock market!
-        </Typography>
-      )}
-      {displayStep >= 2 && (
-        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          2. Compete for the highest quarterly returns against other players.
-        </Typography>
-      )}
-      {displayStep >= 3 && (
-        <Typography variant="body1" component="p" gutterBottom sx={stepStyle}>
-          3. Cash out your gains at the end of the competition.
-        </Typography>
-      )}
-      <Button variant="contained" onClick={() => setPage(1)}>Get started</Button>
-    </Box>
-  );
-};
     const firstPage = () => {
         return (
             <Box key="firstPage" display="flex" flexDirection="column" sx={style.gridCard}>
@@ -254,12 +254,13 @@ const OnboardingSlide = () => {
                     Let's get some info, {props.userInfo.firstname}
                 </Typography>
 
-                <Grid sx={{ marginBottom: '30px' }} container spacing={2}>
+                <Grid container spacing={1} sx={{ marginBottom: '8px' }}>
                     <Grid item xs={6} sm={6}>
                         <TextField
                             id="first-name-input-1"
                             label="Legal First Name"
                             defaultValue={props.userInfo.firstname}
+                            fullWidth
                         />
                     </Grid>
                     <Grid item xs={6} sm={6}>
@@ -267,11 +268,13 @@ const OnboardingSlide = () => {
                             id="last-name-input-2"
                             label="Legal Last Name"
                             defaultValue={props.userInfo.lastname}
+                            fullWidth
                         />
                     </Grid>
                 </Grid>
-                <BankSearch handleBankInput={handleBankInput}/>
+                <BankSearch sx={{ marginBottom: "8px" }} handleBankInput={handleBankInput} />
                 <TextField
+                    sx={{ marginBottom: "8px" }}
                     key="bank-account"
                     id="bank-account"
                     label="Bank Account Number"
@@ -285,6 +288,7 @@ const OnboardingSlide = () => {
                 <TextField
                     id="username-input-4"
                     label="Routing Number"
+                    sx={{ marginBottom: "8px" }}
                     error={errors.routingNumber}
                     helperText={helperTexts.routingNumber}
                     onBlur={(event) => validateRoutingNumber(event.target.value)}
@@ -295,6 +299,7 @@ const OnboardingSlide = () => {
                 <TextField
                     id="Swift-code"
                     label="Swift code"
+                    sx={{ marginBottom: "8px" }}
                     error={errors.swiftCode}
                     helperText={helperTexts.swiftCode}
                     onBlur={(event) => validateSwiftCode(event.target.value)}
@@ -302,7 +307,7 @@ const OnboardingSlide = () => {
                         setSwiftCode(event.target.value);
                     }}
                 />
-                <FormControl component="fieldset">
+                <FormControl component="fieldset" sx={{ marginBottom: "8px" }} >
                     <FormLabel component="legend">Account type</FormLabel>
                     <RadioGroup
                         row
@@ -344,19 +349,20 @@ const OnboardingSlide = () => {
                 step={10}
                 max={1000 - props.availFunds.net_deposits}
                 onChangeCommitted={(_, newValue) => setTransferAmount(newValue)}
+                sx={{ marginBottom: "8px" }}
             />
             {transferAmount !== 0 ? (
                 <Button
-                onClick={() => setPage(page + 1)}
-                variant="contained"
-                color="primary"
-            >
-                Next
-            </Button>
+                    onClick={() => setPage(page + 1)}
+                    variant="contained"
+                    color="primary"
+                >
+                    Next
+                </Button>
             ) : (
                 <Typography variant="h4" sx={style.headerText}>
-                You've already transferred the max amount!
-            </Typography>
+                    You've already transferred the max amount!
+                </Typography>
             )}
         </Box>
     );
@@ -365,17 +371,17 @@ const OnboardingSlide = () => {
         <Box display="flex" flexDirection="column" sx={style.gridCard}>
             <Typography variant="h2" sx={style.headerText}> Are you sure? </Typography>
             <Typography variant="body2" >You are about to transfer <Box fontWeight='bold' display='inline'>${transferAmount}</Box> from your linked bank account ending in  <Box fontWeight='bold' display='inline'>{accountNumberTrimmer(accountNumber)}</Box>. Are you sure you want to proceed?</Typography>
-            <Box display="flex" flexDirection="row">
-            <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
-                <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} variant="outlined" color="primary">Confirm</Button></Link>
+            <Box sx={{ marginTop: "20px" }} display="flex" flexDirection="row">
+                <Link to="/AccountInfo" ><Button variant="outlined" color="primary">Cancel</Button></Link>
+                <Link to="/AccountInfo" ><Button onClick={handleTransferSubmit} sx={{ marginLeft: "12px" }} variant="outlined" color="primary">Confirm</Button></Link>
             </Box>
         </Box>
     )
 
     let currentPage = (
         <>
-            { page === -1 ? (
-                <OnboardingSlide/>
+            {page === -1 ? (
+                <OnboardingSlide />
             ) : page === 1 ? (
                 firstPage()
             ) : page === 2 ? (
@@ -401,18 +407,17 @@ const OnboardingSlide = () => {
                 <Grid sx={style.background} item xs={6} sm={6}>
                     <Grid sx={{ float: "right" }} item xs={6} sm={6}>
                         <Link to="/">
-                        <img src={Logo} alt="SharkFin Trading" height="50" />                        </Link>
+                            <img src={Logo} alt="SharkFin Trading" height="50" />                        </Link>
                     </Grid>
                     <Grid item xs={6} sm={6}>
                     </Grid>
-                    <Box sx={{ width:'100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
-</Box>
-</Grid>
+                    <Box sx={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <img src={Graphic} alt="SharkFin Trading" style={{ marginTop: '-100px' }} width="100%" />
+                    </Box>
+                </Grid>
             </Grid>
         </Box>
     );
 }
 
 export default TransferForm;
-

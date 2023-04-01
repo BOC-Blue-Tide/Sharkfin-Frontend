@@ -103,6 +103,9 @@ const cryptoReviewOrder = (props) => {
   }
 
   const handleSubmit = () => {
+
+    let datetime = new Date();
+    datetime = datetime.toUTCString()
     const orderObj = props.orderInput
     orderObj.orderType = orderType
     orderObj.account = userid

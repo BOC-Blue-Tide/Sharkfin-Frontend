@@ -103,13 +103,13 @@ const cryptoReviewOrder = (props) => {
   }
 
   const handleSubmit = () => {
-    let datetime = new Date
+    let datetime = new Date()
     datetime = datetime.toUTCString()
     const orderObj = props.orderInput
     orderObj.purchaseType = 'crypto'
     orderObj.orderType = orderType
     orderObj.account = userid
-    orderObj.symbol = coinMeta[0].symbol
+    orderObj.symbol = coinMeta[0].symbol + '/USD'
     orderObj.company = coinMeta[0].name
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount

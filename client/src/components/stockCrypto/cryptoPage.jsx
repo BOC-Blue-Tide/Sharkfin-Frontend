@@ -95,7 +95,7 @@ const cryptoPage = (props) => {
         <>
           <div className="stock-name">{coinMeta[0].name}</div>
           {/* <div className="live-price">live price</div> */}
-          {defaultPrice ? <LivePriceDisplay liveData={liveData} /> : <div className="live-price">{`${priceHolder}`}</div>}
+          {defaultPrice ? <LivePriceDisplay liveData={liveData} /> : <div className="live-price">{`$${priceHolder}`}</div>}
 
           <Graph coinBarData={props.coinBarData} liveData={liveData} pageType={'crypto'} />
           <TimeRange handleTimeRangeClick={props.handleTimeRangeClick} />

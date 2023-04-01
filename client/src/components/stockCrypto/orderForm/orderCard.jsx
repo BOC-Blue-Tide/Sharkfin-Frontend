@@ -100,10 +100,10 @@ const orderCard = (props) => {
 
   return (
     <>
-      <CardContent>
-        <Typography variant="subtitle1" component="div">
+      <CardContent >
+        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }}>
           {props.value === 0 ? <Grid container spacing={1}>
-            <Grid item xs={8}>
+            <Grid item xs={8} >
               {`Available Fund: `}
             </Grid>
             <Grid item xs={4}>
@@ -112,7 +112,7 @@ const orderCard = (props) => {
           </Grid> : null}
         </Typography>
 
-        <Typography variant="subtitle1" component="div">
+        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }}>
           {showHolding ? <Grid container spacing={1}>
             <Grid item xs={8}>
               {`Current Holding: `}
@@ -123,16 +123,16 @@ const orderCard = (props) => {
           </Grid> : null}
         </Typography>
 
-        <Typography variant="subtitle1" component="div">
+        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }}>
           {props.value === 0 ? <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ padding: 20 }} >
               {`Buy in `}
             </Grid>
             <Grid item xs={6}>
               <Dropdown handleOrderIn={handleOrderIn} pageType={props.pageType} />
             </Grid>
           </Grid> : <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid item xs={6} style={{ padding: 20 }} >
               {`Sell in `}
             </Grid>
             <Grid item xs={6}>
@@ -140,17 +140,17 @@ const orderCard = (props) => {
             </Grid>
           </Grid>}
         </Typography>
-        <Typography variant="subtitle1" component="div">
+        <Typography variant="body1" component="div" style={{ fontFamily: 'sans-Serif' }} >
           <Grid container spacing={1}>
-            <Grid item xs={6}>
+            <Grid style={{ padding: 20 }} item xs={6}>
               {`Amount `}
             </Grid>
             <Grid item xs={6}>
               {props.value === 0 ?
-                <TextField type="number" helperText={errMsg} InputProps={{
+                <TextField style={{ maxWidth: 150 }} type="number" helperText={errMsg} InputProps={{
                   inputProps: { min: 0 }
                 }} type="number" variant="standard" onInput={handleAmount} /> :
-                <TextField style={{ minWidth: 120 }} InputProps={{
+                <TextField style={{ maxWidth: 150 }} InputProps={{
                   inputProps: { min: 0 }
                 }} type="number" helperText={errMsg} variant="standard" onInput={handleAmount} />
               }
@@ -161,8 +161,8 @@ const orderCard = (props) => {
       </CardContent>
       <div className="orderMsg">{orderMsg}</div>
       <Divider />
-      <CardActions>
-        <Button size="small" onClick={handleReviewClick}>Review Order</Button>
+      <CardActions sx={{ justifyContent: "center" }}>
+        <Button size="small" onClick={handleReviewClick} style={{}}>Review Order</Button>
 
       </CardActions>
 

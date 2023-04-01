@@ -4,6 +4,7 @@ import CryptoPage from './stockCrypto/cryptoPage.jsx'
 import helpers from './stockCrypto/helperFunctions/requestHelpers.js'
 import Order from './stockCrypto/orderForm/orderTab.jsx'
 import moment from 'moment-timezone'
+
 const axios = require('axios').default;
 const API_KEY = process.env.REACT_APP_ALPACA_KEY1;
 const API_SECRET = process.env.REACT_APP_ALPACA_SECRET1;
@@ -11,6 +12,7 @@ const SOURCE = process.env.REACT_APP_ALPACA_SOURCE;
 const POLYGON = process.env.REACT_APP_POLYGON;
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 const defaultStartTime = moment().subtract(1, 'days').toISOString()
+
 //Jacinthe
 import TransactionList from './transactions/TransactionList.jsx';
 // import mockData from '../../../mockData.js';
@@ -29,6 +31,13 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 import AccountInfo from './accountInfo/accountInfo.jsx';
 import TransferForm from './accountInfo/transferForm.jsx'
 import Header from './header.jsx'
+import Fab from '@mui/material/Fab';
+import ChatIcon from '@mui/icons-material/Chat';
+import Popper from '@mui/material/Popper';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import { styled } from '@mui/system';
+
 
 //Mengna
 import Login from './Login/Login.jsx';
@@ -102,6 +111,9 @@ const theme = createTheme({
             borderRadius: "4px",
             borderColor: "#278D9B",
           },
+        fab: {
+          background: '#278D9B'
+          }
         },
       },
     },
@@ -138,6 +150,8 @@ class App extends React.Component {
         avail_balance: 0,
         net_deposits: 0
       },
+      chatPopperOpen: false,
+      chatPopperAnchorEl: null,
       userInfo: {
         user_id: 0,
         firstname: '',
@@ -172,6 +186,30 @@ class App extends React.Component {
       })()
     }
   }
+
+  handleChatButtonClick = (event) => {
+    this.setState({
+      chatPopperOpen: !this.state.chatPopperOpen,
+      chatPopperAnchorEl: event.currentTarget,
+    });
+  };
+
+  handleCloseChat = () => {
+    this.setState({
+      chatPopperOpen: false,
+      chatPopperAnchorEl: null,
+    });
+  };
+
+  //  customizedPaper = styled(Paper)(({ theme }) => ({
+  //   padding: theme.spacing(2),
+  //   backgroundColor: theme.palette.primary.main,
+  //   color: theme.palette.primary.contrastText,
+  // }));
+
+  // chatButton = () => (
+  // )
+
 
   async getUserInfo() {
     if (!localStorage.googleInfo) {
@@ -437,8 +475,36 @@ class App extends React.Component {
               href="https://fonts.googleapis.com/icon?family=Material+Icons"
             />
             <Header getData={this.getData.bind(this)} updateEmail={this.updateEmail} getHoldingAmount={this.getHoldingAmount.bind(this)} />
-
-            {/* test only, will delete later */}
+            <>
+              <Fab
+                color="secondary"
+                aria-label="chat"
+                onClick={this.handleChatButtonClick}
+                style={{
+                  position: 'fixed',
+                  bottom: '16px',
+                  right: '16px',
+                  background: theme.palette.primary.main,
+                  color: "white"
+                }}
+              >
+                <ChatIcon />
+              </Fab>
+              <Popper
+                open={this.state.chatPopperOpen}
+                anchorEl={this.state.chatPopperAnchorEl}
+                placement="top-end"
+                onClose={this.handleCloseChat}
+                style={{
+                  zIndex: 1500,
+                  marginBottom: '20px'
+                }}
+              >
+                <Paper sx={{height: "520px", width: "320px", borderRadius: "10px"}}>
+                  <ChatPage/>
+                </Paper>
+              </Popper>
+            </>            {/* test only, will delete later */}
             {/* <div>user_id: {JSON.parse(localStorage.getItem("googleInfo")).id}</div>
           <div>username: {JSON.parse(localStorage.getItem("googleInfo")).username}</div>
           <div>firstname: {JSON.parse(localStorage.getItem("googleInfo")).firstname}</div>
@@ -509,9 +575,7 @@ class App extends React.Component {
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                             handleOrderClick={this.handleOrderClick.bind(this)}
-                            handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
-                            handleOrderClick={this.handleOrderClick.bind(this)}
-
+                        
                           />
                         </Grid>
                         <Grid item xs={4}>

@@ -1,21 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import Grid from '@mui/material/Unstable_Grid2';
-import TransactionList from '../transactions/TransactionList.jsx';
-import mockData from '../../../../mockData.js';
 import ChatList from './chats.jsx';
 import FriendListChat from './friendlist.jsx';
 import axios from 'axios';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+  backgroundColor: '##f7f7f7',
   ...theme.typography.body2,
   padding: theme.spacing(1),
   textAlign: 'center',
   color: theme.palette.text.secondary,
+  boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08)',
+
 }));
 
 const chatApp = function(props) {
@@ -23,15 +21,47 @@ const chatApp = function(props) {
   const [friendData, setFriendData] = useState([]);
   const [currentChat, setCurrentChat] = useState([]);
   const [currentFriend, setCurrentFriend] = useState(0);
+  const [inChat, setInChat] = useState(false);
 
 
-  const handleClick = function(input) {
+  const handleBackClick = () => {
+    setInChat(false);
+  };
+
+  const getMostRecentMessages = (chatData) => {
+    const recentMessages = {};
+
+    chatData.forEach((message) => {
+      const friend_id = message.sent_from === 1 ? message.sent_to : message.sent_from;
+
+      if (
+        !recentMessages[friend_id] ||
+        new Date(recentMessages[friend_id].datetime) < new Date(message.datetime)
+      ) {
+        const truncatedMessage =
+          message.message.length > 36
+            ? message.message.slice(0, 33) + '...'
+            : message.message;
+        recentMessages[friend_id] = { ...message, message: truncatedMessage };
+      }
+    });
+
+    return recentMessages;
+  };
+
+
+  const handleClick = function (input) {
     var array = chatData.filter(element => element.sent_from === input || element.sent_to === input);
-    setCurrentFriend(input);
+    var currentFriendData = friendData.find(element => element.friend_id === input);
     setCurrentChat(array);
+    setCurrentFriend(currentFriendData)
+    setInChat(true);
+    console.log('inchat', inChat)
+    console.log(currentChat, currentFriend)
+
   }
 
-  const handleFormSubmit = function(message) {
+  const handleFormSubmit = function (message) {
     let date = new Date();
     let data = {
       sent_to: currentFriend,
@@ -70,22 +100,31 @@ const chatApp = function(props) {
     })
   }, []);
 
+  const recentMessages = getMostRecentMessages(chatData);
+
+
   return (
     <>
-    <Grid container spacing={2}>
-      <Grid xs={4}>
-        <Item>
-          <FriendListChat friends={friendData} handleClick={handleClick}/>
-        </Item>
-      </Grid>
-      <Grid xs={8}>
-        <Item>
-          <ChatList messages={currentChat} handleFormSubmit={handleFormSubmit} currentFriend={currentFriend}/>
-        </Item>
-      </Grid>
-    </Grid>
+      {inChat ? (
+        <>
+          <ChatList
+            messages={currentChat}
+            handleFormSubmit={handleFormSubmit}
+            currentFriend={currentFriend}
+            handleBackClick={handleBackClick}
+            sx={{
+              overflowY: "none",
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <FriendListChat recentMessages={recentMessages}
+            friends={friendData} handleClick={handleClick} />
+        </>
+      )}
     </>
-  )
-}
+  );
+};
 
 export default chatApp;

@@ -1,5 +1,7 @@
-import React, {useState} from 'react';
-import { Button } from '@mui/material';
+// ChatForm.jsx
+import React, { useState } from "react";
+import { Button, TextField, Box } from "@mui/material";
+import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
 const ChatForm = function(props) {
@@ -14,14 +16,43 @@ const ChatForm = function(props) {
     setSentData(escapedText);
   }
 
-  return <form onSubmit={(e) => {
-    e.preventDefault();
-    props.handleFormSubmit(sentData);
-    setFormData('');
-    }}>
-  <input className='chatform' type='text' value={formData} onChange={handleChange}></input>
-  <Button type='submit' endIcon={<SendIcon />}>Send</Button>
-  </form>
-}
+  return (
+    <Box
+      component="form"
+      sx={{
+        zIndex:2000,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        background: "#fff",
+        padding: "8px",
+        borderTop: "1px solid #ddd",
+        borderRadius: "0px 0px 10px 10px"
+      }}
+      onSubmit={(e) => {
+        e.preventDefault();
+        props.handleFormSubmit(formData);
+        setFormData("");
+      }}
+    >
+      <TextField
+        className="chatform"
+        type="text"
+        value={formData}
+        onChange={handleChange}
+        fullWidth
+        variant="outlined"
+        size="small"
+      />
+<IconButton type="submit" color="primary" aria-label="Send message">
+  <SendIcon />
+</IconButton>
+    </Box>
+  );
+};
 
 export default ChatForm;

@@ -64,13 +64,13 @@ const chatApp = function(props) {
   const handleFormSubmit = function (message) {
     let date = new Date();
     let data = {
-      sent_to: currentFriend,
+      sent_to: currentFriend.friend_id,
       sent_from: JSON.parse(localStorage.getItem(['googleInfo'])).id,
       message: message,
       datetime: date.toUTCString()
     }
     let unescapedData = {
-      sent_to: currentFriend,
+      sent_to: currentFriend.friend_id,
       sent_from: JSON.parse(localStorage.getItem(['googleInfo'])).id,
       message: message.replaceAll("''", "'"),
       datetime: date.toUTCString()

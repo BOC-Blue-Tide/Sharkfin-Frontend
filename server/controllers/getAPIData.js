@@ -41,8 +41,8 @@ module.exports = {
 
       var requestOption = {
         headers: {
-          "Apca-Api-Key-Id": process.env.REACT_APP_ALPACA_ID,
-          "Apca-Api-Secret-Key": process.env.REACT_APP_ALPACA_KEY
+          "Apca-Api-Key-Id": process.env.REACT_APP_ALPACA_KEY1,
+          "Apca-Api-Secret-Key": process.env.REACT_APP_ALPACA_SECRET1
         }
       }
       let stock = await Axios.get(url, requestOption)

@@ -35,7 +35,7 @@ const ChatForm = function(props) {
       }}
       onSubmit={(e) => {
         e.preventDefault();
-        props.handleFormSubmit(formData);
+        props.handleFormSubmit(sentData);
         setFormData("");
       }}
     >

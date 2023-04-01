@@ -1,22 +1,26 @@
-# SharkFin Stock Trading Platform
+ ![Screen Shot 2023-04-01 at 1 53 58 AM](https://user-images.githubusercontent.com/106402982/229268318-7147e3f8-c9e4-4fc9-b052-abe22507de76.png)
+# Stock Trading Platform
 SharkFin is a stock-trading application designed for entry-level traders. Our app provides a user-friendly interface and a fresh aesthetic that makes it fun for Gen Z, millennials, and young adults to invest in the stock market. With SharkFin, users can quickly and easily buy and sell stocks, track their portfolio's performance against their friends, and partake in friendly competition on a quarterly basis.
 
 ## Table of Contents
-- [Project Name](#sharkfin-stock-trading-platform)
-- [Table of Contents](#table-of-contents)
-- [About the Project](#about-the-project)
+- [SharkFin Features](#sharkfin-features)
+  - [Portfolio](#portfolio)
+  - [Stock and Crypto Trade](#stock-and-crypto-trade)
+  - [Friend Leaderboard](#friend-leaderboard)
+  - [Chat Messaging](#chat-messaging)
+  - [Account Information](#account-information)
 - [Getting Started](#getting-started)
 
-## About the Project
+## SharkFin Features
 
-### Porfolio
+### Portfolio
 On the home page, users can see a comprehensive view of their portfolio's performance, including its overall value, how it has changed over different time periods (1 day, 7 days, 1 week, 1 month, 6 months, and 1 year), and how much of it is invested in each stock.
 
 The asset distribution chart provides a visual representation of the user's portfolio allocation, making it easy to see which stocks are driving the portfolio's performance.
 
 ### Stock and Crypto Trade
 Users can quickly find the stocks they're interested in and place orders to buy or sell them. The search bar provides recommendations of 
-stock symbols that relate to what the using is typing.
+stock symbols that relate to what the user is typing.
 ![Screen Shot 2023-03-31 at 5 17 20 PM](https://user-images.githubusercontent.com/106402982/229232987-8e9a9093-14eb-4e78-8bef-dc0a6a1e02f9.png)
 
 After users buy or sell their holdings, users can review their past trades in the Transactions tab. This includes the five most recent trades with the option to see more trades and filter by "buy" or "sell".
@@ -32,7 +36,7 @@ Users can see who has added them as a friend on SharkFin and accept or decline t
 ### Chat Messaging
 The chat messaging module displays the list of your friends and allows you to keep in touch and discuss trading strategies. The UI follows familiar messaging applications that Gen Z's and Millenials know and love.
 
-![Chat gif](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNmQxZDMxY2E1ZmVkM2UwMzI4MjIwNzNlODUwZDUyOTgxZTA2ODkyZiZjdD1n/VvhuTp8wVISva9CjTC/giphy.gif)
+![Chat gif](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExN2FhODc0MmYyYTgyZDBkNDBiODEzNDRlMTQ2MzIyODMxOWUxZTE4YSZjdD1n/hyb7T6iLRGgdHu6t8g/giphy.gif)
 
 ### Account Information
 The login is set up with GoogleAuth so that users can securely log in to the app using their Google credentials. Once logged in, users will be prompted to enter their bank account information to get started. Once again, the field to enter bank will search for American banks that match the users' input.

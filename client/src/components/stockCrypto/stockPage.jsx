@@ -15,7 +15,16 @@ const stockPage = (props) => {
   var qouteData = props.qouteData
   const [errMsg, setErrMsg] = useState(null)
   const [change, setChange] = useState('')
-  const [liveData, setLiveData] = useState(null)
+  const [liveData, setLiveData] = useState('')
+  const [priceHolder, setPriceHolder] = useState('')
+  const [defaultPrice, setDefaultPrice] = useState(false)
+
+  useEffect(() => {
+    if (liveData.length === 0 && props.qouteData !== null) {
+      setPriceHolder(qouteData['08. previous close'])
+    }
+
+  }, [props.qouteData])
 
   useEffect(() => {
     if (props.symbol !== null && props.stockObj) {
@@ -78,6 +87,7 @@ const stockPage = (props) => {
       } else {
         var data = response.data || null
         console.log(data)
+        setDefaultPrice(true)
         setLiveData(data)
       }
 
@@ -98,7 +108,7 @@ const stockPage = (props) => {
             <Chip label={`${stockObj.Industry}`} />
           </Stack>
           <div className="stock-name">{stockObj.Name}</div>
-          <LivePriceDisplay liveData={liveData} />
+          {defaultPrice ? <LivePriceDisplay liveData={liveData} /> : <div className="live-price">{`$${parseFloat(priceHolder).toFixed(2)}`}</div>}
           <div className="today-change">{change} (${parseFloat(qouteData['10. change percent']).toFixed(2)}%) Today</div>
 
           <Graph barData={props.barData} liveData={liveData} pageType={'stock'} />

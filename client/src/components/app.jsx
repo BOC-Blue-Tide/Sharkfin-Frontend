@@ -111,8 +111,8 @@ const theme = createTheme({
             borderRadius: "4px",
             borderColor: "#278D9B",
           },
-        fab: {
-          background: '#278D9B'
+          fab: {
+            background: '#278D9B'
           }
         },
       },
@@ -127,7 +127,7 @@ class App extends React.Component {
     this.state = {
       currency: 'USD',// can be dynaimc if offers currency selection
       stockObj: null, // incoming data from api
-      liveData: null, // incoming data from api
+      // liveData: null, // incoming data from api
       barData: null, // incoming data from api
       qouteData: null, // incoming data from api
       errorMsg: null,
@@ -139,7 +139,7 @@ class App extends React.Component {
       orderObj: null, // user order input from requestReview.jsx
       coinMeta: null, // incoming data from api
       coinBarData: null, // incoming data from api
-      coinLiveData: null, // incoming data from api
+      // coinLiveData: null, // incoming data from api
       searchScope: null,
       selectRange: '1d',
       coinToday: null,
@@ -229,10 +229,12 @@ class App extends React.Component {
       var availBalance = await axios.get(`http://${SERVER_URL}/finances/${userid}/balance`)
         .then(availBalance => {
           if (availBalance.data.length === 0) {
-            this.setState({ availFunds: {
-              avail_balance: 0,
-              net_deposits: 0
-            }});
+            this.setState({
+              availFunds: {
+                avail_balance: 0,
+                net_deposits: 0
+              }
+            });
           } else {
             this.setState({ availFunds: availBalance.data[0] })
             if (assetData) {
@@ -279,17 +281,27 @@ class App extends React.Component {
   handleOrderClick(orderObj) {
     console.log('data to DB', orderObj)
     this.setState({ orderObj: orderObj });
-    axios({
+    var postTransaction = axios({
       method: 'post',
       url: `http://${SERVER_URL}/transactions`,
       data: orderObj,
     });
 
-    axios({
-      method: 'post',
+    var updatePortfolioInstant = axios({
+      method: 'put',
       url: `http://${SERVER_URL}/updatePortfolioinstant`,
       data: orderObj,
     });
+
+    Promise.all([postTransaction, updatePortfolioInstant])
+      .then(() => {
+        // Both requests have completed successfully
+        this.getAvailBalance(this.state.userInfo.user_id)
+        this.getHoldingAmount(this.state.currentSymbol)
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
   }
 
   async getTransactionData() {
@@ -500,8 +512,8 @@ class App extends React.Component {
                   marginBottom: '20px'
                 }}
               >
-                <Paper sx={{height: "520px", width: "320px", borderRadius: "10px"}}>
-                  <ChatPage/>
+                <Paper sx={{ height: "520px", width: "320px", borderRadius: "10px" }}>
+                  <ChatPage />
                 </Paper>
               </Popper>
             </>            {/* test only, will delete later */}
@@ -519,9 +531,9 @@ class App extends React.Component {
           <ViewRequests /> */}
 
             <Routes>
-              <Route exact path="/" element={<Portfolio user={this.state.userInfo} assetData={this.state.assetData} availFunds={this.state.availFunds}/>} />
+              <Route exact path="/" element={<Portfolio user={this.state.userInfo} assetData={this.state.assetData} availFunds={this.state.availFunds} />} />
               <Route path="/accountInfo" element={<AccountInfo userInfo={this.state.userInfo} availFunds={this.state.availFunds} getUserInfo={this.getUserInfo} />} />
-              <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo} assetData={this.state.assetData}/>} />
+              <Route path="/leaderboard" element={<LeaderBoard user={this.state.userInfo} assetData={this.state.assetData} />} />
               <Route path="/transferForm" element={<TransferForm
                 userInfo={this.state.userInfo}
                 availFunds={this.state.availFunds}
@@ -537,7 +549,7 @@ class App extends React.Component {
                       <Grid container spacing={2}>
                         <Grid item xs={8}>
                           <StockPage
-                            liveData={this.state.liveData}
+                            // liveData={this.state.liveData}
                             stockObj={this.state.stockObj}
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
@@ -567,15 +579,16 @@ class App extends React.Component {
                       <Grid container spacing={2}>
                         <Grid item xs={8}>
                           <CryptoPage
+                            currentSymbol={this.state.currentSymbol}
                             coinMeta={this.state.coinMeta}
                             coinBarData={this.state.coinBarData}
-                            coinLiveData={this.state.coinLiveData}
+                            // coinLiveData={this.state.coinLiveData}
                             coinToday={this.state.coinToday}
                             coinPrevious={this.state.coinPrevious}
                             errorMsg={this.state.errorMsg}
                             handleTimeRangeClick={this.handleTimeRangeClick.bind(this)}
                             handleOrderClick={this.handleOrderClick.bind(this)}
-                        
+
                           />
                         </Grid>
                         <Grid item xs={4}>
@@ -594,7 +607,7 @@ class App extends React.Component {
                     : null}
                 </>
               } />
-              <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo}/>} />
+              <Route path="/chat" element={<ChatPage userInfo={this.state.userInfo} />} />
 
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>

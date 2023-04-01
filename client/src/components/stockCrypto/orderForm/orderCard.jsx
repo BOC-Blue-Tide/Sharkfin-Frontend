@@ -24,11 +24,14 @@ const orderCard = (props) => {
   const [holding, setHolding] = useState(0)
   const [showHolding, setShowHolding] = useState(false)
   const [orderMsg, setOrderMsg] = useState('')
+  const [displayAvailBalance, setDisplayAvailBalance] = useState(0)
 
 
   useEffect(() => {
     if (props.assetData.availBalance) {
+      let formattedAvailBalance = parseFloat(props.assetData.availBalance).toFixed(2)
       setAvailBalance(props.assetData.availBalance)
+      setDisplayAvailBalance(formattedAvailBalance)
     }
   }, [props.assetData.availBalance])
 
@@ -36,15 +39,16 @@ const orderCard = (props) => {
     if (props.assetData.holding) {
       setHolding(props.assetData.holding)
     }
-  }, [props.assetData.holding])
+  }, [props.assetData.holding, orderIn])
 
   useEffect(() => {
     if (orderIn === 'shares' || orderIn === 'coins') {
+
       setShowHolding(true)
     } else {
       setShowHolding(false)
     }
-  }, [props.value])
+  }, [orderIn])
 
 
 
@@ -103,7 +107,7 @@ const orderCard = (props) => {
               {`Available Fund: `}
             </Grid>
             <Grid item xs={4}>
-              {availBalance}
+              {displayAvailBalance}
             </Grid>
           </Grid> : null}
         </Typography>
@@ -111,7 +115,7 @@ const orderCard = (props) => {
         <Typography variant="subtitle1" component="div">
           {showHolding ? <Grid container spacing={1}>
             <Grid item xs={8}>
-              {`Holding: `}
+              {`Current Holding: `}
             </Grid>
             <Grid item xs={4}>
               {holding}

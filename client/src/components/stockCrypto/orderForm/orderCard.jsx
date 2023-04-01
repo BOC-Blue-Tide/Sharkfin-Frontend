@@ -37,7 +37,8 @@ const orderCard = (props) => {
 
   useEffect(() => {
     if (props.assetData.holding) {
-      setHolding(props.assetData.holding)
+      var newholding = parseFloat(props.assetData.holding.toFixed(2))
+      setHolding(newholding)
     }
   }, [props.assetData.holding, orderIn])
 

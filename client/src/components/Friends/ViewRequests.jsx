@@ -39,6 +39,8 @@ const ViewRequests = (props) => {
       oldValue['added'] = true;
       newFriendsList[index] = oldValue; // update the value at the specified index
       setFriendsList(newFriendsList); // set the new list as the state
+      props.getFriendRequestNum(JSON.parse(localStorage.getItem("googleInfo")).id);
+      props.getFriendBoardData(JSON.parse(localStorage.getItem("googleInfo")).id);
     })
     .catch(err => console.log("updateFriendStatus", err));
 

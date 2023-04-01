@@ -11,7 +11,7 @@ import Person from './person.jsx';
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
 const SideBar = (props) => {
-  console.log(props);
+  // console.log(props);
   const [userId, setuserId] = useState(JSON.parse(localStorage.getItem("googleInfo")).id)
   // const [userId, setuserId] = useState(1)
   const [friendRequestNum, setFriendRequestNum] = useState(0)

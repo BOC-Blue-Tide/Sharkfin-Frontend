@@ -135,11 +135,11 @@ const cryptoReviewOrder = (props) => {
         <Stack spacing={2}>
           <Stack direction="row" spacing={1}>
             <span>Available Fund: </span>
-            <span>{`$${availBalance}`}</span>
+            <span>{`$${parseFloat(availBalance).toFixed(2)}`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
             <span>Current Holding: </span>
-            <span>{`${holding} shares`}</span>
+            <span>{`${parseFloat(holding).toFixed(2)} shares`}</span>
           </Stack>
           <Stack direction="row" spacing={1}>
             <span>Symbol: </span>

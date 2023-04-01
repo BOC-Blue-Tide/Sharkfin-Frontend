@@ -109,7 +109,7 @@ const cryptoReviewOrder = (props) => {
     orderObj.purchaseType = 'crypto'
     orderObj.orderType = orderType
     orderObj.account = userid
-    orderObj.symbol = coinMeta[0].symbol
+    orderObj.symbol = coinMeta[0].symbol + '/USD'
     orderObj.company = coinMeta[0].name
     orderObj.orderIn = props.orderInput.orderIn
     orderObj.amount = props.orderInput.amount

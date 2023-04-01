@@ -35,7 +35,7 @@ import Login from './Login/Login.jsx';
 import AddFriends from './Friends/AddFriends.jsx';
 import ViewRequests from './Friends/ViewRequests.jsx';
 
-
+ console.log(SERVER_URL)
 const theme = createTheme({
   palette: {
     primary: {
@@ -256,7 +256,7 @@ class App extends React.Component {
 
   async getTransactionData() {
     try {
-      var id = JSON.parse(localStorage.googleInfo).id;
+      var id = JSON.parse(localStorage.getItem(['googleInfo'])).id;
       const response = await axios.get(`http://${SERVER_URL}/transactions/${id}`);
       this.setState({ transactionData: response.data });
     } catch (err) {

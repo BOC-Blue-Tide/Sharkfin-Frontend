@@ -10,7 +10,6 @@ const imagebb_key = process.env.REACT_APP_IMAGEBB_KEY;
 
 function AccountInfo(props) {
 
-   console.log(props);
    const [edit, setEdit] = useState(false);
 
    const [userInfo, setUserInfo] = useState({
